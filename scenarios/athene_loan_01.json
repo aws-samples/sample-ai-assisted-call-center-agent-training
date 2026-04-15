@@ -1,0 +1,31 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity (name, DOB)",
+    "Confirms the caller's mailing address and email on file",
+    "Explains the loan request process and required form clearly",
+    "Addresses the EFT disbursement question accurately",
+    "Acknowledges and addresses the email security concern professionally",
+    "Confirms next steps and sets expectations for timeline"
+  ],
+  "context": "You are Anna Greengrass, the policy owner of Athene annuity policy number 3038. You are calling because you would like to take a loan from your annuity and need the loan request form sent to you.\n\nPersonal details you know and can provide when asked:\n- Full name: Anna Greengrass\n- Date of birth: 3/15/1980\n- Mailing address: 19 Lavernne Drive, Amarillo, CA 93010\n- Phone: 888-555-4444\n- Email: anna@anna.com\n\nYour situation: You want to take a loan against your annuity policy. You are not sure of the exact process but you know loans are available on annuity products. You would like the loan form emailed to you. if told to send back the form back via mail ask if you can email it. if told email box is not encrypted ask what does it mean.",
+  "updatedAt": "2026-03-12T20:36:07.175843",
+  "escalation_triggers": [
+    "Failing to verify identity before discussing the policy",
+    "Being dismissive of the caller's email security concerns",
+    "Providing incorrect information about loan availability or the disbursement process",
+    "Making the process sound unnecessarily complicated or difficult"
+  ],
+  "id": "athene_loan_01",
+  "key_challenges": [
+    "Accurately explaining the loan process and required forms for an annuity product",
+    "Addressing the caller's question about EFT disbursement options",
+    "Handling the caller's concern about email security when transmitting personal/financial documents",
+    "Properly verifying the caller's identity before discussing policy details"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Athene Loan Request #11\n\nRod: Customer Service, this is Rod. May I please have your name and policy number?\nAnna: Hi Rod, my name is Anna Greengrass, and my policy number is 3038. Can you help me get a loan?\nRod: I’d be happy to look at your loan options, Ms. Greengrass. First, I’ll need to verify your identity. May I please have your date of birth?\nAnna: Sure. 1/15/1980. \nRod: Thank you. Would you confirm your address and a good number to reach you?\nAnna: My address is 19 Lavernne Drive, Amarillo, CA 93010, and my phone number is 888-555-4444.\nRod: Thank you, Ms. Greengrass. You’re all set. Would you like the loan form mailed, faxed, or emailed?\nAnna: Please email it to me at anna@anna.com.\nRod: Great. Let me repeat that back to confirm:\n**A** as in **Apple**, **N** as in **Nancy**, **N** as in **Nancy**, **A** as in **Apple**, @ **A** as in **Apple**, **N** as in **Nancy**, **N** as in **Nancy**, **A** as in **Apple**, dot **C** as in **Charlie**, **O** as in **Oscar**, **M** as in **Mary**.\nIs that correct?\nAnna: Yes, that’s correct.\nRod: Perfect. Please grab a pen, so I can give you some important information.\nAnna: Okay, I’m ready.\nRod: I’ve ordered the loan form to be emailed to you. You should receive it within 12 to 24 business hours.\nOnce you complete the form, please mail it back to us. Be sure to include either your employer’s third-party administrator’s signature or proof of separation from your employer.\nOnce we receive everything in good order, we’ll process your loan within 7 to 10 business days, plus mailing time.\nIf you include EFT information, please allow 1 to 3 business days after processing for the funds to be deposited.\nAnna: Can I just email my paperwork to you?\nRod: Our email box is not encrypted, but I can give you the address if you’d like.\nAnna: What does that mean?\nRod: It means that emailing forms with your personal financial information might be risky, as it’s not securely protected.\nAnna: Got it. I’ll just mail the form.\nRod: Sounds good. The mailing address will be listed on the form. Please hold one moment while I place the order.\nRod: [Pause] All set, Ms. Greengrass—the form has been ordered. Is there anything else I can assist you with today?\nAnna: No, that’s everything. Thank you!\nRod: Thank you for calling Client Services. Have a nice evening!",
+  "name": "Athene Loan Request",
+  "initial_message": "Hi, my name is Anna Greengrass, and my policy number is 3038. Can you help me get a loan?",
+  "caller_gender": "female"
+}

@@ -1,0 +1,33 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity",
+    "Provides the current surrender value ($4,509.97) and surrender charge ($3,799.65) clearly",
+    "Explains the surrender charge period (9 of 19 years completed) and how charges decrease over time",
+    "Discusses alternatives such as partial withdrawals, loans, or waiting",
+    "Avoids giving financial advice while still being helpful",
+    "Answers all of the caller's questions clearly and accurately",
+    "Confirms next steps if the caller decides to proceed"
+  ],
+  "context": "You are Michael Knight, the owner of Antelope policy number 03N42. You are calling because you want to know how much you would receive if you cancelled (surrendered) the policy today.\n\nPersonal details you know and can provide when asked:\n- Full name: Michael Knight\n- Last four digits of SSN: 9999\n- Phone: 813-765-4321\n\nYour situation: You are considering surrendering your policy and want to understand if you cancel the policy today, how much money you would receive. When the agent asks for a moment to locate your surrender value, say 'sure'. After the agent explain the surrender value and the penalty, ask why you are being charged a penalty for canceling your policy. After the agent explains the surrender charge period, say that you will wait to surrender. Read each digit individually when providing last 4 digits of SSN.",
+  "updatedAt": "2026-03-23T23:59:05.282377",
+  "escalation_triggers": [
+    "Being unable to provide specific surrender values",
+    "Not explaining the surrender charge clearly or making it confusing",
+    "Pressuring the caller not to surrender instead of presenting neutral information",
+    "Failing to mention alternatives to full surrender",
+    "Using jargon without explanation"
+  ],
+  "id": "antelope_surrender_inquiry_01",
+  "key_challenges": [
+    "Clearly explaining the surrender value vs. surrender charge and the net amount the caller would receive",
+    "Explaining the surrender charge schedule and how it decreases over time",
+    "Presenting alternatives to full surrender (partial withdrawals, waiting, loans)",
+    "Helping the caller understand the financial trade-offs without giving financial advice"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Call Script Sample #7 ( Surrender Inquiry)\nCSR: Thank you for calling Insurance Services. My name is Tasha. May I have your name and policy number?\nCALLER: My name is Michael Knight, and the policy number is 03N42.\nCSR: Thank you, Mr. Littere. May I have your best contact number?\nCALLER: Sure, my phone number is 813-765-4321\nCSR: For the security of your account, may I verify the last four digits of your social security number?\nCALLER: 9999\nCSR: Thank you for that information. I have your policy pulled up. How may I assist you today? \nCALLER: I would like to know if I cancel the policy today, how much money I would receive? \nCSR: Okay, please give me just a moment to locate your surrender value.\nCALLER: Sure\nCSR: I have located your surrender value. As of today, your surrender value would be $4,509.97, which includes a $3,799.65 surrender penalty.\nCALLER: Why am I being charged a penalty for canceling my policy?\nRep: There is a surrender charge period built into the policy for the first 19 years. The surrender charge does decrease each year, and there is no charge in year 20 of the policy. Your policy has been active for 9 years.\nCALLER: Okay, I think I will wait to surrender.\nCSR: Is there anything else I can assist you with?\nCALLER: No, thank you. That will be all.\nCSR: Thank you for calling Insurance Services. Have a great day. \nCall Ends",
+  "name": "Antelope Surrender",
+  "initial_message": "My name is Michael Knight, and the policy number is 03N42.",
+  "caller_gender": "male"
+}

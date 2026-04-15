@@ -1,0 +1,34 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Attempts multiple verification methods beyond just SSN",
+    "Identifies the policy number discrepancy and works with the caller to resolve it",
+    "Does not release policy-specific information until verification is satisfactorily completed",
+    "Respects the caller's decision not to provide SSN without being judgmental",
+    "Offers alternative ways to verify identity (address, email, phone number on file, etc.)",
+    "Maintains a helpful and patient tone throughout",
+    "Follows security protocols without being adversarial"
+  ],
+  "context": "You are Hai Song Wu, a client. You are calling about what you believe is your Antelope policy. You provide some incorrect information.\n\nDetails you provide:\n- Your name: Hai Song Wu (spelled H-A-I S-O-N-G W-U)\n- Date of birth: 05/12/1975 (say in english)\n- Policy number you give: 03NC022 (this is WRONG — the correct policy number is something else, but you do not know that)\n- Address: 28 82nd St, Rochester, New York\n- You will NOT provide your SSN. If asked, you say: \"I'm not comfortable providing my Social Security number over the phone.\"\n\nYour situation: You want to know your current cash value and whether you can take a withdrawal from your policy. You are calling with what you believe is the correct policy number, but you have it wrong. When the agent says they cannot find a policy with that number, you apologize and say you don't have your paperwork with you, then try the same wrong number again. If the agent asks for your SSN, you decline. If they ask you to spell your name and provide your DOB, you cooperate. If they ask for your address, you provide it.",
+  "updatedAt": "2026-03-23T23:44:44.297369",
+  "escalation_triggers": [
+    "Releasing policy information without proper verification",
+    "Being confrontational about the caller's refusal to provide SSN",
+    "Not attempting alternative verification methods",
+    "Making the caller feel like they are being treated as suspicious or fraudulent",
+    "Giving up on helping the caller because of the verification challenges"
+  ],
+  "id": "antelope_unauthorized_wrong_info_01",
+  "key_challenges": [
+    "Handling a caller who provides an incorrect policy number",
+    "Navigating identity verification when the caller refuses to provide their SSN",
+    "Finding alternative verification methods that maintain security",
+    "Not releasing policy information until proper verification is complete",
+    "Being patient and professional with a caller who has a legitimate privacy concern"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "______________________________________________________________________ \nCall Script Sample #2 (Unauthorized Caller-Wrong Information Provided) \n(Accurate Policy number 03NC012) \n \nCSR: Thank you for calling Insurance Services. My name is Tasha. May I have your name and policy number? \n \nAI: Yes, I believe my policy number is 03NC022, and my name is Hai Song Wu. \n \nCSR: I’m sorry, but I couldn’t pull up a policy with that number. \n \nAI: I apologize; I don’t have my paperwork with me. Let me try that again: 03NC022. \n \nCSR: Unfortunately, I still couldn't find a policy with that number. May I ask for your Social Security number? \n \nAI: I’m not comfortable providing my Social Security number over the phone. \n \nCSR: Okay, could you please spell your name for me and provide your date of birth? \n \nAI: Of course, it’s spelled H-A-I S-O-N-G W-U, and my date of birth is 05/12/1975. \n \nCSR: Thank you. Could you also verify your address? \n \nAI: Yes, my address is 28 82nd St, Rochester, New York. \n \nCSR: Thank you. How may I assist you today? \n \nAI: I would like to know my current cash value and whether I can take a withdrawal from my policy. \n \nCSR: Sure! Your current cash value is $48,652.03. I will create a request for your available withdrawal amount and the partial surrender form. \n \nAI: That sounds great. \n \nCSR: Is there anything else I can help you with? \n \nAI: No, that’s all. \n \nCSR: Thank you for calling Insurance Services. Have a nice day. \n \nAI: You, too.  \nCall ends \n \n \n \n \n",
+  "name": "Antelope Unauthorized Caller - Wrong Info",
+  "initial_message": "I believe my policy number is 03NC022, and my name is Hai Song Wu.",
+  "caller_gender": "male"
+}

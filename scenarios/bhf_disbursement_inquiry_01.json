@@ -1,0 +1,31 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the financial professional's identity",
+    "Correctly follows the confirm-only policy for bank information",
+    "Provides the RMD amount ($25,499.93 annually) and next payment date (December 1st)",
+    "Handles the caller's impatience professionally without rushing through compliance steps",
+    "Maintains a professional and efficient pace throughout the call"
+  ],
+  "context": "You are Vincent Tran, a financial professional from Primerica. You are calling about your client Paul Knowles' contract number 1234567890 with BHF. You want to know the bank information on file for Paul's account and the details of his Required Minimum Distribution (RMD) — specifically the amount and payment schedule.\n\nDetails you know:\n- Your name: Vincent Tran\n- Your firm: Primerica\n- Client name: Paul Knowles\n- Contract number: 1234567890\n- Last four digits of client's SSN: 1234\n- Phone: 732-555-5555\n\nYour situation: You need to verify the bank information on file for your client Paul Knowles so you can confirm it is correct for upcoming RMD distributions. The bank on file should be Bank of America. You also need to know the annual RMD amount and when the next payment is scheduled. The company policy is that they can only \"confirm\" bank information (you provide it and they say yes or no) — they cannot \"state\" or read out the bank information to you. The RMD amount is $25,499.93 annually, and the next payment is scheduled for December 1st.",
+  "escalation_triggers": [
+    "Reading out bank account information instead of only confirming it",
+    "Putting the caller on hold for too long without explanation",
+    "Being slow or fumbling through the process",
+    "Not knowing the difference between confirming and stating bank information",
+    "Being unable to locate the client's account or RMD information"
+  ],
+  "id": "bhf_disbursement_inquiry_01",
+  "key_challenges": [
+    "Properly authenticating the financial professional's identity and authority",
+    "Correctly handling the bank information policy — can only confirm, not state",
+    "Providing accurate RMD amount and schedule information",
+    "Managing an impatient caller who wants quick answers",
+    "Maintaining compliance while being efficient"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "BHF Mock Call Example \nCall Reason: Disbursement Inquiry\nCaller Type: Financial Professional\nMood: Impatient\n\nCSR agent: This is Angell with Brighthouse Financial Annuity Services, is there a contract number I can assist you with today?\nFinancial Professional: Yes, I actually just did this. Ok, contract number is 1234567890.\nCSR agent: Alright, thank you.\nCSR agent: Alright, thank you sir. The system is pulling up the account information. May I have your name please?\nFinancial Professional: Vincent Tran\nCSR agent: Alright, thank you. And what firm do you work for or clear through sir?\nFinancial Professional: Primerica Financial Services\nCSR agent: Alright, thank you. May I have the last four digits of your social security number as the agent?\nFinancial Professional: 1234\nCSR agent: Alright, thank you. And a good phone number for you today?\nFinancial Professional: 732-555-5555\nCSR agent: Alright, thank you sir and the client’s name on this account please?\nFinancial Professional: Paul Knowles\nCSR agent: Thank you sir. How can I help you today?\nFinancial Professional: Can you just tell me the name of the bank the client has on file for their electronic RMD payment?\nCSR agent: Sir, as far as client information or bank information, we can’t state information, we can only confirm. \nFinancial Professional: Okay. Alright.  I’ll ask you. These are yes or no questions, is that right? I can ask you?\nCSR agent: Sure, yes.\nFinancial Professional: Alright, is it a Bank of America account?\nCSR agent: Yes.\nFinancial Professional: Alight. Good to know. Thank you. Umm, that’s one question. Thank you. Umm, and the other question is can you tell me what their estimated RMD is for the RMD on file is? Or you can’t tell me that either?\nCSR agent: Oh no, I can provide RMD information. Uh, thank you, it’ll be just one moment sir. Give me just one moment. \nFinancial Professional: Okay.\nCSR agent: Uh, the 2025 RMD is $25,499.93.\nFinancial Professional: Okay. Can you tell me when it’s scheduled to go out?\nCSR agent: Uh, yes sir. Uh, the client does have an active automated RMD program, it’s an annual frequency and the payment date is December 1st.\nFinancial Professional: Thank you so much, that’s all I need for now. Thank you. \nCSR agent: Alright, oh also sir, thank you I wanted to mention if you use the Brighthouse Financial agent portal, uh under the reports section you can actually run RMD eligibility reports for your book of business and it shows who’s on…\nFinancial Professional: I appreciate that...yeah.\nCSR agent: Alright, well you have a good day sir\nFinancial Professional: I’m not, thank you.\nCSR agent: Alright\n\nDisconnect Reason: Customer disconnected call ",
+  "name": "BHF Impatient RMD",
+  "initial_message": "Yes, contract number is 1234567890.",
+  "caller_gender": "male"
+}

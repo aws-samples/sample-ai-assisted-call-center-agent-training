@@ -1,0 +1,33 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity",
+    "Explains the age 25 conversion deadline compassionately",
+    "Clearly communicates that Ariela is no longer eligible but Rafael is",
+    "Initiates the conversion process for Rafael efficiently",
+    "Accurately answers the beneficiary question (children can be contingent beneficiaries)",
+    "Respects the caller's time by being concise and efficient",
+    "Provides clear next steps and required paperwork for Rafael's conversion"
+  ],
+  "context": "You are Edgar Rosales, the owner of GAFG life insurance policy number 1635. You are calling because you want to convert your child rider to individual policies for your children.\n\nPersonal details you know and can provide when asked:\n- Full name: Edgar Rosales\n- Age: 56\n- Last four digits of SSN: 9999\n- Address: 66 East River Ave, Apt G, Bronx, NY 10455\n\nYour children:\n- Daughter: Ariela Rosales, date of birth March 25, 1997 (age 28)\n- Son: Rafael Rosales (age 12)\n\nYour situation: You have a child rider on your life insurance policy that covers your children. You want to convert the rider to individual policies for both Ariela and Rafael. However, the conversion deadline for your child rider is age 25. Ariela is now 28, which means her conversion window has passed — she aged out at 25. Rafael, at age 12, is still eligible for conversion. You do not know about the age 25 deadline when you call; the agent will inform you. You will be disappointed about Ariela — you may say something like \"I really wish someone had told me about that deadline\". You want to proceed with the conversion for Rafael. You also want to know if your children can be listed as beneficiaries on your policy (they can be contingent beneficiaries).",
+  "escalation_triggers": [
+    "Delivering the bad news about Ariela in an insensitive or abrupt way",
+    "Being slow or inefficient when the caller is clearly in a hurry",
+    "Not being able to explain the age 25 conversion rule clearly",
+    "Providing incorrect information about beneficiary eligibility for minors",
+    "Making the caller repeat information they already provided"
+  ],
+  "id": "gafg_child_rider_01",
+  "key_challenges": [
+    "Delivering the disappointing news that Ariela has aged out of conversion eligibility",
+    "Clearly explaining the age 25 conversion deadline for child riders",
+    "Processing the conversion request for Rafael efficiently",
+    "Answering the question about children as beneficiaries (contingent)",
+    "Managing the caller's time expectations while being thorough"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Mock Call Script: Converting a Child Rider\n\nRep: “Thank you for calling insurance services, My name is Rain, How can I assist you today?”\n\nCustomer: “I’d like to convert my child rider to an individual policy.”\n\nRep: “Absolutely! I would love to help with that; First I need to pull up your account and get you verified. Can I Get your name please? \nCustomer: “Edgar Rosales and my policy number is 1635.”\n\nRep: “Thank you very much Mr., Rosales, and may I get your role on the policy?”\nCustomer “I am the owner.”\nRep” Thank you, and if I can please get the last 4 of your Social Security Number?”\nCustomer “9999”\nRep; ” and lastly can I please have your mailing address?”\nCustomer “66 East River Ave APT G, Bronx, NY 10455.”\nRep “Perfect! I do see you have a child rider on this account. The Child Rider can be converted as long as the request is made before the rider expires when the child turns 25 or when you reach age 65, whichever comes first. May I confirm the child’s name and date of birth?”\n\nCustomer: “Yes, it is Ariela Rosales, March 25, 1997.”\n\nRep: “Thank you. I am sorry to Ariela has passed the age of conversion, do you have any other children that could use this coverage?”\n\nCustomer: “Yes, I have my son, Rafael, he is just 12.”\n\nRep:“ Would you like to convert policy for Rafael?” \n\nCustomer: “How long do I have before I have to convert? ”\n\nRep: “it needs to be before he turns 25 or you 65, Let’s see… according to my system you are 56. You would turn 65 before his 25th birthday, so in 9 years. “\nCustomer: “Okay, I can wait.”\n\nRep: “Is there anything else I could help you with today?”\n\nCustomer: “Yes, who do I have as my beneficiaries?”\n\nRep: “I would just need a moment to look them up, do you mind being placed on hold for a few minutes?”\nCustomer: “Yes, that’s ok.”\nRep: “Thank you, just a moment.”\n“Thank you for holding, “\nCustomer, “Uh Huh.”\nRep: “I show your Primary beneficiaries as Rafael Rosales and Ariela Rosales. And no contingent beneficiaries.”\nCustomer, “ok, how do I change those?”\nRep: “I can send you a form to update your beneficiaries, would you like me to mail it, fax or email?”\nCustomer “You can mail it to me.’\nRep: “Ok, can I mail it to your address of record, “66 East River Ave APT G, Bronx, NY 10455?”\nCustomer “Yes.”\nRep, “Thank you, I will have that mailed out, it can take up to 10 days to receive that. Once you have it please make sure to sign and date it and after we receive it, it takes up to 3 days to get it processed and add the new beneficiaries to the account. We will mail you a confirmation of the changes.\nCustomer, “Ok, thank you.”\nRep, “You are welcome, is there anything else I can help you with today?’\nCustomer, “No, that is all.”\nRep: “Thank you for calling insurance services, I will be placing you into a short after call survey for my service today, have a great day.”\n\n\n",
+  "name": "Child Rider",
+  "initial_message": "I'd like to convert my child rider to an individual policy.",
+  "caller_gender": "male"
+}

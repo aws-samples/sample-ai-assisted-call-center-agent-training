@@ -1,0 +1,365 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "990983c8-532d-4fb2-94f4-0e05a91fb006",
+  "Metadata": {
+    "entryPointPosition": {
+      "x": 40,
+      "y": 40
+    },
+    "ActionMetadata": {
+      "b0e1cef9-5a0b-4d38-8f74-00007a67eb1a": {
+        "position": {
+          "x": 1202.4,
+          "y": -48
+        },
+        "children": [
+          "67315c9f-0c68-46b1-8716-ccd0c02af761",
+          "cad4200a-57e0-412e-b992-2169689ba4e3"
+        ],
+        "parameters": {
+          "WisdomAssistantArn": {
+            "useAIAgentDropdown": true,
+            "aiAgentName": "cell-center-training-ai-agent",
+            "aiAgentVersionArn": "arn:aws:wisdom:us-west-2:195249792362:ai-agent/d9f14a5f-1e38-4060-b6af-0629874d5f23/273624d8-36cf-40dc-9b5f-da078f20ca17:$LATEST"
+          }
+        },
+        "fragments": {
+          "SetContactData": "67315c9f-0c68-46b1-8716-ccd0c02af761"
+        },
+        "useAIAgentDropdown": true,
+        "aiAgentName": "cell-center-training-ai-agent",
+        "aiAgentVersionArn": "arn:aws:wisdom:us-west-2:195249792362:ai-agent/d9f14a5f-1e38-4060-b6af-0629874d5f23/273624d8-36cf-40dc-9b5f-da078f20ca17:$LATEST"
+      },
+      "67315c9f-0c68-46b1-8716-ccd0c02af761": {
+        "position": {
+          "x": 1202.4,
+          "y": -48
+        },
+        "dynamicParams": []
+      },
+      "cad4200a-57e0-412e-b992-2169689ba4e3": {
+        "position": {
+          "x": 1202.4,
+          "y": -48
+        },
+        "parameters": {
+          "LexV2Bot": {
+            "AliasArn": {
+              "displayName": "TestBotAlias",
+              "useLexBotDropdown": true,
+              "lexV2BotName": "ai-agent-bot"
+            }
+          }
+        },
+        "dynamicMetadata": {
+          "voice_id": false,
+          "x-amz-lex:q-in-connect:ai-agent-arn": false
+        },
+        "useLexBotDropdown": true,
+        "lexV2BotName": "ai-agent-bot",
+        "lexV2BotAliasName": "TestBotAlias",
+        "conditionMetadata": []
+      },
+      "1a4550ad-0224-44cc-8870-0c9b0d362123": {
+        "position": {
+          "x": 975.2,
+          "y": -43.2
+        }
+      },
+      "c741cf01-896f-4401-8dec-bc6cf2c897a7": {
+        "position": {
+          "x": 766.4,
+          "y": -40
+        },
+        "parameters": {
+          "LambdaFunctionARN": {
+            "displayName": "CallCenterTraining-Connec-AIAgentSessionSetupFunct-USSCVUu1Nt6N"
+          }
+        },
+        "dynamicMetadata": {}
+      },
+      "7a1f6607-4a87-4d67-998d-f130ae813093": {
+        "position": {
+          "x": 565.6,
+          "y": -33.6
+        },
+        "children": [
+          "07343838-a44e-4d16-9a0b-721b615b1eb5"
+        ],
+        "parameters": {
+          "OrchestrationAIAgentConfiguration": {
+            "AgentAssistanceAgentVersionArn": {
+              "useAIAgentDropdown": true,
+              "aiAgentName": "cell-center-training-ai-agent"
+            }
+          }
+        },
+        "fragments": {
+          "SetContactData": "07343838-a44e-4d16-9a0b-721b615b1eb5"
+        },
+        "useAIAgentDropdown": true,
+        "aiAgentName": "cell-center-training-ai-agent"
+      },
+      "07343838-a44e-4d16-9a0b-721b615b1eb5": {
+        "position": {
+          "x": 565.6,
+          "y": -33.6
+        },
+        "dynamicParams": []
+      },
+      "4647f997-6801-45f7-a8c0-95fe59993f0e": {
+        "position": {
+          "x": 368.8,
+          "y": -14.4
+        },
+        "parameters": {
+          "TextToSpeechVoice": {
+            "useDynamic": true,
+            "languageCode": "$.Attributes.language_code"
+          },
+          "TextToSpeechEngine": {
+            "useDynamic": true
+          },
+          "TextToSpeechStyle": {
+            "useDynamic": true
+          }
+        },
+        "overrideConsoleVoice": true
+      },
+      "a9c70bc9-5b7e-4bbe-b642-30b7d1a7be5a": {
+        "position": {
+          "x": 152.8,
+          "y": 32
+        }
+      },
+      "2e8637b8-ad26-4091-8277-1d726a6e2573": {
+        "position": {
+          "x": 508.8,
+          "y": 425.6
+        }
+      },
+      "990983c8-532d-4fb2-94f4-0e05a91fb006": {
+        "position": {
+          "x": 81.6,
+          "y": 227.2
+        }
+      }
+    },
+    "Annotations": [],
+    "name": "LexTrainingFlow Connect AI Agents",
+    "description": "",
+    "type": "contactFlow",
+    "status": "published",
+    "hash": {}
+  },
+  "Actions": [
+    {
+      "Parameters": {
+        "WisdomAssistantArn": "arn:aws:wisdom:us-west-2:195249792362:assistant/d9f14a5f-1e38-4060-b6af-0629874d5f23"
+      },
+      "Identifier": "b0e1cef9-5a0b-4d38-8f74-00007a67eb1a",
+      "Type": "CreateWisdomSession",
+      "Transitions": {
+        "NextAction": "67315c9f-0c68-46b1-8716-ccd0c02af761",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "WisdomSessionArn": "$.Wisdom.SessionArn"
+      },
+      "Identifier": "67315c9f-0c68-46b1-8716-ccd0c02af761",
+      "Type": "UpdateContactData",
+      "Transitions": {
+        "NextAction": "cad4200a-57e0-412e-b992-2169689ba4e3",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Text": " ",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:195249792362:bot-alias/R2DIABBUMN/TSTALIASID"
+        },
+        "LexSessionAttributes": {
+          "voice_id": "$.Attributes.voice_id",
+          "x-amz-lex:q-in-connect:ai-agent-arn": "arn:aws:wisdom:us-west-2:195249792362:ai-agent/d9f14a5f-1e38-4060-b6af-0629874d5f23/273624d8-36cf-40dc-9b5f-da078f20ca17:$LATEST"
+        }
+      },
+      "Identifier": "cad4200a-57e0-412e-b992-2169689ba4e3",
+      "Type": "ConnectParticipantWithLexBot",
+      "Transitions": {
+        "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "VoiceBehavior": {
+          "VoiceRecordingBehavior": {
+            "RecordedParticipants": [
+              "Agent",
+              "Customer"
+            ],
+            "IVRRecordingBehavior": "Enabled"
+          },
+          "VoiceAnalyticsBehavior": {
+            "Enabled": "True",
+            "AnalyticsLanguage": "en-US",
+            "AnalyticsModes": [
+              "PostContact",
+              "AutomatedInteraction"
+            ],
+            "ConversationalAnalyticsRedactionConfiguration": {
+              "Enabled": "False"
+            },
+            "SentimentConfiguration": {
+              "Enabled": "True"
+            }
+          }
+        }
+      },
+      "Identifier": "1a4550ad-0224-44cc-8870-0c9b0d362123",
+      "Type": "UpdateContactRecordingAndAnalyticsBehavior",
+      "Transitions": {
+        "NextAction": "b0e1cef9-5a0b-4d38-8f74-00007a67eb1a",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          },
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "ChannelMismatch"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "LambdaFunctionARN": "arn:aws:lambda:us-west-2:195249792362:function:CallCenterTraining-Connec-AIAgentSessionSetupFunct-USSCVUu1Nt6N",
+        "InvocationTimeLimitSeconds": "3",
+        "InvocationType": "SYNCHRONOUS",
+        "ResponseValidation": {
+          "ResponseType": "STRING_MAP"
+        }
+      },
+      "Identifier": "c741cf01-896f-4401-8dec-bc6cf2c897a7",
+      "Type": "InvokeLambdaFunction",
+      "Transitions": {
+        "NextAction": "1a4550ad-0224-44cc-8870-0c9b0d362123",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "WisdomAssistantArn": "arn:aws:wisdom:us-west-2:195249792362:assistant/d9f14a5f-1e38-4060-b6af-0629874d5f23",
+        "OrchestrationAIAgentConfiguration": {
+          "AgentAssistanceAgentVersionArn": "arn:aws:wisdom:us-west-2:195249792362:ai-agent/d9f14a5f-1e38-4060-b6af-0629874d5f23/273624d8-36cf-40dc-9b5f-da078f20ca17:$LATEST"
+        }
+      },
+      "Identifier": "7a1f6607-4a87-4d67-998d-f130ae813093",
+      "Type": "CreateWisdomSession",
+      "Transitions": {
+        "NextAction": "07343838-a44e-4d16-9a0b-721b615b1eb5",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "WisdomSessionArn": "$.Wisdom.SessionArn"
+      },
+      "Identifier": "07343838-a44e-4d16-9a0b-721b615b1eb5",
+      "Type": "UpdateContactData",
+      "Transitions": {
+        "NextAction": "c741cf01-896f-4401-8dec-bc6cf2c897a7",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "TextToSpeechVoice": "$.Attributes.voice_id",
+        "TextToSpeechEngine": "$.Attributes.voice_engine",
+        "TextToSpeechStyle": "$.Attributes.voice_style"
+      },
+      "Identifier": "4647f997-6801-45f7-a8c0-95fe59993f0e",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Transitions": {
+        "NextAction": "7a1f6607-4a87-4d67-998d-f130ae813093",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "FlowLoggingBehavior": "Enabled"
+      },
+      "Identifier": "a9c70bc9-5b7e-4bbe-b642-30b7d1a7be5a",
+      "Type": "UpdateFlowLoggingBehavior",
+      "Transitions": {
+        "NextAction": "4647f997-6801-45f7-a8c0-95fe59993f0e"
+      }
+    },
+    {
+      "Parameters": {},
+      "Identifier": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+      "Type": "DisconnectParticipant",
+      "Transitions": {}
+    },
+    {
+      "Parameters": {
+        "SkipWhenDTMFBufferEnabled": "false",
+        "Text": "Please hold while we connect you to an agent"
+      },
+      "Identifier": "990983c8-532d-4fb2-94f4-0e05a91fb006",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "a9c70bc9-5b7e-4bbe-b642-30b7d1a7be5a",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    }
+  ]
+}

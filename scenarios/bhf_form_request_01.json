@@ -1,0 +1,32 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity and BOA authorization",
+    "Confirms the correct form for Change of Financial Professional",
+    "Identifies and corrects the email error (should be bhfrequests@brighthousefinancial.com, not bhrrequest@brighthousefinancial.com)",
+    "Provides the processing timeline (5-7 business days)",
+    "Thoroughly reviews the form details with the caller",
+    "Maintains a professional and helpful tone"
+  ],
+  "context": "You are Helena Montana, an agent assistant (BOA — Business Office Assistant) for financial advisor Kevin Sparks at Raymond James. You are calling about a BHF policy owned by Jennifer Haven.\n\nDetails you know:\n- Your name: Helena Montana\n- Your role: Agent assistant (BOA) for Kevin Sparks\n- Financial advisor: Kevin Sparks\n- Firm: Raymond James\n- Owner name: Jennifer Haven\n- Phone: 720-555-5555\n- Last four digits of agent's SSN: 9999\n- Correct email for form submissions: bhfrequests@brighthousefinancial.com\n\nYour situation: You are filling out a Change of Financial Professional form and want to verify two things: (1) that you have the correct form, and (2) that you filled it out correctly. You initially try to email the form to the wrong email address — bhrrequest@brighthousefinancial.com — but the correct address is bhfrequests@brighthousefinancial.com. You want to confirm the correct email. You also want to know the processing timeline for the form once submitted (it is 5-7 business days).",
+  "escalation_triggers": [
+    "Not catching the email address error when it is mentioned",
+    "Being unsure about which form is correct",
+    "Providing inaccurate processing timeline information",
+    "Being dismissive of the caller's desire to double-check details",
+    "Not verifying the caller's authorization to discuss the policy"
+  ],
+  "id": "bhf_form_request_01",
+  "key_challenges": [
+    "Verifying the caller's identity and authorization as a BOA",
+    "Confirming the correct form is being used for a Change of Financial Professional",
+    "Catching and correcting the email address error (bhrrequest@brighthousefinancial.com vs bhfrequests@brighthousefinancial.com)",
+    "Providing accurate processing timeline information (5-7 business days)",
+    "Being thorough in reviewing form completion details"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "BHF Mock Call Example \nCall Reason: Form Explanation\nCaller Type: Agent Assistant\nMood: Calm\n\nCSR agent: Hi, thank you for calling Brighthouse Financial, this is Mary. Are you calling for policy ending in 6789?\nFinancial Professional: Yes.\nCSR agent: Thank you. May I have your first and last name?\nFinancial Professional: Umm, Helena Montana. \nCSR agent: Thank you, Helena. What’s the owner’s name?\nFinancial Professional: Umm, Jennifer Haven \nCSR agent: Your relationship to the policy?\nFinancial Professional: I work for the financial advisor.\nCSR agent: What’s the agent’s name and last four of the social security number?\nFinancial Professional: Uh, Kevin Sparks. 9999.\nCSR agent: And the firm.\nFinancial Professional: Raymond James.\nCSR agent: And Helena, what is your relationship or title that I could indicate here?\nFinancial Professional: Assistant.\nCSR agent: And I can see your phone number of 720-555-5555, is this a good call back number? \nFinancial Professional: Yes\nCSR agent: And how could I help today?\nFinancial Professional: Umm, I am filling out a request for change of financial professional, and I just want to make sure that I received the right form and that we filled it out correctly before I submit it.\nCSR agent: Sure ma’am, I’d be glad to help you with that. Let me just open the form. And on what section do you need help?\nFinancial Professional: Umm, I just want to make sure all I need is the contract number, name of the person, date of birth, phone number, umm, all the information in financial professional one section and then just one signature from Jennifer.\nCSR agent: Hmm, let me check here. That is right ma’am.\nFinancial Professional: Okay. So, I am going to email it to bhrrequest@brighthousefinancial.com. \nCSR agent: No, bhfrequests@brighthousefinancial.com - B for Bright, H for House, F for Financial Requests with an S  @brighthousefinancial.com . Other return options like fax and mail are located on the very first page of the form. And turn-around time once it’s received in good order is 5 to 7 business days. Okay?\nFinancial Professional: Okay.\nCSR agent: Perfect. Helena, is there anything else I could help you with today?\nFinancial Professional: That is it. Thank you\nCSR agent: Alright ma’am, if that’s all you need, thank you for calling Brighthouse Financial and if you do have a moment kindly stay on the line for a short survey. Take care. Thank you, ma’am. Bye, bye.\nFinancial Professional: Ok. \nCSR agent: Thank you\nFinancial Professional: Bye, bye.\n\nDisconnect Reason: Other \n\n\n\n\n\n",
+  "name": "BHF BOA Form Request",
+  "initial_message": "My name is Helena Montana. I work for the financial advisor Kevin Sparks. I'm calling about a policy owned by Jennifer Haven.",
+  "caller_gender": "female"
+}

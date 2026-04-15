@@ -1,0 +1,36 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity",
+    "Demonstrates genuine empathy for the caller's situation",
+    "Clearly explains the signature mismatch issue and what caused the delay",
+    "Explains the Medallion Signature form requirement and how to obtain one",
+    "Provides a realistic timeline for processing once the form is received",
+    "Offers any available expedited processing options",
+    "Confirms the caller's contact information for follow-up",
+    "Successfully de-escalates the caller's frustration at least partially"
+  ],
+  "context": "You are Mitchell DaLuca, the policy owner of Athene policy number 30AD12. You submitted a withdrawal request three weeks ago because you and your wife are trying to close on a house — your dream home. The withdrawal has been delayed because of a signature mismatch, and now you need to submit a notarized Medallion Signature form to resolve it.\n\nPersonal details you know and can provide when asked:\n- Full name: Mitchell DaLuca\n- Date of birth: July 19, 1955\n- Last four digits of SSN: 9999\n- Address: 61 Bonnie Ave, Shetland Hills, CA 91367\n- Phone: 999-555-8888\n- Email: mickeytherock@DaLuca.com\n\nYour situation: You and your wife found your dream home and need the withdrawal funds to close on it. You submitted the withdrawal paperwork three weeks ago and have been waiting anxiously. You were told there is a signature mismatch on your paperwork, which is causing the delay. You now need to get a notarized Medallion Signature form to proceed. Every day of delay puts your home purchase at risk. You feel like the company is giving you the runaround.",
+  "updatedAt": "2026-03-11T21:05:51.624979",
+  "escalation_triggers": [
+    "Being dismissive of the urgency of the home purchase deadline",
+    "Using a robotic or unsympathetic tone",
+    "Failing to acknowledge the three-week wait or the frustration it caused",
+    "Placing the caller on hold without explanation or for too long",
+    "Being unable to explain why the signature mismatch occurred",
+    "Not offering any expedited options or workarounds"
+  ],
+  "id": "athene_withdrawal_01",
+  "key_challenges": [
+    "De-escalating a highly frustrated caller who has been waiting three weeks",
+    "Explaining the signature mismatch issue and Medallion Signature requirement clearly",
+    "Showing empathy for the caller's time-sensitive home purchase situation",
+    "Providing a clear path forward with realistic timelines",
+    "Managing the caller's emotional state while gathering necessary information"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Athene - 30AD12\n\nJoan: Thank you for calling Insurance Services. This is Joan. How may I help you today?\nCaller, in a tense, serious tone: Did you say Joan?\nJoan: Yes, this is Joan. With whom do I have the pleasure - \nCaller interrupts:  I requested a withdrawal three weeks ago, and I’ve had to postpone the closing on my house because you keep asking for more information. I don’t understand why this is taking so long!\nJoan: I’m so sorry to hear that. I can only imagine how stressful this must be - \nCaller interrupts, raising his voice slightly: I don’t need your “sorry!” My wife and I could lose our dream home! I just need YOU to give me my money!\nJoan: Absolutely. I will look into this for you. First, may I please have your full name and policy number?\nCaller (calmer): Sure. My name is Mitchell DaLuca, 7/19/1955, and my policy number is 30AD12.\nJoan: Thank you, Mr. DaLuca. What is the last four digits of your Social Security Number? \nCaller: 9999.\nJoan: And just to be sure we have the right information on file. What is your address and a good call-back number?\nCaller: 61 Bonnie Ave, Shetland Hills, CA 91367. 999-555-8888.\nJoan: Thank you. Okay, please hold for just a moment while I take a look at your case and see what’s going on.\n[Brief hold]\nJoan: Mr. DaLuca, thank you for holding. I’ve reviewed your case, and the signature on the withdrawal form is different than on your original application. For your protection, we’ll need a new form with a notarized signature.\nCaller (raising his voice again): Are you serious? I don’t have time for all this! I’ve already delayed my closing once, and now you want me to find a notary to prove I’m me? You want another form?\nJoan: I completely understand your frustration, Mr. DaLuca. This is an important time for you. I’ll email you the updated form right away to help speed things up, and I can also provide the overnight mailing address so you can return it as quickly as possible.\nCaller: Can I get an exception?\nJoan: I could submit an exception request, but for security and speed, submitting the notarized form is the most reliable way to ensure your withdrawal is processed quickly. May I confirm your email address so I can send the form?\nCaller: Fine. Please send it to mickeytherock@DaLuca.com.\nJoan: Got it. I’ll send the form to mickeytherock@DaLuca.com within the next 24 hours. Once we receive the completed form in good order, your withdrawal will be processed within 7-10  business days. Please allow additional time for the delivery of funds.\nIs there anything else I can assist you with today?\nCaller: No, that’s all. \nJoan: Thank you for calling Insurance Services. Enjoy your new home, Mr. DaLuca!\n",
+  "name": "Urgent Withdrawal - Athene",
+  "initial_message": "I requested a withdrawal three weeks ago, and I've had to postpone the closing on my house because you keep asking for more information. I don't understand why this is taking so long!",
+  "caller_gender": "male"
+}

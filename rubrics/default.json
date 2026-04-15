@@ -1,0 +1,84 @@
+{
+  "name": "Healthcare Support Call Quality",
+  "version": "4.0",
+  "sections": {
+    "1": {
+      "name": "Security & Authentication",
+      "description": "Verified caller identity and security information. (45 points total, all critical)",
+      "criteria": {
+        "1.1": {
+          "description": "Verified date of birth (DOB).",
+          "criticality": "Critical",
+          "max_points": 15.0,
+          "source": "Transcript"
+        },
+        "1.2": {
+          "description": "Verified Social Security Number (SSN).",
+          "criticality": "Critical",
+          "max_points": 15.0,
+          "source": "Transcript"
+        },
+        "1.3": {
+          "description": "Verified caller name and account number.",
+          "criticality": "Critical",
+          "max_points": 15.0,
+          "source": "Transcript"
+        }
+      }
+    },
+    "2": {
+      "name": "Professional Communication",
+      "description": "Communicated professionally and managed the call flow effectively. (20 points total)",
+      "criteria": {
+        "2.1": {
+          "description": "Maintained a courteous, professional, and respectful tone throughout the interaction.",
+          "criticality": "Non-Critical",
+          "max_points": 5.0,
+          "source": "Transcript"
+        },
+        "2.2": {
+          "description": "Demonstrated active listening by acknowledging the caller's concerns and confirming understanding.",
+          "criticality": "Non-Critical",
+          "max_points": 5.0,
+          "source": "Transcript"
+        },
+        "2.3": {
+          "description": "Used clear, plain language appropriate to the caller and avoided technical jargon.",
+          "criticality": "Non-Critical",
+          "max_points": 5.0,
+          "source": "Transcript"
+        },
+        "2.4": {
+          "description": "Offered the caller the opportunity to participate in a feedback survey.",
+          "criticality": "Non-Critical",
+          "max_points": 5.0,
+          "source": "Transcript"
+        }
+      }
+    },
+    "3": {
+      "name": "Compliance & Service",
+      "description": "Followed compliance requirements, provided accurate information, and delivered quality service. (21 points total)",
+      "criteria": {
+        "3.1": {
+          "description": "Protected confidential information and did not release sensitive details outside of established procedures.",
+          "criticality": "Critical",
+          "max_points": 15.0,
+          "source": "Transcript"
+        },
+        "3.2": {
+          "description": "Educated the caller on available self-service options and online resources when appropriate.",
+          "criticality": "Non-Critical",
+          "max_points": 5.0,
+          "source": "Transcript"
+        },
+        "3.3": {
+          "description": "Potential fraud indicators or caller dissatisfaction detected during the call.",
+          "criticality": "Non-Critical",
+          "max_points": 1.0,
+          "source": "Transcript"
+        }
+      }
+    }
+  }
+}

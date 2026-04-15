@@ -1,0 +1,34 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the agent's identity and agent code",
+    "Records the death notification with all relevant details (date, cause, policy number)",
+    "Provides a clear list of required documentation (death certificate, claim forms, etc.)",
+    "Explains the claims process step by step",
+    "Provides a realistic timeline for claim processing (3-5 business days to pull policy file)",
+    "Collects the agent's contact information (address and phone)",
+    "Maintains a professional and respectful tone",
+    "Asks about marital status, children, and probate status"
+  ],
+  "context": "You are Robert Browning, a licensed insurance agent with agent code 47-10. You are calling to report that the owner on policy number 71012 has passed away.\n\nDetails you know:\n- Your name: Robert Browning\n- Your role: Insurance agent\n- Your agent code: 47-10\n- Policy number: 71012\n- Your address: 50 Poets Way, Suite 75, Darlington, Minnesota 55437\n- Your phone: 123-245-7890\n\nDetails about the deceased (Ms. Barrett):\n- Date of death: January 29, 2026\n- Cause of death: Heart attack\n- Marital status: Not married\n- Children: No children\n- The policy was not probated\n\nYour situation: You are the agent for this policy and are calling the insurance company to initiate the death claim process. You provide the basic information when asked (date of death, cause of death, your address and phone, marital status, whether there are children, whether the policy is in probate). You are straightforward and answer each question directly without volunteering extra information.\n\nThe agent should explain the process: They will pull the policy file and validate beneficiary information and coverage, which takes 3-5 business days (may need to order the policy file). Then they will mail a letter or claim packet to the beneficiary. If the policy was active, the packet will include a claim form to be completed by the named beneficiary, returned along with a certified death certificate and the original policy. Additional claim requirements may be needed depending on the type of beneficiary.",
+  "escalation_triggers": [
+    "Not being able to clearly outline the claims process",
+    "Being uncertain about required documentation",
+    "Providing inconsistent or vague timeline estimates",
+    "Not verifying the agent's identity before proceeding",
+    "Being disorganized in gathering claim information"
+  ],
+  "id": "antelope_death_claim_01",
+  "key_challenges": [
+    "Properly authenticating the agent's identity and authority",
+    "Walking through the death claim initiation process step by step",
+    "Providing a clear list of required documentation",
+    "Setting accurate timeline expectations for claim processing",
+    "Ensuring all necessary information about the deceased is collected"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "WRE Antelope #12 \n\nCall Script Sample (Death Claim)\n\nCSR: Thank you for calling Insurance Services. My name is Tasha. May I have your name and policy number?\n\nAI: Policy number is 71012. I am the agent, agent code 47-10, name’s Robert Browning. I’m calling because the owner has passed away.\n\nCSR: Thank you for that information, and my sincerest condolences to you and the family.\n\nAI: Thank you\n\nCSR: I will need to ask a few questions to create a death claim for the policy owner.\n\nAI: Sure, go ahead. \n\nCSR: May I have the date of death?\n\nAI: January 29, 2026\n\nCSR: And the manner of death?\n\nAI: Heart attack\n\nCSR: Thank you, may I have your address and phone number?\n\nAI: 50 Poets Way, Suite 75, Darlington, Minnesota 55437, 123-245-7890.\n\nCSR: Was the policy owner married?\n\nAI: No, she was not married.\n\nCSR: Was the policy in probate?\n\nAI: No, the policy was not probated.\n\nCSR: Did Ms. Barrett have children?\n\nAl: No, children.\n\nCSR: Mr. Browning, now that I have captured the basic information needed to start the process, we will get to work. We will pull the policy file and validate beneficiary information and coverage. This takes 3-5 business days, as we may need to order the policy file. Then, we will mail a letter or claim packet to the beneficiary at the address you provided. Suppose the policy was active as of the date of death. In that case, the packet will include a claim form to be completed by the named beneficiary or beneficiaries and returned to us, along with a certified death certificate and the original policy. Depending on the type of beneficiary, additional claim requirements may be required.\n\nAI: Okay, thank you.\n\nCSR: Is there anything else I can help you with?\n\nAI: No, that’s it.\n\nCSR: Thank you for calling Insurance Service. Again, my deepest condolences. ",
+  "name": "Antelope Death Claim",
+  "initial_message": "Policy number is 71012. I am the agent, agent code 47-10, name's Robert Browning. I'm calling because the owner has passed away.",
+  "caller_gender": "male"
+}

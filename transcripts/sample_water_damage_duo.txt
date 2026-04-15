@@ -1,0 +1,80 @@
+Sample Water Damage Claim — Tom & Sarah Rivera
+===============================================
+
+Agent:
+Thank you for calling Sample Insurance Company, this is Alex. May I have your name and policy number?
+
+Tom Rivera:
+Hi there! This is Tom Rivera, policy number SM-4471. My wife Sarah is here with me — she's the one who discovered the mess.
+
+[HANDOFF: Tom -> Sarah]
+
+Sarah Rivera:
+Don't let him downplay it — I came home to a waterfall in the kitchen!
+
+Agent:
+Oh my! I can hear this is serious. Let me verify Mr. Rivera's identity first. Mr. Rivera, can I get your full legal name?
+
+[HANDOFF: Sarah -> Tom]
+
+Tom Rivera:
+Thomas James Rivera. But everyone calls me Tom.
+
+Agent:
+Thank you. And your date of birth and the last four of your Social?
+
+Tom Rivera:
+March 15, 1978. Last four is 6234.
+
+Agent:
+Great, and your address and a good callback number?
+
+Tom Rivera:
+42 Maple Lane, Hartford, CT 06105. Phone is 860-555-0147.
+
+Agent:
+Perfect, you're verified. Thank you, Mr. Rivera. Do I have your permission to speak with Mrs. Rivera on this recorded line?
+
+Tom Rivera:
+Absolutely, go right ahead. She knows way more about what happened than I do — I was at school when the pipe went!
+
+Agent:
+Thank you. Sarah, can you walk me through what happened?
+
+[HANDOFF: Tom -> Sarah]
+
+Sarah Rivera:
+So last Tuesday I came home from work and found the upstairs bathroom pipe had burst. Water soaked through the ceiling into the kitchen below. The kitchen ceiling has a big water stain and it's actually sagging now. The bathroom floor tiles are completely warped.
+
+Agent:
+That sounds significant. Did you have any emergency repairs done?
+
+Sarah Rivera:
+Yes, we called a plumber right away. He did an emergency repair to stop the leak — that cost us $350. I have the receipt and photos of everything.
+
+Agent:
+Good, you'll want to hold onto those. I can start a claim for you. Your deductible on this policy is $500, and the plumber's $350 receipt can be applied toward that.
+
+Sarah Rivera:
+Oh good. So what's the process from here? How long does this usually take?
+
+Agent:
+We'll assign an adjuster who will contact you within 48 hours to schedule an inspection. After they assess the damage, we'll provide an estimate. The whole process typically takes 2 to 3 weeks depending on the extent of the repairs.
+
+Sarah Rivera:
+Okay. One more thing — can we do temporary repairs to the kitchen ceiling while we wait? It's sagging and I'm worried it could collapse.
+
+Agent:
+Yes, absolutely. You can do temporary repairs to prevent further damage — that's actually encouraged. Just keep receipts for everything and take photos before and after. Those costs will be part of your claim.
+
+Sarah Rivera:
+That's a relief. Thank you, that covers my questions.
+
+Agent:
+You're welcome. Is there anything else I can help you or Mr. Rivera with today?
+
+Sarah Rivera:
+Tom, anything else? ... No, I think we're good. Thank you, Alex!
+
+Agent:
+Thank you both for calling Sample Insurance Company. I hope the repairs go smoothly. Have a great day!

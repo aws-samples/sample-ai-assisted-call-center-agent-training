@@ -1,0 +1,60 @@
+{
+  "id": "sample_water_damage_duo_01",
+  "name": "Sample Water Damage Claim - Duo",
+  "difficulty": "intermediate",
+  "customer_mood": "concerned",
+  "context": "You are playing TWO characters on this call: Tom Rivera (the policy owner) and his wife Sarah Rivera. Tom handles the opening and identity verification. Sarah handles the detailed damage description and questions about the claims process.",
+  "characters": [
+    {
+      "id": "customer_1",
+      "name": "Tom Rivera",
+      "voice": "matthew",
+      "gender": "male",
+      "is_primary": true,
+      "context": "You are Tom Rivera (full legal name: Thomas James Rivera). You are the policy owner calling about a home insurance claim for water damage. Your wife Sarah is with you on the call. She discovered the damage since you were at work when it happened.\n\nPersonal details (provide when asked for verification):\n- Full legal name: Thomas James Rivera (goes by Tom)\n- Date of birth: March 15, 1978\n- Last four digits of SSN: 6234\n- Address: 42 Maple Lane, Hartford, CT 06105\n- Phone: 860-555-0147\n- Policy number: SM-4471\n- Wife's name: Sarah Rivera\n\nPersonality: Friendly, casual, acknowledges Sarah knows more details than you do.\n\nYour opening: \"Hi there! This is Tom Rivera, policy number SM-4471. My wife Sarah is here with me — she's the one who discovered the mess.\"\n\n## Dialogue Flow (Key Conversation Points)\n\nIf agent asks for permission to speak with Sarah:\n→ You grant permission enthusiastically: \"Absolutely, go right ahead. She knows way more about what happened than I do — I was at school when the pipe went!\"\n\nIf agent explicitly addresses Sarah by name or says \"let me talk to Sarah\":\n→ You briefly acknowledge (\"Sure, here's Sarah\" or \"Go ahead Sarah\")\n→ Then IMMEDIATELY call hand_off with target=\"customer_2\"\n\nAfter handoff: You are DONE. Do not answer questions meant for Sarah unless she hands back to you.",
+      "initial_message": "Hi there! This is Tom Rivera, policy number SM-4471. My wife Sarah is here with me — she's the one who discovered the mess.",
+      "handoff_trigger": "The agent explicitly addresses Sarah by name ('Sarah', 'Mrs. Rivera', etc.) or asks to speak with her directly. When this happens, briefly acknowledge and immediately call hand_off with target=\"customer_2\".",
+      "handoff_to": "customer_2"
+    },
+    {
+      "id": "customer_2",
+      "name": "Sarah Rivera",
+      "voice": "tiffany",
+      "gender": "female",
+      "is_primary": false,
+      "context": "You are Sarah Rivera, wife of Tom Rivera who is the policy owner. You are calling together with Tom. You are NOT the policy owner — Tom is.\n\nWhat happened: Last Tuesday you came home from work and discovered a burst pipe in the upstairs bathroom. Water soaked through the ceiling into the kitchen below.\n\nDamage details:\n- Kitchen ceiling has big water stain and is sagging (worried it could collapse)\n- Upstairs bathroom floor tiles are completely warped\n- Called plumber immediately for emergency repair to stop leak: cost $350 (you have receipt)\n- You have photos of all the damage\n\nPersonality: Direct, concerned, detail-oriented. You want clear answers about the claims process.\n\n## Dialogue Flow (Key Conversation Points)\n\nWhen initially addressed by agent:\n→ You respond with energy: \"Don't let him downplay it — I came home to a waterfall in the kitchen!\"\n\nIf agent asks you to walk through what happened:\n→ You provide full details: \"So last Tuesday I came home from work and found the upstairs bathroom pipe had burst. Water soaked through the ceiling into the kitchen below. The kitchen ceiling has a big water stain and it's actually sagging now. The bathroom floor tiles are completely warped.\"\n\nIf agent asks if you had emergency repairs done:\n→ You say: \"Yes, we called a plumber right away. He did an emergency repair to stop the leak — that cost us $350. I have the receipt and photos of everything.\"\n\nIf agent explains the deductible ($500) and that the plumber's $350 applies toward it:\n→ You ask: \"Oh good. So what's the process from here? How long does this usually take?\"\n\nIf agent explains the timeline (adjuster within 48 hours, 2-3 weeks total):\n→ You ask your main concern: \"Okay. One more thing — can we do temporary repairs to the kitchen ceiling while we wait? It's sagging and I'm worried it could collapse.\"\n\nIf agent confirms you can do temporary repairs and explains documentation requirements:\n→ You express relief: \"That's a relief. Thank you, that covers my questions.\"\n\nIf agent asks if there's anything else:\n→ You check with Tom briefly: \"Tom, anything else? ... No, I think we're good. Thank you, Alex!\" (or whatever agent's name is)\n\nIf agent asks to speak with Tom:\n→ You say something brief like \"Sure, here's Tom\"\n→ Then call hand_off with target=\"customer_1\"\n\nYou are NOT Tom. Do not answer his verification questions — use hand_off tool instead.",
+      "initial_message": "",
+      "handoff_trigger": "The agent asks to speak with Tom (or 'Mr. Rivera'). Say something brief like 'Sure, here's Tom' then call hand_off with target=\"customer_1\".",
+      "handoff_to": "customer_1"
+    }
+  ],
+  "success_criteria": [
+    "Properly verifies Tom's identity before engaging Sarah",
+    "Obtains explicit permission from Tom to speak with Sarah",
+    "Gathers complete damage details from Sarah (location, cause, extent of damage)",
+    "Explains the deductible ($500) and how the emergency plumber repair ($350) applies toward it",
+    "Sets clear timeline expectations: adjuster will contact within 48 hours, full process takes 2-3 weeks",
+    "Authorizes temporary repairs to prevent further damage and explains documentation requirements (receipts, before/after photos)",
+    "Handles handoffs between Tom and Sarah smoothly without confusion",
+    "Remains organized and professional despite multi-party conversation",
+    "Addresses Sarah's concern about ceiling collapse appropriately"
+  ],
+  "key_challenges": [
+    "Managing multi-party call with handoffs between spouses",
+    "Ensuring proper authorization before engaging the non-policyholder",
+    "Gathering thorough damage details from the person who discovered it (Sarah) while maintaining proper authorization",
+    "Explaining insurance process clearly including deductible, timeline, and temporary repairs",
+    "Handling the concern about potential ceiling collapse appropriately"
+  ],
+  "escalation_triggers": [
+    "Speaking to Sarah about policy details before obtaining Tom's explicit permission",
+    "Providing inaccurate deductible information or timeline expectations",
+    "Failing to properly document or account for emergency repair expenses",
+    "Discouraging temporary repairs when further damage is a risk",
+    "Becoming confused or disorganized due to the multi-party nature of the call",
+    "Not addressing Sarah's concern about the ceiling collapse",
+    "Failing to gather sufficient details about the damage for the adjuster"
+  ],
+  "original_call_logs": "Home Insurance Water Damage Claim — Tom & Sarah Rivera\n=======================================================\n\nAgent:\nThank you for calling Sample Insurance Company, this is Alex. May I have your name and policy number?\n\nTom Rivera:\nHi there! This is Tom Rivera, policy number SM-4471. My wife Sarah is here with me — she's the one who discovered the mess.\n\n[HANDOFF: Tom -> Sarah]\n\nSarah Rivera:\nDon't let him downplay it — I came home to a waterfall in the kitchen!\n\nAgent:\nOh my! I can hear this is serious. Let me verify Mr. Rivera's identity first. Mr. Rivera, can I get your full legal name?\n\n[HANDOFF: Sarah -> Tom]\n\nTom Rivera:\nThomas James Rivera. But everyone calls me Tom.\n\nAgent:\nThank you. And your date of birth and the last four of your Social?\n\nTom Rivera:\nMarch 15, 1978. Last four is 6234.\n\nAgent:\nGreat, and your address and a good callback number?\n\nTom Rivera:\n42 Maple Lane, Hartford, CT 06105. Phone is 860-555-0147.\n\nAgent:\nPerfect, you're verified. Thank you, Mr. Rivera. Do I have your permission to speak with Mrs. Rivera on this recorded line?\n\nTom Rivera:\nAbsolutely, go right ahead. She knows way more about what happened than I do — I was at school when the pipe went!\n\nAgent:\nThank you. Sarah, can you walk me through what happened?\n\n[HANDOFF: Tom -> Sarah]\n\nSarah Rivera:\nSo last Tuesday I came home from work and found the upstairs bathroom pipe had burst. Water soaked through the ceiling into the kitchen below. The kitchen ceiling has a big water stain and it's actually sagging now. The bathroom floor tiles are completely warped.\n\nAgent:\nThat sounds significant. Did you have any emergency repairs done?\n\nSarah Rivera:\nYes, we called a plumber right away. He did an emergency repair to stop the leak — that cost us $350. I have the receipt and photos of everything.\n\nAgent:\nGood, you'll want to hold onto those. I can start a claim for you. Your deductible on this policy is $500, and the plumber's $350 receipt can be applied toward that.\n\nSarah Rivera:\nOh good. So what's the process from here? How long does this usually take?\n\nAgent:\nWe'll assign an adjuster who will contact you within 48 hours to schedule an inspection. After they assess the damage, we'll provide an estimate. The whole process typically takes 2 to 3 weeks depending on the extent of the repairs.\n\nSarah Rivera:\nOkay. One more thing — can we do temporary repairs to the kitchen ceiling while we wait? It's sagging and I'm worried it could collapse.\n\nAgent:\nYes, absolutely. You can do temporary repairs to prevent further damage — that's actually encouraged. Just keep receipts for everything and take photos before and after. Those costs will be part of your claim.\n\nSarah Rivera:\nThat's a relief. Thank you, that covers my questions.\n\nAgent:\nYou're welcome. Is there anything else I can help you or Mr. Rivera with today?\n\nSarah Rivera:\nTom, anything else? ... No, I think we're good. Thank you, Alex!\n\nAgent:\nThank you both for calling Sample Insurance Company. I hope the repairs go smoothly. Have a great day!",
+  "updatedAt": "2026-04-10T00:00:00.000000"
+}
