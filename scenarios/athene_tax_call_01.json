@@ -1,0 +1,35 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies Jay's identity as the policy owner",
+    "Obtains Jay's verbal consent before discussing policy details with Merry",
+    "Clearly explains all three deductions: MVA ($1,289.61), federal withholding at 20% ($5,639.83), and state withholding at 6.99% ($1,971.12)",
+    "Shows how the deductions account for the difference between expected and received amounts",
+    "Patiently handles Jay's talkative nature while keeping the call on track",
+    "Addresses Merry's detailed questions accurately",
+    "Explains what MVA is and why it applies",
+    "Confirms whether the withholdings will be reported on a 1099"
+  ],
+  "context": "You are Jay Forrester, the owner of Athene policy number 30SV8. Your legal name is James Forrester but you go by Jay. You recently surrendered the policy. Your wife Merry is with you on the call. You just retired.\n\nPersonal details you know and can provide when asked:\n- Full legal name: James Forrester (goes by Jay)\n- Date of birth: September 1, 1961\n- Last four digits of SSN: 9999\n- Address: 18 Sunday Drive, Bristol, CT 06010\n- Phone: 999-555-8888\n- Policy number: 30SV8\n- Wife's name: Merry Forrester (she is NOT the policy owner)\n\nYour situation: You surrendered your Athene policy. The surrender value was $29,488.75. However, you received a check for approximately $20,588.19. You want the discrepancy explained. The difference is accounted for by three things:\n1. Market Value Adjustment (MVA): -$1,289.61\n2. Federal tax withholding at 20%: -$5,639.83\n3. State tax withholding at 6.99%: -$1,971.12\n\nYou did not realize there would be tax withholdings or an MVA deduction. Merry, your wife, is the more detail-oriented one and she will want to jump in and ask clarifying questions. However, since Merry is not the policy owner, the agent needs to get your verbal consent before speaking with her about your policy.",
+  "updatedAt": "2026-03-11T19:34:29.080966",
+  "escalation_triggers": [
+    "Speaking with Merry about policy details without first getting Jay's consent",
+    "Being impatient with Jay's chattiness or jokes",
+    "Not being able to break down the numbers clearly",
+    "Providing incorrect information about the MVA or tax withholdings",
+    "Being condescending when explaining financial concepts"
+  ],
+  "id": "athene_tax_call_01",
+  "key_challenges": [
+    "Explaining the three deductions (MVA, federal withholding, state withholding) clearly",
+    "Obtaining verbal consent from the policy owner before speaking with Merry",
+    "Managing a talkative caller who goes on tangents about retirement",
+    "Providing accurate tax withholding information",
+    "Addressing both Jay's casual style and Merry's detail-oriented questions"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Athene Tax Call – PO with spouse \nLana:\nCustomer Service, this is Lana. May I please have your name and policy number?\nMr. Forrester:\nHi Lana! This is Jay Forrester, policy number 30SV8. I’m here with my wife Merry—she’s the boss today. I finally retired, and she’s already put me to work remodeling the kitchen!\nMrs. Forrester\nI’m not going to watch him watch TV all day! Hi Lana, I have a couple of questions about our surrender check.\nLana:\nOf course, Mr. and Mrs. Forrester. I’d be happy to help. Congratulations on retiring, Mr. Forrester! May I ask you a few questions to authenticate the call?\nMr. Forrester: Now you’ve got orders for me, too? Haha! What would you like to know?\nLana: May I have your legal name?\nMr. Forrester: My legal name? Oh, you probably show me as James. \nLana: Thank you. What is your date of birth and the last four digits of your Social Security Number?\nMr. Forrester: 9/1/61, 9999\nLana: Your address and a good call-back number?\nMr. Forrester: 18 SUNDAY DRIVE,  BRISTOL, CT 06010. 999-555-8888.\nLana: Thank you so much, Mr. Forrester. Do I have your permission to speak with Mrs. Forrester on this recorded line?\nMr. Forrester: Yes, you can do whatever she asks.\nLana: Thank you. This permission is valid for this call only. Mrs. Forrester, how can I help you?\nMrs. Forrester\nWhen we requested our surrender, there was nearly $30,000 in the account. We just got our check, and it was $10,000 less. What happened?\nLana:\nI can understand why you’d be concerned! It will take me a moment to review the account.\nMrs. Forrester \nTake your time.\nLana: \nThank you for your patience. The surrender value of the policy was originally $29,488.75.\nThere was a Market Value Adjustment of $1,289.61.\nFederal withholding at 20% came to $5,639.83, and although you requested no state withholding, there was a mandatory 6.99% withheld, totaling $1,971.12.\nThat brought your net withdrawal to $20,588.19.\nMrs. Forrester\nOh, I see. Do you know why the state withholding was applied even though we asked not to?\nLana:\nState withholding can sometimes be applied automatically depending on your state’s regulations. I recommend checking with your tax advisor for clarification. \nMrs. Forrester\nCan’t escape taxes, I suppose. Will the tax form be sent electronically or by mail?\nLana:\nIt will be mailed to the address of record by January 31st.\nMrs. Forrester\nOkay, thank you. That helps a lot.\nLana:\nIs there anything else I can do for you?\nMr. & Mrs. Forrester\nNo, that’s everything. Thanks, Lana!\nLana:\nThank you for calling Client Services. Have a nice day!\n",
+  "name": "ATH Tax Call - PO with Spouse",
+  "initial_message": "Hi, this is Jay Forrester, policy number 30SV8. I’m here with my wife Merry—she’s the boss today. I finally retired, and she’s already put me to work remodeling the kitchen!",
+  "caller_gender": "male"
+}

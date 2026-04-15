@@ -1,0 +1,33 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity using agent number (2400)",
+    "Provides the death benefit type (level) and explains how it differs from increasing",
+    "States the death benefit ($300,000) and cash value (approximately $73,838.70) clearly",
+    "Reports on the beneficiary change status (received October 2025, processed)",
+    "Confirms the current beneficiary (The Jon Banks Center for ALS)",
+    "Provides the cost of insurance ($283.96)",
+    "Handles all questions efficiently and accurately"
+  ],
+  "context": "You are Felina Goldman, assistant to Charles Goldman, the Agent of Record for Elaine Butcher. You are calling about JNL policy number 0437.\n\nDetails you know:\n- Your name: Felina Goldman\n- Your role: Assistant to Charles Goldman, the Agent of Record\n- Client name: Elaine Butcher\n- Policy number: 0437\n- Your phone: 318-999-8888\n- Your agent number: 2400 (used for verification)\n\nYour situation: You are calling to get several pieces of information about Elaine Butcher's policy. You have a list of questions and you go through them one by one:\n1. Does the policy have a level or increasing death benefit?\n2. How does a level death benefit differ from an increasing one? (With increasing, cash value is added to the specified amount at time of claim. With level, the death benefit does not change based on cash value — it is just the specified amount minus any unpaid loans.)\n3. What are the current death benefit and cash values?\n4. Was the beneficiary change form sent at the end of 2025 received and processed?\n5. Who is showing as the beneficiary?\n6. What is the current cost of insurance?\n\nThe answers (as of 1/28/2026):\n- Death benefit type: Level\n- Death benefit: $300,000\n- Cash value: approximately $73,838.70\n- Beneficiary change: Received in October 2025, processed\n- Current beneficiary: The Jon Banks Center for ALS\n- Last cost of insurance charge: $283.96\n\nAfter asking all your questions, you pause and wait for the agent to ask if there is anything else they can help with.",
+  "escalation_triggers": [
+    "Not verifying the caller's authorization before releasing policy details",
+    "Providing inaccurate values for death benefit or cash value",
+    "Being disorganized or unable to find the requested information",
+    "Making the caller wait excessively between each question",
+    "Not being able to provide the beneficiary change status"
+  ],
+  "id": "jnl_db_value_01",
+  "key_challenges": [
+    "Properly authenticating the caller as an authorized agent assistant",
+    "Providing multiple pieces of policy information accurately",
+    "Explaining the difference between level and increasing death benefits",
+    "Checking and reporting on the beneficiary change status",
+    "Being organized and efficient to match the caller's methodical approach"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Mock Call Sample \nCall #1\nRep: Thank you for calling client services, this is Brooks, may I have your name and policy number?\nTrainer: My name is Felina Goldman, assistant to Charles Goldman, the Agent of Record for Elaine Butcher. I’m calling in on her policy 0437\nRep: Thank you, Felina, I’ll pull that policy up shortly; while I do, can I get a good contact number in case we need to reach back out for any reason?\nTrainer: Yes, my phone number is 3189998888.\nRep: Thank you, it will take a few seconds to pull up your client’s policy. Thank you for your patience.\nTrainer: Of course\nRep: I have the policy pulled up; I just need to ask you to verify your agent number before I can provide any information. \nTrainer: My agent number is 2400\nRep: Perfect, thank you. And how can I help you today?\nTrainer: I wanted to know if her policy has a level or increasing death benefit?\nRep: Level\nTrainer: How does that differ from an increasing death benefit? \nRep: With an increasing death benefit, at the time of claim, the cash value would be added to the specified amount of the policy. This policy’s level death benefit means that the death benefit does not change based on the cash value. At the time of claim, the death benefit would be the specified amount, minus any unpaid loans, if any.\nTrainer: So, what are the current death benefit and cash values?\nRep: (As of 1/28/2026) The death benefit is currently $300,000 cash value is approximately 73,838.70, \nTrainer: Our office sent a beneficiary change form at the end of 2025; can you remind me if that was received and processed?\nRep: Let me take a look, just one moment. Yes, we received a beneficiary change form in October of 2025, it was processed.\nTrainer: Who do you have showing as the beneficiary?\nRep: The Jon Banks Center for ALS\nTrainer: And what is the current Cost of Insurance?\nRep: (As of January 28, 2026) The last cost of insurance charge was $283.96\nTrainer: (Pause to wait for an additional help statement)\nRep: Was there any other information I could provide today? (Acceptable additional help statement)\nTrainer: That’s all I needed, thank you!\nRep: Thank you for calling client services, I hope you have a great rest of your day! If you would stay on the line after the call, there will be a brief survey after the close.\n\n\n\n\n",
+  "name": "JNL DB Value",
+  "initial_message": "My name is Felina Goldman, assistant to Charles Goldman, the Agent of Record for Elaine Butcher. I'm calling in on her policy 0437.",
+  "caller_gender": "female"
+}

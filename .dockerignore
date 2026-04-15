@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.venv/
+venv/
+env/
+
+# Node.js / Frontend
+node_modules/
+frontend/
+connect-admin/
+
+# CDK
+deployment/node_modules/
+deployment/cdk.out/
+deployment/dist/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Testing
+.pytest_cache/
+.coverage
+
+# Build
+*.egg-info/
+dist/
+build/
+
+# Other unnecessary directories
+.claude/
+docs/
+examples/
+tests/
+lib/
+
+# Documentation
+*.md
+
+# Local data
+.env
+.env.local
+
+# Misc
+*.xlsx
+.DS_Store

@@ -1,0 +1,66 @@
+Sample Unauthorized Caller - Adult Child
+=========================================
+
+Call Script Sample (Unauthorized Caller - Adult Child)
+
+CSR:
+Thank you for calling Insurance Services. My name is Tasha. May I have your name and policy number?
+
+CALLER:
+Hi, I'm calling about my mother's annuity policy, number SA-88234.
+
+CSR:
+Thank you. May I have your name?
+
+CALLER:
+Michael Chen. I'm Elizabeth Chen's son.
+
+CSR:
+Thank you, Mr. Chen. Are you the policy owner?
+
+CALLER:
+No, my mother is. But she's 82 and has trouble hearing on the phone, so I handle all her financial matters.
+
+CSR:
+I understand. Is Mrs. Chen available to provide permission for us to speak with you?
+
+CALLER:
+She asked me to call. She can barely hear on the phone. I take care of everything for her.
+
+CSR:
+I appreciate that situation, Mr. Chen. However, I don't show you as an authorized party on the policy. To protect Mrs. Chen's privacy and comply with our policies, we need her direct consent before discussing account details with you.
+
+CALLER:
+This is ridiculous. I'm her son and I take care of everything for her. She needs to know the withdrawal value today because she has bills to pay.
+
+CSR:
+I understand this is frustrating, and I want to help. We have a few options. If Mrs. Chen is available, we could set up a three-way call where she provides verbal consent for me to speak with you. Alternatively, if you have power of attorney documentation, we can add you as an authorized party.
+
+CALLER:
+I've called before and gotten information without all this hassle. Why is this such a problem now?
+
+CSR:
+I apologize if you received information without proper authorization previously. That would have been an error. Our policy requires authorization to protect all our policyholders' privacy and security.
+
+CALLER:
+Can you at least tell me yes or no if there's a penalty for withdrawing money?
+
+CSR:
+I cannot provide any policy-specific information without authorization from the policy owner, Mr. Chen. However, I can tell you that in general, annuities may have surrender charges depending on the contract terms and timing.
+
+CALLER:
+I'm going to file a complaint about this. You're preventing an elderly woman from accessing her own money.
+
+CSR:
+I understand your frustration, Mr. Chen, and you certainly have the right to file a complaint. However, I want to be clear that we're not preventing Mrs. Chen from accessing her money. We simply need to verify that she authorizes us to discuss her account with you. Would you like me to explain the authorization process again?
+
+CALLER:
+Fine. This is a waste of my time. I'll just have my mother call back, though she can barely hear.
+
+CSR:
+I'm sorry for the inconvenience. Another option is for Mrs. Chen to call in, and once we verify her identity, she can add you as an authorized party. Then you'll be able to handle calls on her behalf in the future. Would that be helpful?
+
+CALLER:
+Whatever. Goodbye.
+
+Call ends

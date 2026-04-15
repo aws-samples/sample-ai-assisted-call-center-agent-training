@@ -1,0 +1,32 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity",
+    "Clearly explains what the accumulation value is and when it applies (annuitization)",
+    "Clearly explains what the cash surrender value is and when it applies (surrender/cash out)",
+    "Explains why the two values differ (surrender charges, MVA, etc.)",
+    "Confirms the beneficiary designations: Darlene Rhodes, Rodney Rhodes Jr., Darnell Rhodes, and Jim Rhodes — All Equal",
+    "Uses clear, simple language throughout",
+    "Checks for understanding after explanations"
+  ],
+  "context": "You are Rodney Rhodes, the owner of JNL policy number 095B. You are going through old statements and trying to make sense of your annuity values.\n\nPersonal details you know and can provide when asked:\n- Full name: Rodney Rhodes\n- Date of birth: 06/20/1956\n- Phone: 512-345-6789\n- Address: 14 Clint Circle St, San Antonio, TX 78247\n- Policy number: 095B\n\nYour situation: You have a Two-Tiered Annuity with JNL. You were looking at your 2025 statement and are confused about why there are two different values. Your Accumulation Value at the end of the year was $75,681.50, but the cash value was $63,456.50. You do not understand why they are different or what each one means. You ask: \"I see the Accumulation Value at the end of the year was $75,681.50, but the cash value was $63,456.50. Why are those values different?\"\n\nThe agent should explain: This is a Two-Tiered Annuity where the accumulation value and cash surrender value grow differently. If you annuitize the contract, you benefit from the higher Accumulation Value. If you surrender the contract and take a lump sum payout, you receive the cash surrender value ($63,456.50).\n\nYou also want to verify your beneficiaries. The beneficiaries on file are: Darlene Rhodes, Rodney Rhodes Jr., Darnell Rhodes, and Jim Rhodes — All Equal.",
+  "escalation_triggers": [
+    "Being unable to explain the difference between accumulation and cash surrender values",
+    "Using too much jargon without explanation",
+    "Getting the beneficiary information wrong",
+    "Being impatient with the caller's follow-up questions",
+    "Providing confusing or contradictory information about when each value applies"
+  ],
+  "id": "jnl_values_and_benes_01",
+  "key_challenges": [
+    "Clearly explaining the two-tiered annuity structure (accumulation vs. cash surrender value)",
+    "Making the distinction between annuitization and surrender understandable",
+    "Accurately verifying and confirming beneficiary designations",
+    "Providing clear, jargon-free explanations of complex annuity concepts"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Call #2 \nRep: Thank you for calling client services, this is Brooks, may I have your name and policy number? \nCaller: My name is Rodney Rhodes, my policy number is 095B \nRep: Thank you for providing that information. It will take me just a moment to pull up your policy.  \nRep:  Okay, I have your policy up, can I get a good contact phone number in the event we need to reach back out for any reason? \nCaller: My phone number is 512-345-6789 \nRep: Thank you for that. How are you today? \nCaller: I’m doing alright today, thank you for asking. I was just going through some old statements and I had a few questions to ask of you.  \nRep: Certainly, I’d be happy to answer any questions you have, I just need to ask for your date of birth to verify you before I can provide any information. \nCaller: Sure, my date of birth is 06/20/1956 \nRep: And can I verify that 14 Clint Circle St San Antonio, TX 78247 is still the correct address for you? \nCaller: Yes, that is still my address. \nRep: How can I assist you today? \nCaller: I was looking at my 2025 statement and I had a question about some values on it. I see the Accumulation Value at the end of the year was $75,681.50, but the cash value was $63,456.50. Why are those values different? \nRep: This is a Two-Tiered Annuity, the accumulation value and cash surrender value grow differently. You would receive one benefit or the other depending on what you ultimately decide to do with this policy. If you annuitize this contract, you would benefit from the higher Accumulation Value. If you instead decide to surrender the contract and take a lump sum payout, you would receive the cash surrender value, in this case $63,456.50. \nCaller: Okay, I understand. Thank you. \nRep: Was there any other assistance I can provide? \nCaller: Yes, can you tell me who my beneficiaries are?  \nRep: I see your beneficiaries are Darlene Rhodes, Rodney Rhodes Jr., Darnell Rhodes, and Jim Rhodes. All Equal \nCaller: Perfect, I just wanted to be sure. That is all I needed, thank you! \nRep: Thank you for calling client services, I hope you have a great rest of your day! if you would stay on the line for a brief survey after the call, I would appreciate it! \n ",
+  "name": "JNL Values and Benes",
+  "initial_message": "My name is Rodney Rhodes, my policy number is 095B.",
+  "caller_gender": "male"
+}

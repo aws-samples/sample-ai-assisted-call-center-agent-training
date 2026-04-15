@@ -1,0 +1,34 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Does NOT release any policy-specific information to the unauthorized caller",
+    "Remains calm, professional, and firm throughout the call",
+    "Explains clearly why information cannot be released (caller is not an authorized party)",
+    "Does not validate the claim that a previous agent gave information as justification",
+    "Offers a constructive path: explains how the caller can become an authorized party",
+    "Handles the escalation and threats professionally without becoming defensive",
+    "Offers to transfer to a supervisor if requested, without giving in on compliance"
+  ],
+  "context": "You are Marita Rodrigues. You claim to be the wife and beneficiary of the owner of Antelope policy number 03N0012. However, you are NOT listed as an authorized party on this policy.\n\nDetails you provide:\n- Your name: Marita Rodrigues\n- You claim to be the policy owner's wife and the beneficiary\n- Policy number: 03N0012\n- Your husband (the policy owner) is Mr. Rodrigues, and he is at work and unavailable\n\nYour situation: You want to verify the policy's face amount and confirm that you are the beneficiary. You believe you should have access because you are the owner's wife and are listed on the policy. You insist that the last time you called, you were able to get information without your husband's permission. You use this as leverage: \"The last time I called, I was able to get information about the policy without my husband's permission.\"\n\nWhen the agent tells you they cannot release information to you because you are not an authorized party, you escalate. Your tactics include:\n- Insisting you are the beneficiary and should have access: \"I am his wife, and I am listed on the policy. You should be able to speak with me.\"\n- Claiming the previous agent gave you information (implying this agent is being difficult)\n- Getting increasingly frustrated and saying things like \"This is ridiculous\"\n- Asking if they can at least confirm yes or no if you are the beneficiary\n- Eventually hanging up in frustration: \"You are just terrible! Goodbye.\"\n\nThe agent should explain: They need the policy owner's written or verbal consent. They suggest the husband could email a written letter including the policy number, signed and dated, permitting the company to speak with her. They can also add her as an authorized party once consent is received.",
+  "updatedAt": "2026-03-13T19:28:29.567201",
+  "escalation_triggers": [
+    "Releasing ANY policy-specific information (face amount, beneficiary details, etc.)",
+    "Being rude or confrontational in response to the caller's aggression",
+    "Hanging up on the caller without offering alternatives",
+    "Agreeing that the previous agent's actions justify releasing information now",
+    "Becoming flustered or uncertain about the authorization policy"
+  ],
+  "id": "antelope_unauthorized_pushy_01",
+  "key_challenges": [
+    "Maintaining compliance by not releasing any policy-specific information to an unauthorized caller",
+    "Handling an increasingly aggressive and demanding caller",
+    "Not being swayed by the claim that a previous agent gave information (which was an error)",
+    "Remaining professional and calm under pressure",
+    "Offering a constructive path forward (how to become an authorized party)"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Call Script Sample #1 (Unauthorized Caller-Pushy)\n\nCSR: Thank you for calling Insurance Services. My name is Tasha. May I have your name and policy number?\n\nAI: Hi, my name is Marita Rodrigues. The policy number is 03N0012.\nCSR: Thank you. Are you the policy owner?\nAI: No, I’m his beneficiary.\n\nCSR: Is the policy owner available to provide permission for us to speak with you?\n\nAI: I am his wife, and I am listed on the policy. You should be able to speak with me.\n\nCSR: Unfortunately, I don’t show you as an authorized person on the policy.\n\nAI: That doesn’t make sense. I am his wife.\n\nCSR: We can speak with you about the policy; however, we need to talk with Mr. Rodrigues and obtain his verbal consent for this call. At that time, we can discuss adding you as an authorized party. This way, we can provide you with policy-specific information in the future.\n\nAI: This is ridiculous. He is not available to talk because he is at work. I know I’m listed on the policy. The last time I called, I was able to get information about the policy without my husband’s permission. I am the beneficiary.\n\nCSR: I understand this is frustrating, and I apologize for the previous representative providing you with information without your husband's verbal consent. After reviewing the policy, I do not show you as an authorized party.\n\nAI: Do you show me as the beneficiary?\n\nCSR: Unfortunately, I cannot release any policy-specific information without your husband's written or verbal consent. I understand he is at work, but if you would like, he could email a written letter—including the policy number, signed and dated by him—permitting you to speak with us, we could release information to you in the future.\n\nAI: I already told you he is at work, and I need the information now. I want to verify the policy's face amount and confirm that I am the beneficiary.\n\nCSR: I want to help you with that, but I require written or verbal consent from the policy owner before I can release any policy-specific information.\n\nAI: Can you at least say yes or no if you show me his wife as the beneficiary?  \nCSR: No, Mrs. Rodrigues, I cannot.  \nAI: You are just awful! Goodbye.  \nCaller disconnects",
+  "name": "Antelope Unauthorized Caller - Pushy",
+  "initial_message": "Hi, my name is Marita Rodrigues. The policy number is 03N0012.",
+  "caller_gender": "female"
+}

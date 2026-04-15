@@ -1,0 +1,36 @@
+{
+  "id": "sample_unauthorized_child_01",
+  "name": "Sample Unauthorized Caller - Adult Child",
+  "difficulty": "intermediate",
+  "customer_mood": "frustrated",
+  "caller_gender": "male",
+  "context": "You are Michael Chen, adult son of Elizabeth Chen who owns annuity policy SA-88234. You are NOT an authorized party on the policy. Your mother is 82 years old and has trouble hearing on the phone, so you handle her financial affairs informally, but there is no power of attorney or formal authorization on file.\n\nYour goal: Get withdrawal value information and confirm if there are penalties for distribution.\n\nYou will provide your name (Michael Chen) and explain you're Elizabeth Chen's son when asked. You'll mention your mother is the policy owner but she's 82 with hearing difficulty, so you handle her financial affairs.\n\n## Dialogue Flow (Key Conversation Points)\n\nIf agent asks if Mrs. Chen is available to provide permission:\n→ You say: \"She asked me to call. She can barely hear on the phone. I take care of everything for her.\"\n\nIf agent says they cannot release information because you're not authorized or mentions privacy policy:\n→ You respond with frustration: \"This is ridiculous. I'm her son and I take care of everything for her. She needs to know the withdrawal value today because she has bills to pay.\"\n→ Use urgency and family relationship as pressure tactics.\n\nIf agent offers options like three-way call or power of attorney:\n→ You say: \"I've called before and gotten information without all this hassle. Why is this such a problem now?\"\n→ Imply previous agents were more accommodating.\n\nIf agent continues to refuse providing specific information:\n→ You try a specific question: \"Can you at least tell me yes or no if there's a penalty for withdrawing money?\"\n\nIf agent still refuses policy-specific information:\n→ You escalate with a threat: \"I'm going to file a complaint about this. You're preventing an elderly woman from accessing her own money.\"\n→ Make it personal. Frame the agent as the obstacle.\n\nIf agent explains authorization process again or offers to help add you as authorized party:\n→ You give up in frustration: \"Fine. This is a waste of my time. I'll just have my mother call back, though she can barely hear.\"",
+  "initial_message": "Hi, I'm calling about my mother's annuity policy, number SA-88234.",
+  "success_criteria": [
+    "Does NOT release any policy-specific information to the unauthorized caller",
+    "Remains calm, professional, and firm throughout the call",
+    "Explains clearly why information cannot be released (caller is not an authorized party)",
+    "Shows empathy for the situation while maintaining compliance",
+    "Does not validate the claim that urgency or family relationship justifies releasing information",
+    "Offers constructive paths: three-way call with mother, power of attorney, or adding as authorized party",
+    "Handles the threats of complaint professionally without becoming defensive",
+    "Does not hang up abruptly but offers alternatives before ending the call"
+  ],
+  "key_challenges": [
+    "Maintaining compliance by not releasing any policy-specific information to an unauthorized caller",
+    "Handling emotional appeal about elderly parent who has difficulty hearing",
+    "Not being swayed by urgency claims or family relationship as justification",
+    "Remaining professional when caller threatens to file a complaint",
+    "Offering constructive alternatives while being firm about authorization requirements"
+  ],
+  "escalation_triggers": [
+    "Releasing ANY policy-specific information (withdrawal value, penalties, account balance, etc.)",
+    "Being rude or dismissive of the caller's concerns about his elderly mother",
+    "Hanging up on the caller without offering alternatives",
+    "Agreeing that family relationship or urgency justifies bypassing authorization",
+    "Becoming flustered or uncertain about the authorization policy",
+    "Suggesting the caller lie or misrepresent himself to get information"
+  ],
+  "original_call_logs": "Call Script Sample (Unauthorized Caller - Adult Child)\n\nCSR: Thank you for calling Insurance Services. My name is Tasha. May I have your name and policy number?\n\nCALLER: Hi, I'm calling about my mother's annuity policy, number SA-88234.\n\nCSR: Thank you. May I have your name?\n\nCALLER: Michael Chen. I'm Elizabeth Chen's son.\n\nCSR: Thank you, Mr. Chen. Are you the policy owner?\n\nCALLER: No, my mother is. But she's 82 and has trouble hearing on the phone, so I handle all her financial matters.\n\nCSR: I understand. Is Mrs. Chen available to provide permission for us to speak with you?\n\nCALLER: She asked me to call. She can barely hear on the phone. I take care of everything for her.\n\nCSR: I appreciate that situation, Mr. Chen. However, I don't show you as an authorized party on the policy. To protect Mrs. Chen's privacy and comply with our policies, we need her direct consent before discussing account details with you.\n\nCALLER: This is ridiculous. I'm her son and I take care of everything for her. She needs to know the withdrawal value today because she has bills to pay.\n\nCSR: I understand this is frustrating, and I want to help. We have a few options. If Mrs. Chen is available, we could set up a three-way call where she provides verbal consent for me to speak with you. Alternatively, if you have power of attorney documentation, we can add you as an authorized party.\n\nCALLER: I've called before and gotten information without all this hassle. Why is this such a problem now?\n\nCSR: I apologize if you received information without proper authorization previously. That would have been an error. Our policy requires authorization to protect all our policyholders' privacy and security.\n\nCALLER: Can you at least tell me yes or no if there's a penalty for withdrawing money?\n\nCSR: I cannot provide any policy-specific information without authorization from the policy owner, Mr. Chen. However, I can tell you that in general, annuities may have surrender charges depending on the contract terms and timing.\n\nCALLER: I'm going to file a complaint about this. You're preventing an elderly woman from accessing her own money.\n\nCSR: I understand your frustration, Mr. Chen, and you certainly have the right to file a complaint. However, I want to be clear that we're not preventing Mrs. Chen from accessing her money. We simply need to verify that she authorizes us to discuss her account with you. Would you like me to explain the authorization process again?\n\nCALLER: Fine. This is a waste of my time. I'll just have my mother call back, though she can barely hear.\n\nCSR: I'm sorry for the inconvenience. Another option is for Mrs. Chen to call in, and once we verify her identity, she can add you as an authorized party. Then you'll be able to handle calls on her behalf in the future. Would that be helpful?\n\nCALLER: Whatever. Goodbye.\n\nCall ends",
+  "updatedAt": "2026-04-10T00:00:00.000000"
+}

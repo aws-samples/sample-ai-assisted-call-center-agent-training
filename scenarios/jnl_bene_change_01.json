@@ -1,0 +1,34 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity",
+    "Listens empathetically when the caller shares the family situation without judging",
+    "Confirms the correct beneficiary change form",
+    "Provides clear instructions: just list intended beneficiaries (Halley and Britney) in the boxes, mark as primary, include desired percentage",
+    "Provides the correct fax number (803-333-7879)",
+    "States the processing time (5-10 business days) and that a confirmation letter will be mailed",
+    "Remains neutral about the caller's beneficiary decision",
+    "Treats the caller with compassion and patience"
+  ],
+  "context": "You are Donald Derk, the owner of JNL policy number 8214. You want to change your beneficiary designation.\n\nPersonal details you know and can provide when asked:\n- Full name: Donald Derk\n- Phone: 334-444-5555\n- Last four digits of SSN: 9999\n- Address: 62 Marybeth Court, Montgomery, AL 36117\n- Policy number: 8214\n\nYour situation: You have three daughters: Beth Derk, Halley Lang, and Britney Derk. Currently Beth Derk is listed as your Primary beneficiary, and Halley Lang and Britney Derk are listed as your Contingent beneficiaries. You want to REMOVE Beth as your primary beneficiary and put Halley and Britney as the only primary beneficiaries, since they are \"the only good daughters I have left.\" The reason: Beth recently suggested putting you in a nursing home because you keep forgetting how to fill out forms and ask too many questions. You told her \"no way, Jose!\" and you are deeply hurt.\n\nYou have already downloaded the beneficiary change form from the website. You want to know:\n1. Do you need to include Beth on the form to show she is being removed? (No — just list the intended beneficiaries)\n2. How to fill it out — just put Britney in one box and Halley in the other with their information, mark them as primary\n3. Include the desired percentage next to each beneficiary\n4. The fax number to submit the form: 803-333-7879\n5. Processing time: 5-10 business days, then a confirmation letter will be mailed",
+  "escalation_triggers": [
+    "Questioning or judging the caller's decision to remove his daughter",
+    "Being cold or dismissive when the caller vents about the family situation",
+    "Providing incorrect form instructions or fax number",
+    "Suggesting the caller should reconsider (unsolicited)",
+    "Rushing the caller when he is emotional"
+  ],
+  "id": "jnl_bene_change_01",
+  "key_challenges": [
+    "Handling an emotionally charged caller dealing with family conflict",
+    "Providing accurate guidance on completing the beneficiary change form",
+    "Confirming the fax number and processing timeline",
+    "Being empathetic without overstepping into personal advice about the family situation",
+    "Remaining neutral and not commenting on the caller's decision to remove a beneficiary"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Call # 3 \n \nRep: Thank you for calling client services, My name is Brooks! May I have your name and the policy number you’re calling in for? \nCaller: Yes, My name is Donald Derk, and my policy number is 8214.  \nRep: Thank you for that, Mr. Derk, let me repeat that back, it’s 8214. \nCaller: That’s correct! \nRep: I’ll be happy to assist you today. Can I get a good contact number for you just in case we need to reach back out for any reason? \nCaller: My phone number is 334-444-5555. I was calling in because I downloaded your beneficiary change form from the website, and had some questions about how to fill it out and how my beneficiaries are set up now, can you help me with that? \nRep: Certainly, I can help with that. It will take me one moment to access your policy. Thank you for your patience. \nCaller: Of Course \nRep: I have your policy up now.  I’ll just need to ask you for the last four digits of your social security number to verify you? \nCaller: The last four digits of my social are: 9999 \nRep: Thank you, and can I verify that 62 Marybeth Court, Montgomery, AL 36117 is still the correct address for you? \nCaller: Yes, that’s still where I live.  \nRep: Thank you for verifying that information for me! You asked about your current beneficiaries and need help with the form? \nCaller: That is correct. \nRep: Okay, I see your current beneficiaries listed are Beth Derk as your Primary beneficiary, and Halley Lang and Britney Derk are listed as your contingent beneficiaries. \nCaller: I thought so. Beth, Halley, and Britney are my daughters. Beth suggested the other day that she move me to a nursing home because I keep forgetting how to fill out forms and ask too many questions, I told her no way, Jose! So now I’m wanting to remove her as my primary beneficiary and put Halley and Britney as the only primary beneficiaries, since they’re the only good daughters I have left.  \nRep: I’m so sorry to hear that! What questions did you have about the form? \nCaller: Yes, do I need to put on this form that I’m removing Beth? How do I just appoint Britney and Halley? \nRep: No, you don’t need to include Beth on the request for beneficiary form, you’ll just list the intended beneficiaries using the boxes on the form, do you see those? \nCaller: Yes, I’m looking at it right now. So, I just put Britney in one box, and Halley in the other with their information, and mark them as primary? \nRep: That’s correct. Make sure you also include the desired percentage next to each beneficiary as well. Are you going to be sending it to us via fax or mail? \nCaller: I wanted to send it by fax. I had that fax number before, but I forgot it.  \nRep: No problem, I can give you our fax number, it is 803-333-7879. \nCaller: Thanks! And how long will it take for the change to take place?  \nRep: Once we receive the paperwork in good order, processing time will be 5-10 business days. Once processing is complete, you should receive a confirmation letter mailed to you.  \nCaller: Thank you, I’ll get it sent over today. Thank you for your help today! \nRep: You’re welcome. Was there anything else I could help you with? \nCaller: No, that was all, I’m happy to get this done. \nRep: Great! Well, if there’s no other assistance I can provide, I thank you for calling client services and hope you have a great day! If you stay on the line after the call, there will be a brief survey. \n ",
+  "name": "JNL Bene Change",
+  "initial_message": "My name is Donald Derk, and my policy number is 8214.",
+  "caller_gender": "male"
+}

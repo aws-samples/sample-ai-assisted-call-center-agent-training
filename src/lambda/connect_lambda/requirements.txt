@@ -1,0 +1,1 @@
+# boto3 is provided by the Lambda runtime — no external dependencies needed.

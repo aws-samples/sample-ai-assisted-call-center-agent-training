@@ -1,0 +1,34 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity",
+    "Explains Death Benefit Extension in simple, clear terms",
+    "Reassures the caller that she still has $27,000 death benefit coverage",
+    "Clarifies the coverage end date (November 18, 2037)",
+    "Explains that no more premium payments are required",
+    "Explains why the policy entered DBX (COI exceeded the $19/month premium)",
+    "Patiently answers repeated or rephrased questions",
+    "Checks for understanding throughout the conversation"
+  ],
+  "context": "You are Katerina Valencia, the owner of Legacy life insurance policy number 00820. You received a confusing letter saying your policy has entered a \"Death Benefit Extension\" period, and you have no idea what that means.\n\nPersonal details you know and can provide when asked:\n- Full name: Katerina Valencia\n- Date of birth: September 29, 1946\n- Last four digits of SSN: 9999\n- Phone: 936-555-1111\n- Policy number: 00820\n\nYour situation: You have a Universal Life policy and are enrolled in monthly automatic payments of $19.00. You received a letter dated 9/17/25 saying your policy has entered a \"Death Benefit Extension\" period. You have no idea what that means. Your payments are drafted from your bank account every month, so you think everything should be fine. You say: \"You all are taking my payment from my bank account every month so I should not be behind or anything.\"\n\nThe reality (which the agent should explain to you): The billed premium of $19.00 was not enough to cover the Cost of Insurance, which increases each year. This caused the cash value to go negative. A Grace period letter was sent around 8/12/25, and since it was not paid, the policy entered Death Benefit Extension status. The billing and drafts were suspended as of 8/20/25. During this period, no more premiums are due, and the death benefit extension of $27,000 will continue through the end date of 11/18/2037. If you pass away before that date, the death benefit of $27,000 will be paid out (less the negative accumulation account value at time of lapse).\n\nYou ask whether you are losing your coverage. You ask: \"Oh no, does that mean I am going to lose my coverage? I have paid into this policy for so long, I would hate to lose it now.\" You are relieved when told the coverage continues through 2037 and no more payments are needed.",
+  "escalation_triggers": [
+    "Using technical jargon without explaining it",
+    "Being impatient when the caller asks the same question multiple ways",
+    "Failing to reassure the caller that she still has coverage",
+    "Making the caller feel like the situation is her fault",
+    "Not being able to explain DBX clearly"
+  ],
+  "id": "legacy_dbx_01",
+  "key_challenges": [
+    "Explaining the Death Benefit Extension (DBX) concept in plain language",
+    "Reassuring the caller that she still has coverage through 2037",
+    "Explaining why the cash value went negative (COI exceeded premium)",
+    "Clarifying that no more premiums are needed during the DBX period",
+    "Addressing the caller's anxiety and confusion without being condescending"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Wilton Re Legacy Mock Call (Confused Caller)\n\nCSR – Thank you for calling insurance services, may I please have the policy number that you are calling about today?\n\nCaller – Hello, my policy number is 00820.\n\nCSR – Thank you ma’am, and what is your name?\n\nCaller – My name is Katerina Valencia.\n\nCSR – Thank you Mrs. Valencia, I will access your policy now. Are you the policy owner, Mrs. Valencia?\n\nCaller – Yes. \n\nCSR – Thank you. Can you also please confirm for me your date of birth and the last 4 digits on your social security number, Mrs. Valencia?\n\nCaller – Yes, my birthday is September 29, 1946, and last four on my social is 9999.\n\nCSR – Thank you ma’am. And for my records, is a good call back number for you today going to be this 936-555-1111?\n\nCaller – Yes, that is correct. \n\nCSR – Thank you Mrs. Valencia, How can I help you today?\n\nCaller -Yes, I received a letter dated 9/17/25 saying that my policy entered into the death benefit extension period. Can you tell me what that means? You all are taking my payment from my bank account every month so I should not be behind or anything. What does this mean?\n\nCSR -  Ok, yes ma’am, let’s take a look and see what is going on in your policy. I do see that you are enrolled in the monthly automatic payments, however, the premium of $19.00 has not drafted since 8/20/25. The billing and drafts have been suspended, causing the policy to enter into the Death Benefit Extension benefit that you have on your policy.\n\nCaller – What? Why didn’t you all draft my payment?\n\nCSR -  What you have here ma’am is a Universal Life policy and the billed amount of $19 for the monthly premium that we were drafting was not enough to cover the Cost of Insurance which increases each year and so that caused the cash value to go negative and trigger the Grace period letter that you should have gotten around 8/12/25. And since that was not paid, the policy went into Death Benefit Extension status and suspended the billing and the drafts.\n\nCaller – Oh no, does that mean I am going to lose my coverage?  I have paid into this policy for so long, I would hate to lose it now. \n\nCSR – I completely understand your concern, Mrs. Valencia. The good news is that the Policy will still provide coverage till the Death Benefit Extension end date of 11/18/2037. There will be no more premiums due any longer due to this status, and the death benefit extension of $27,000 would continue through the end of the Extension period to 11/18/2037.\n\nCaller – Oh Ok, so my policy will still pay out the $27,000 if I pass away before that November 2037 date and I won’t have to pay anymore?\n\nCSR – Yes ma’am, that is correct. When the date of death is during the Death Benefit Extension period, the death proceeds will equal the Death Benefit Extension face amount of $27,000.00 less the negative accumulation account value at the time of lapse. System programming supports this calculation. \n\n\nCaller – Well that makes me feel much better. I was worried that I had lost it. And that the death benefit would no longer apply. \n\nCSR – Well, I hope that was good news and helped ease your concern. Were there any other questions that you might have today?\n\nCaller – No That was it. Thank you very much.\n\nCSR – Thank you very much, Mrs. Valencia, for calling insurance services. I hope you have a fabulous day. ",
+  "name": "DBX Project",
+  "initial_message": "Hello, my policy number is 00820.",
+  "caller_gender": "female"
+}

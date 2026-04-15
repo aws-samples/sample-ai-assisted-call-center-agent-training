@@ -1,0 +1,90 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+# Python lib directories (not CDK lib/)
+/lib/
+/lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Environment Variables
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+test_logs/
+
+# Node.js (frontend & deployment)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# package-lock.json should be committed for reproducible builds
+# yarn.lock should be committed if using Yarn
+
+# Frontend build artifacts
+frontend/dist/
+frontend/.env
+
+# CDK deployment artifacts
+deployment/dist/
+deployment/cdk.out/
+deployment/.env
+*.js.map
+*.d.ts
+
+frontend/test-react-agentcore/
+frontend/test-react-lambda/
+*.xlsx
+/.ash
+
+# Tests
+tests/
+
+# Claude Code
+.claude/
+CLAUDE.md
+
+# Auto-generated environment files (created by deploy.sh)
+.env.production
+.env.local
+
+# CDK context with account IDs
+deployment/cdk.context.json
+
+# Local-only scripts
+scripts/dump_scenarios.py
+scripts/standalone_duo_demo.py
+scripts/standalone_duo_transcript.txt
+scripts/start_chat.py

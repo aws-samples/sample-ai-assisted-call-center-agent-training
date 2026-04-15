@@ -1,0 +1,34 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity and authority as trustee",
+    "Explains that an actuary review is required and why",
+    "Provides the timeline for the review (7-10 business days)",
+    "Clarifies how the surrender value quote will be delivered (mailed to address on file, caller can also call back for it)",
+    "Confirms the trust name and policy details",
+    "Sets clear expectations for next steps",
+    "Maintains a professional and helpful tone",
+    "Acknowledges the family planning context appropriately"
+  ],
+  "context": "You are Sue Hansen, the trustee for the trust owner on JNL policy number 0216.\n\nPersonal details you know and can provide when asked:\n- Your name: Sue Hansen\n- Your role: Trustee of the Fern & Robert Hansen Irrevocable Family Trust (the policy owner)\n- Phone: 303-888-9999\n- Policy number: 0216\n- Trust full name (the owner): Fern & Robert Hansen Irrevocable Family Trust\n- Insured: Fern Hansen, date of birth 02/13/1952\n- Mailing address on file: 5 Winterhaven Lane, Littleton, CO 80123\n\nYour situation: Your family was just talking about finances as your parents get older and where you have money. You want to know the total surrender value of this policy. You are not necessarily planning to surrender — you are just starting a conversation so you have some time.\n\nHowever, this type of policy requires a review by the actuary team to have values checked. The agent needs to create a work item for the actuary team to review and quote. It will take 7-10 business days. The agent may ask you to hold for 3-4 minutes while they create the request. You are fine with that. Once processed, the quote will be mailed to the address on file. You can also call back once it has been processed to get the quote over the phone.\n\nYou say: \"That is fine, we are just starting a conversation so we have some time. You can take the time you need.\"",
+  "escalation_triggers": [
+    "Not being able to explain why an immediate quote is unavailable",
+    "Being vague about the timeline or delivery method for the quote",
+    "Not properly verifying the trustee's authority to request information",
+    "Making the process sound more complicated than it needs to be",
+    "Not acknowledging the family planning context with appropriate empathy"
+  ],
+  "id": "jnl_surrender_inquiry_01",
+  "key_challenges": [
+    "Explaining why the surrender value cannot be provided immediately (actuary review required)",
+    "Handling a trust-owned policy and verifying the trustee's authority",
+    "Setting clear expectations for the 7-10 business day timeline",
+    "Explaining how the surrender value quote will be delivered",
+    "Navigating the trust ownership structure properly"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Call # 5 \nRep: Thank you for calling Client Services, this is Brooks. Can I have your name and policy number? \nCaller: Hi there, my name is Sue Hansen. I’m the trustee for the trust owner on policy 0216. \nRep: Thank you for providing that, and can I get a good contact number in case we need to reach out to you for any reason? \nCaller: Sure, it’s 303-888-9999 \nRep: Thank you, I’ll have the policy up momentarily. How are you doing today? \nCaller: I’m well, my family and I were just talking about finances as my parents get older and where we have money. We were wondering what the total surrender value of this policy is.  \nRep: I can certainly look into that, but first, I need to ask a few questions for security. Can I have the full name of the owner? \nCaller: Yes, it’s the Fern & Robert Hansen Irrevocable Family Trust. \nRep: Perfect, and can I have the name and Date of Birth of one of the insured? \nCaller: Yes, Fern Hansen, 02/13/1952. \nRep: Thank you! And can I confirm that 5 Winterhaven Lane Littleton, CO 80123 is still the best mailing address? \nCaller: Yes, it is.  \nRep: Perfect, thank you for providing that information. You mentioned looking for the total surrender value? \nCaller: Yep \nRep: Let me take a look. Actually, I do see that this type of policy requires a review by our actuary team to have values checked. At this time I would need to create a work item to have our actuary team review. I can create this right now if you would allow me 3-4 minutes to request the quotes. It would be up to about 7-10 business days for our actuary team to review and quote.  \nCaller: That is fine, we are just starting a conversation so we have some time. You can take the time you need.  \nRep: Thank you: I’ll be right back.  \nRep: Ms. Hansen, are you there?  \nCaller: Yes, I am. \nRep: Thank you for your patience! I was able to create that quote request. Once it is processed, they should mail the quote to the address on file. You can give us a call once it has been processed for the quote if you’d like, we should be able to pull the letter and provide that information.  \nCaller: Thank you for that, I think we’ll be fine waiting.  \nRep: Perfect, and was there any other help I can provide today? \nCaller: No that was all, we will wait for this quote! \nRep: Well, thank you for calling client services, I hope you have a great day! If you would stay on the line after the call, there will be a brief survey after. Goodbye! \n \n \n\n\n\n",
+  "name": "JNL Trustee Surrender",
+  "initial_message": "Hi there, my name is Sue Hansen. I'm the trustee for the trust owner on policy 0216.",
+  "caller_gender": "female"
+}

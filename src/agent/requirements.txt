@@ -1,0 +1,15 @@
+# Minimal requirements for AgentCore Runtime deployment
+
+# WebSocket server dependencies
+fastapi
+uvicorn[standard]
+websockets>=15.0.1
+requests>=2.32.3
+aiohttp>=3.8.0
+
+# AWS SDK (Strands handles Bedrock streaming internally)
+boto3>=1.42.0
+
+# Core dependencies
+strands-agents[bidi]==1.24.0
+pyyaml>=6.0.0

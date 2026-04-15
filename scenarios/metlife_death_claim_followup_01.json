@@ -1,0 +1,33 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity as the beneficiary",
+    "Provides the claim status and check amount clearly",
+    "Explains the interest portion ($131.53) and why it was included",
+    "Accurately explains tax implications: death benefit is generally not taxable income, but interest may be",
+    "Addresses whether a 1099 form will be issued",
+    "Maintains a compassionate and respectful tone throughout",
+    "Confirms the mailing address for the check"
+  ],
+  "context": "You are Arnie Cusack, the beneficiary on a MetLife/GenAm life insurance policy number 3165 that belonged to your late wife, Linda Cusack. You are calling to follow up on a death claim you submitted.\n\nPersonal details you know and can provide when asked:\n- Full name: Arnie Cusack\n- Address: 61 NW 4th Ave, Oil Wells, TX 76067\n- Phone: 817-777-8888\n\nYour situation: Your wife Linda passed away, and you sent in the death claim paperwork back in September. You have been waiting and have not received anything — no check, no letter, no update. You are calling to find out the status. Unbeknownst to you at the start of the call, the claim has actually been recently processed and a check for $25,136.67 has been or will be issued. When you learn the amount, you have questions: specifically, you notice there is a $131.53 portion that seems to be interest, and you want to understand what that is. You also want to know about the tax implications of the death benefit and the interest portion — will you owe taxes on any of it? Will you receive a 1099?",
+  "escalation_triggers": [
+    "Being insensitive about the loss of his wife",
+    "Not being able to locate the claim or provide a status update",
+    "Giving vague or incorrect information about the tax implications",
+    "Rushing through the call without allowing the caller to ask questions",
+    "Using cold or transactional language when discussing the death benefit"
+  ],
+  "id": "metlife_death_claim_followup_01",
+  "key_challenges": [
+    "Sensitively handling a death claim follow-up call with a grieving beneficiary",
+    "Explaining the claim status and payout amount clearly",
+    "Addressing questions about the interest portion of the death benefit",
+    "Providing accurate information about tax implications (death benefit vs. interest)",
+    "Explaining whether a 1099 will be issued and for which portion"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": "Death Claim Follow up #10\nRep:  Thank you for calling Metlife, my name is Ariel,  how can I assist you?  \nCaller:  I am calling to check on my death claim.  I sent the paperwork in back in September and I haven’t received anything yet.  \nRep:   I’m sorry for your loss.  I’d be happy to take a look at that for you. Can I have your name and the policy number please?  \nCaller:  Sure, my name is Arnie Cusack.  The policy number is 3165. \nRep:  Thank you and who is the insured on the policy?  \nCaller:  My wife Linda Cusack.\nRep:  Thank you.  I’m pulling up the policy now.  While it is coming up, can I get the best phone number to reach you? \nCaller:  My number is 817-777-8888.\nRep:  Thank you Mr.  Cusack,  and what was the address on file for this policy please?    \nCaller:  61 NW 4th Ave, Oil Wells, TX 76067. \nRep:  Thank you.  I have the policy up.  We did receive your paperwork, just checking the notes.  And what is your address, Mr. Cusack? \nCaller:  same as my wife’s.\nRep:  I see that your claim was processed this past Friday, 1/17.  The check will be going in the mail the next business day. \nCaller:  Ok so you got everything you needed then.\nRep:  Yes we did, you’re all set.  The check is being sent to the address you provided.\nCaller: Ok thanks,  where is it coming from?  \nRep:  The check is coming from Scranton, PA.\nCaller:  How much was it?    \nRep:  The check amount was $25,136.67.  \nCaller:  Is this taxable?  \nRep:  The basic death benefit isn’t taxable, but the interest can be.  For this policy, interest of 10.00 or more is taxable. You will receive a tax form next January.  \nCaller:  Oh,  was there interest on my payment?\nRep:  yes,  the interest was $131.53.   Is there anything else I can assist you with today Mr.  Cusack?\nCaller:  No,  thank you,  you have answered all of my questions.  \nRep:  I’m happy to hear that.  If you think of anything else,  please give us a call.  Again, please accept our condolences, and thank you for calling MetLife.  Take care.",
+  "name": "ML Life Death Claim Follow Up",
+  "initial_message": "I am calling to check on my death claim. I sent the paperwork in back in September and I haven't received anything yet.",
+  "caller_gender": "male"
+}

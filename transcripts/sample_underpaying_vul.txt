@@ -1,0 +1,87 @@
+Sample Underpaying Variable Universal Life
+===========================================
+
+Call Script Sample (Underpaying Variable Universal Life)
+
+CSR:
+Thank you for calling Insurance Services, this is Kiley. May I have your name and policy number?
+
+CALLER:
+Hi, my name is David Martinez, my policy number is SV-91455.
+
+CSR:
+Thank you, Mr. Martinez. For the security of your account, may I verify your date of birth?
+
+CALLER:
+My date of birth is 06/22/1965.
+
+CSR:
+Thank you. And may I have the last four digits of your Social Security number?
+
+CALLER:
+7723.
+
+CSR:
+Perfect. How may I assist you today?
+
+CALLER:
+I just got my annual statement and I'm really confused and frustrated. My cash value went DOWN even though I've been making my payments every single month on time.
+
+CSR:
+I understand your frustration, Mr. Martinez. Let me pull up your policy and review what's happening with your cash value. Please bear with me for just a moment.
+
+CALLER:
+Sure.
+
+CSR:
+Thank you for your patience. I'm looking at your policy now, and I can see there are actually two factors affecting your cash value. First, regarding your premium: your cost of insurance is $180.32 per month, and your policy fees are $5.00, for a total of $185.32 each month. We're receiving your $150 payment on time, but it's not enough to cover the full cost of insurance and fees.
+
+CALLER:
+So you're telling me I'm not paying enough? Why didn't anyone tell me? I've been making my payments every single month!
+
+CSR:
+I understand your frustration, and I apologize that this wasn't clearer to you. With variable universal life insurance, you have flexibility in your premium payments, but the cost of insurance still needs to be covered. We send an annual statement each year that shows your premium, your cost of insurance, fees, and investment performance. The shortfall between what you're paying and the cost is being deducted from your cash value.
+
+CALLER:
+I got the statement, but it's like reading a foreign language. All I see is that my cash value went down. What about my investments? Did they lose money too?
+
+CSR:
+Yes, that's the second factor. Your subaccount investments declined approximately 8% over the past year due to market performance. So you have two things reducing your cash value: the premium shortfall of $35.32 per month, and the investment losses.
+
+CALLER:
+So I'm paying for insurance that costs more than I'm putting in, AND my investments are losing money? This is a disaster! What are my options here?
+
+CSR:
+I understand this is concerning. Let me explain your options. First, to prevent the cash value from being depleted by the premium shortfall, you would need to increase your monthly premium to at least $185.32 to cover the cost of insurance and fees. That would stop the shortfall from eating into your cash value.
+
+CALLER:
+Okay, what about the investments?
+
+CSR:
+Regarding the investment performance, you have the option to review and potentially adjust your subaccount allocations. However, I'm not licensed to provide specific investment advice. I can send you a current prospectus and illustration, and we can also connect you with a licensed representative who can discuss your investment options in detail. It's important to understand that with variable life insurance, your investment returns are not guaranteed and will fluctuate with market performance.
+
+CALLER:
+I guess I need to see that illustration. What happens if I just keep paying what I'm paying now?
+
+CSR:
+If your premium continues at $150 per month and your cost of insurance remains around $185.32, your cash value will continue to decline. Eventually, if the cash value is depleted to zero and no additional premium is paid, the policy will lapse. Based on your current cash value and the monthly shortfall, I estimate you have approximately 18 to 24 months before that would occur, but that also depends on investment performance.
+
+CALLER:
+That's not good. Yeah, send me that illustration showing what I need to pay.
+
+CSR:
+Absolutely. I'll put in a request to have an illustration sent to you. Just to confirm, is your address still 1840 Oak Street, Chicago, IL 60614?
+
+CALLER:
+Yes, that's correct.
+
+CSR:
+Perfect. The illustration will show the premium amount needed to keep your policy current and make a small contribution to your cash value. The processing time is five business days. I'll also include information about connecting with a licensed representative to discuss your investment allocations. Is there anything else I can help you with today?
+
+CALLER:
+No, I think I need to look at that illustration first. Thanks for explaining it, even though it's not what I wanted to hear.
+
+CSR:
+I understand, Mr. Martinez. We're here to help. If you have any questions when you receive the illustration, please don't hesitate to call back. Thank you for calling, and I hope you have a good day.
+
+Call ends

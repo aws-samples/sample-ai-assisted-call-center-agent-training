@@ -1,0 +1,35 @@
+{
+  "customer_mood": "neutral",
+  "success_criteria": [
+    "Properly verifies the caller's identity",
+    "Clearly explains why the cash value is declining (premium < COI + fees)",
+    "Empathizes with the caller's frustration about not being previously informed",
+    "Explains how universal life premium flexibility works",
+    "Presents concrete options: increase premium to at least $138.32/month, reduce death benefit to lower COI, or other alternatives",
+    "Discusses the lapse risk and timeline if nothing changes",
+    "Confirms the caller's address and contact information",
+    "Sets clear expectations for next steps"
+  ],
+  "context": "You are Veronica North, the owner of Antelope universal life policy number 7656. You have been paying $100 per month in premiums, but you just learned that the cost of insurance plus policy fees totals $138.32 per month, which means your cash value is not growing — it is actually being eaten away.\n\nPersonal details you know and can provide when asked:\n- Full name: Veronica North\n- Date of birth: January 7, 1971\n- Address: 27 Hartford Ave, Apt 3, Brooklyn, NY 11210\n\nYour situation: you would like to know why your cash value has not grown very much over the years although you have been making your payments on time. After the agent explains that your $100 monthly payment is not enough to cover the cost of insurance and fees, ask 'How was I supposed to know my cost insurance and fees were not being covered? No one contacted me to say I wasn’t paying enough.' After the agent mentions the annual statement and asks if you like to review your yearly statement together, say 'No, I don’t have time for that. I know I can’t afford to pay much more than I am paying now. Just tell me what I need to pay to cover all the charges.' The agent will offer to send you an illustration of the amount you need to pay to keep your policy current which you accept politely. ",
+  "updatedAt": "2026-03-24T00:11:56.994128",
+  "escalation_triggers": [
+    "Being dismissive of the caller's frustration about not being informed",
+    "Using technical jargon without explaining it",
+    "Blaming the caller for not understanding how UL works",
+    "Not being able to clearly explain the cost of insurance vs. premium issue",
+    "Failing to offer concrete options for resolving the situation"
+  ],
+  "id": "antelope_underpaying_ul_01",
+  "key_challenges": [
+    "Explaining how universal life premium flexibility works and why the current premium is insufficient",
+    "Addressing the caller's frustration about not being informed earlier",
+    "Explaining the relationship between premium, cost of insurance, fees, and cash value",
+    "Presenting options: increase premium, reduce death benefit, or other alternatives",
+    "Discussing the risk of policy lapse if the situation is not addressed"
+  ],
+  "difficulty": "intermediate",
+  "original_call_logs": " \n \n Antelope Underpaying UL\n \nCall Script Sample #8 (Not paying enough cover COI & Fees)  \nCSR: Thank you for calling Insurance Services, this is Kiley. May I have your name and policy number? \nCALLER: Hi, my name is Veronica North, my policy number is 7656. \nCSR: Thank you. For the security of your account, may I verify your date of birth? \nCALLER: My date of birth is 01/07/1971. \nCSR: Thank you. How may I assist you?   \nCALLER: Yes, I would like to know why my cash value has not grown very much over the years. I have been making my payments on time.  \nCSR: I can take a look at what is happening with your cash value. Please bear with me for one minute while I review your account.  \nCALLER: Sure \nCSR: Your cost of insurance $133.32, and the fees are $5.00 for a total of $138.32 each month. We are receiving your $100.00 payment on time; however, it is not enough to cover the cost of insurance and fees.   \nCALLER: How was I supposed to know my cost insurance and fees were not being covered? No one contacted me to say I wasn’t paying enough. \nCSR: I understand your frustration. We send an annual statement each year around your policy’s anniversary, which lists your fees, insurance deduction, which is your cost of insurance, and interest earned. Your statement shows how these charges and credits are impacting your cash value, which is listed as accumulation value. Would you like to review your yearly statement together? \nCALLER: No, I don’t have time for that. I know I can’t afford to pay much more than I am paying now. Just tell me what I need to pay to cover all the charges.  \nCSR: Yes, ma’am. I can send you an illustration of the amount you need to pay to keep your policy current and make a small contribution to your cash value.  \nCALLER: Okay, that would be good. \nCSR: I have put in that request. Is your address still 27 HARTFORD AVE APT 3, BROOKLYN, NY 11210?  \nCALLER: Yes. \nCSR: Thank you, okay, Ms. North. I have put in a request to have an illustration sent to your address on record. The processing time is five business days. Is there anything else I can assist you with? \nCALLER: No, that’s it.  \nCSR: Thank you for calling insurance services. I hope you have a good day. \nCall Ends \n",
+  "name": "Antelope Underpaying UL",
+  "initial_message": "Hi, my name is Veronica North, my policy number is a7656.",
+  "caller_gender": "female"
+}

@@ -1,0 +1,326 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "990983c8-532d-4fb2-94f4-0e05a91fb006",
+  "Metadata": {
+    "entryPointPosition": {
+      "x": 40,
+      "y": 40
+    },
+    "ActionMetadata": {
+      "7a1f6607-4a87-4d67-998d-f130ae813093": {
+        "position": {
+          "x": 564,
+          "y": -35.2
+        },
+        "children": [
+          "2ac04ecc-1de0-4e8b-9ce8-36b925ecd9a8"
+        ],
+        "parameters": {
+          "OrchestrationAIAgentConfiguration": {
+            "AgentAssistanceAgentVersionArn": {
+              "useAIAgentDropdown": true,
+              "aiAgentName": "call-center-training"
+            }
+          }
+        },
+        "fragments": {
+          "SetContactData": "2ac04ecc-1de0-4e8b-9ce8-36b925ecd9a8"
+        },
+        "useAIAgentDropdown": true,
+        "aiAgentName": "call-center-training"
+      },
+      "2ac04ecc-1de0-4e8b-9ce8-36b925ecd9a8": {
+        "position": {
+          "x": 564,
+          "y": -35.2
+        },
+        "dynamicParams": []
+      },
+      "b0e1cef9-5a0b-4d38-8f74-00007a67eb1a": {
+        "position": {
+          "x": 1202.4,
+          "y": -48
+        },
+        "children": [
+          "29d9ad29-ea98-4426-a11e-13df91122ffd",
+          "fe4bfcf9-ca1a-4102-a3d4-716c4ddc2c87"
+        ],
+        "parameters": {
+          "WisdomAssistantArn": {
+            "useAIAgentDropdown": true,
+            "aiAgentName": "call-center-training",
+            "aiAgentVersionArn": "<AI_AGENT_VERSION_ARN>"
+          }
+        },
+        "fragments": {
+          "SetContactData": "29d9ad29-ea98-4426-a11e-13df91122ffd"
+        },
+        "useAIAgentDropdown": true,
+        "aiAgentName": "call-center-training",
+        "aiAgentVersionArn": "<AI_AGENT_VERSION_ARN>"
+      },
+      "29d9ad29-ea98-4426-a11e-13df91122ffd": {
+        "position": {
+          "x": 1202.4,
+          "y": -48
+        },
+        "dynamicParams": []
+      },
+      "fe4bfcf9-ca1a-4102-a3d4-716c4ddc2c87": {
+        "position": {
+          "x": 1202.4,
+          "y": -48
+        },
+        "parameters": {
+          "LexV2Bot": {
+            "AliasArn": {
+              "displayName": "TestBotAlias",
+              "useLexBotDropdown": true,
+              "lexV2BotName": "call-center-agent-training"
+            }
+          }
+        },
+        "dynamicMetadata": {
+          "voice_id": false,
+          "x-amz-lex:q-in-connect:ai-agent-arn": false
+        },
+        "useLexBotDropdown": true,
+        "lexV2BotName": "call-center-agent-training",
+        "lexV2BotAliasName": "TestBotAlias",
+        "conditionMetadata": []
+      },
+      "990983c8-532d-4fb2-94f4-0e05a91fb006": {
+        "position": {
+          "x": 125.6,
+          "y": 2.4
+        }
+      },
+      "a9c70bc9-5b7e-4bbe-b642-30b7d1a7be5a": {
+        "position": {
+          "x": 328,
+          "y": -26.4
+        }
+      },
+      "c741cf01-896f-4401-8dec-bc6cf2c897a7": {
+        "position": {
+          "x": 766.4,
+          "y": -40
+        },
+        "parameters": {
+          "LambdaFunctionARN": {
+            "displayName": "CallCenterTraining-Connec-AIAgentSessionSetupFunct-rxT0Vom0F7qr"
+          }
+        },
+        "dynamicMetadata": {}
+      },
+      "2e8637b8-ad26-4091-8277-1d726a6e2573": {
+        "position": {
+          "x": 508.8,
+          "y": 425.6
+        }
+      },
+      "1a4550ad-0224-44cc-8870-0c9b0d362123": {
+        "position": {
+          "x": 973.6,
+          "y": -44.8
+        }
+      }
+    },
+    "Annotations": [],
+    "name": "AI Agents Chat",
+    "description": "",
+    "type": "contactFlow",
+    "status": "PUBLISHED",
+    "hash": {}
+  },
+  "Actions": [
+    {
+      "Parameters": {
+        "WisdomAssistantArn": "<WISDOM_ASSISTANT_ARN>",
+        "OrchestrationAIAgentConfiguration": {
+          "AgentAssistanceAgentVersionArn": "<AI_AGENT_VERSION_ARN>"
+        }
+      },
+      "Identifier": "7a1f6607-4a87-4d67-998d-f130ae813093",
+      "Type": "CreateWisdomSession",
+      "Transitions": {
+        "NextAction": "2ac04ecc-1de0-4e8b-9ce8-36b925ecd9a8",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "WisdomSessionArn": "$.Wisdom.SessionArn"
+      },
+      "Identifier": "2ac04ecc-1de0-4e8b-9ce8-36b925ecd9a8",
+      "Type": "UpdateContactData",
+      "Transitions": {
+        "NextAction": "c741cf01-896f-4401-8dec-bc6cf2c897a7",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "WisdomAssistantArn": "<WISDOM_ASSISTANT_ARN>"
+      },
+      "Identifier": "b0e1cef9-5a0b-4d38-8f74-00007a67eb1a",
+      "Type": "CreateWisdomSession",
+      "Transitions": {
+        "NextAction": "29d9ad29-ea98-4426-a11e-13df91122ffd",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "WisdomSessionArn": "$.Wisdom.SessionArn"
+      },
+      "Identifier": "29d9ad29-ea98-4426-a11e-13df91122ffd",
+      "Type": "UpdateContactData",
+      "Transitions": {
+        "NextAction": "fe4bfcf9-ca1a-4102-a3d4-716c4ddc2c87",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Text": " ",
+        "LexV2Bot": {
+          "AliasArn": "<LEX_BOT_ALIAS_ARN>"
+        },
+        "LexSessionAttributes": {
+          "voice_id": "$.Attributes.voice_id",
+          "x-amz-lex:q-in-connect:ai-agent-arn": "<AI_AGENT_VERSION_ARN>"
+        }
+      },
+      "Identifier": "fe4bfcf9-ca1a-4102-a3d4-716c4ddc2c87",
+      "Type": "ConnectParticipantWithLexBot",
+      "Transitions": {
+        "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Text": "Please hold while we connect you to an agent"
+      },
+      "Identifier": "990983c8-532d-4fb2-94f4-0e05a91fb006",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "a9c70bc9-5b7e-4bbe-b642-30b7d1a7be5a",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "FlowLoggingBehavior": "Enabled"
+      },
+      "Identifier": "a9c70bc9-5b7e-4bbe-b642-30b7d1a7be5a",
+      "Type": "UpdateFlowLoggingBehavior",
+      "Transitions": {
+        "NextAction": "7a1f6607-4a87-4d67-998d-f130ae813093"
+      }
+    },
+    {
+      "Parameters": {
+        "LambdaFunctionARN": "<LAMBDA_FUNCTION_ARN>",
+        "InvocationTimeLimitSeconds": "3",
+        "InvocationType": "SYNCHRONOUS",
+        "ResponseValidation": {
+          "ResponseType": "STRING_MAP"
+        }
+      },
+      "Identifier": "c741cf01-896f-4401-8dec-bc6cf2c897a7",
+      "Type": "InvokeLambdaFunction",
+      "Transitions": {
+        "NextAction": "1a4550ad-0224-44cc-8870-0c9b0d362123",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {},
+      "Identifier": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+      "Type": "DisconnectParticipant",
+      "Transitions": {}
+    },
+    {
+      "Parameters": {
+        "ChatBehavior": {
+          "ChatAnalyticsBehavior": {
+            "Enabled": "True",
+            "AnalyticsLanguage": "en-US",
+            "AnalyticsModes": [
+              "ContactLens"
+            ],
+            "ConversationalAnalyticsRedactionConfiguration": {
+              "Enabled": "False"
+            },
+            "InFlightChatRedactionConfiguration": {
+              "Enabled": "False"
+            },
+            "SentimentConfiguration": {
+              "Enabled": "True"
+            }
+          }
+        }
+      },
+      "Identifier": "1a4550ad-0224-44cc-8870-0c9b0d362123",
+      "Type": "UpdateContactRecordingAndAnalyticsBehavior",
+      "Transitions": {
+        "NextAction": "b0e1cef9-5a0b-4d38-8f74-00007a67eb1a",
+        "Errors": [
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "NoMatchingError"
+          },
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "ChannelMismatch"
+          },
+          {
+            "NextAction": "2e8637b8-ad26-4091-8277-1d726a6e2573",
+            "ErrorType": "InFlightRedactionConfigurationFailed"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# Requirements for scoring Lambda container
+
+# Pydantic for data models and validation
+pydantic>=2.0.0
+
+# PyYAML for config
+pyyaml>=6.0.0
+
+boto3>=1.42.49
