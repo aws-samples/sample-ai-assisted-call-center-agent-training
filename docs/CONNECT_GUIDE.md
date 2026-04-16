@@ -337,6 +337,12 @@ The deployment outputs the following URLs:
    - The AI customer should greet and begin the training scenario
    - Verify the AI customer responds via Nova Sonic voice
 
+---
+
+## Step 15: Test Chat Flow (Optional)
+
+For web-based text training, import the chat flow `amazon-connect/AIAgentChatFlow.json` following the same process as Step 7. Configure the Lambda function, AI Agent, and Lex bot blocks similar to Step 12. Then in Connect console go to **Channels** → **Test Chat**, select the chat flow, click **Test Settings** and add contact attributes `{"scenario_id": "sample_unauthorized_child_01"}`, then click **Start Chat** to test the text-based training conversation.
+
 ## Tearing Down
 
 To destroy the Connect stack:
