@@ -1,4 +1,4 @@
-# Call Center Training Agent
+# AI-Assisted Call Center Training Agent
 
 AI-powered voice training system for call center agents using Amazon Nova 2 Sonic. Deploy as a standalone web application or integrate with Amazon Connect AI Agents for realistic customer simulations.
 
