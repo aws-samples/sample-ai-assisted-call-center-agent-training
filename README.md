@@ -1,6 +1,6 @@
 # Call Center Training Agent
 
-AI-powered voice training system for call center agents using [Strands Agents](https://strandsagents.com) with Amazon Bedrock Nova 2 Sonic for simulating call center customer calls.
+AI-powered voice training system for call center agents using Amazon Nova 2 Sonic. Deploy as a standalone web application or integrate with Amazon Connect AI Agents for realistic customer simulations.
 
 ## Overview
 
