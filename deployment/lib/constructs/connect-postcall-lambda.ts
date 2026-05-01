@@ -126,14 +126,22 @@ export class ConnectPostCallLambdaConstruct extends Construct {
     this.function = new lambda.DockerImageFunction(this, 'Function', {
       code: lambda.DockerImageCode.fromImageAsset(projectRoot, {
         file: 'src/lambda/connect_postcall/Dockerfile',
+        ignoreMode: cdk.IgnoreMode.DOCKER,
+        // Allowlist: exclude everything, then re-include only what the Dockerfile COPYs.
+        // Parents must be re-included before narrowing their children.
         exclude: [
-          'deployment',
-          'connect-admin',
-          'frontend',
-          'node_modules',
-          '.git',
-          'cdk.out',
-          '*.md',
+          '*',
+          '!src',
+          'src/*',
+          '!src/__init__.py',
+          '!src/lambda',
+          'src/lambda/*',
+          '!src/lambda/connect_postcall',
+          '!src/lambda/connect_postcall/**',
+          '!src/recording',
+          '!src/recording/**',
+          '**/__pycache__',
+          '**/*.pyc',
         ],
       }),
       role: lambdaRole,

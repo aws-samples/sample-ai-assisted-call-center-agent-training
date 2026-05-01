@@ -88,15 +88,24 @@ export class AudioEmpathyLambdaConstruct extends Construct {
       code: lambda.DockerImageCode.fromImageAsset(projectRoot, {
         file: 'src/lambda/audio_empathy/Dockerfile',
         buildArgs: {},
-        // Include only needed files in the Docker build context
+        ignoreMode: cdk.IgnoreMode.DOCKER,
+        // Allowlist: exclude everything, then re-include only what the Dockerfile COPYs.
+        // Parents must be re-included before narrowing their children.
         exclude: [
-          'deployment',
-          'connect-admin',
-          'frontend',
-          'node_modules',
-          '.git',
-          'cdk.out',
-          '*.md',
+          '*',
+          '!src',
+          'src/*',
+          '!src/__init__.py',
+          '!src/lambda',
+          'src/lambda/*',
+          '!src/lambda/audio_empathy',
+          '!src/lambda/audio_empathy/**',
+          '!src/recording',
+          '!src/recording/**',
+          '!src/evaluators',
+          '!src/evaluators/**',
+          '**/__pycache__',
+          '**/*.pyc',
         ],
       }),
       role: lambdaRole,

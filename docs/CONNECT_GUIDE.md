@@ -1,6 +1,6 @@
 # Amazon Connect Integration - Setup & Deployment Guide
 
-Step-by-step instructions for setting up and deploying the Amazon Connect integration for the call center training system.
+This stack now provisions nearly everything via CDK. What used to be a 15-step console procedure is reduced to a single `cdk deploy` plus a couple of post-deploy actions that cannot be fully automated.
 
 ## Architecture Overview
 
@@ -21,314 +21,214 @@ The admin initiates an outbound call via the Admin API Lambda, which calls `star
 
 ---
 
+## What CDK Provisions
+
+Deploying `CallCenterTraining-Connect` creates all of the following:
+
+| Resource | CFN Type |
+|---|---|
+| Amazon Connect instance (inbound+outbound, Contact Lens, custom TTS) | `AWS::Connect::Instance` |
+| KMS-encrypted recordings / Contact Lens / chat transcripts bucket | `AWS::S3::Bucket` + `AWS::KMS::Key` |
+| Storage configs for CALL_RECORDINGS, SCHEDULED_REPORTS, CHAT_TRANSCRIPTS | `AWS::Connect::InstanceStorageConfig` |
+| Wisdom (Q Connect) Assistant | `AWS::Wisdom::Assistant` |
+| AI Prompt (ORCHESTRATION, MESSAGES format, published) | Custom resource → `qconnect:CreateAIPrompt` |
+| AI Agent (ORCHESTRATION, published, wired to prompt version) | Custom resource → `qconnect:CreateAIAgent` |
+| WISDOM_ASSISTANT integration association | `AWS::Connect::IntegrationAssociation` (via custom resource) |
+| Lex V2 bot + version + alias + resource policy | `AWS::Lex::Bot` / `CfnBotVersion` / `CfnBotAlias` / `CfnResourcePolicy` |
+| LEX_BOT integration association | `AWS::Connect::IntegrationAssociation` |
+| LAMBDA_FUNCTION integration for Session Setup | `AWS::Connect::IntegrationAssociation` |
+| Voice + Chat contact flows (ARN placeholders substituted at deploy time) | `AWS::Connect::ContactFlow` |
+| Toll-free US phone number | `AWS::Connect::PhoneNumber` |
+| Session Setup Lambda, Admin API Lambda, Post-Call Lambda | `AWS::Lambda::Function` (VPC) |
+| Admin UI (CloudFront + S3 + Cognito user pool) | `AWS::CloudFront::Distribution` etc. |
+
+The contact flow JSON in [amazon-connect/AIAgentFlow.json](../amazon-connect/AIAgentFlow.json) and [amazon-connect/AIAgentChatFlow.json](../amazon-connect/AIAgentChatFlow.json) uses `${WisdomAssistantArn}`, `${AIAgentVersionArn}`, `${LambdaArn}`, `${LexBotAliasArn}` placeholders that CloudFormation resolves via `Fn::Sub` at deploy time.
+
+---
+
 ## Deployment Modes
 
-The deployment script supports 4 modes:
-
-| Mode | Stacks Deployed | Use Case |
-|------|----------------|----------|
+| Mode | Stacks | Use case |
+|------|-------|----------|
 | `agentcore` | `AgentCoreStack` | Shared backend only |
-| `webui` | `AgentCoreStack` + `WebUIStack` | Browser-based training |
-| `connect` | `AgentCoreStack` + `ConnectStack` | Amazon Connect training |
-| `all` | `AgentCoreStack` + `WebUIStack` + `ConnectStack` | Everything |
+| `webui` | `+WebUIStack` | Browser-based training |
+| `connect` | `+ConnectStack` | Amazon Connect training |
+| `all` | `+WebUIStack +ConnectStack` | Everything |
 
 ---
 
-## Step 1: Create a Connect Instance
-
-1. Open the [Amazon Connect console](https://console.aws.amazon.com/connect/) in **us-west-2**
-2. Click **Create instance**
-3. Configure:
-   - **Identity management**: Store users within Amazon Connect
-   - **Administrator**: Create an admin user (e.g. `admin`)
-   - **Telephony**: Enable both inbound and outbound calls
-   - **Data storage**: Use defaults (S3 for call recordings, CloudWatch for logs)
-   - **Review and create**
-4. Wait for the instance to be created (takes a few minutes)
-5. Note the **Instance ARN** from the instance overview page:
-   ```
-   arn:aws:connect:<region>:<account-id>:instance/<instance-id>
-   ```
-
----
-
-## Step 2: Note the Recordings S3 Bucket
-
-When you created your Connect instance in Step 1, Amazon Connect automatically created an S3 bucket for storing call recordings and Contact Lens analysis.
-
-1. In the Connect console, open your instance
-2. Go to **Data storage** section
-3. Look for **Call recordings** storage location
-4. Note the S3 bucket name (typically `amazon-connect-<random-hash>`)
-
-**Alternative via AWS CLI:**
-```bash
-aws connect describe-instance --instance-id <instance-id> --region us-west-2
-```
-
-This bucket is used for:
-- Call recordings (audio files)
-- Contact Lens analysis output (JSON files)
-- Post-call processing (EventBridge monitors this bucket)
-
-This value is required for the `recordingsBucket` config field in Step 4.
-
----
-
-## Step 3: Create AI Agent Domain
-
-Before creating AI Agents, you must create a domain.
-
-1. In AWS Console, navigate to **Applications** → **AI Agents**
-2. In the navigation pane, choose **AI Agents**, then choose **Add domain**
-3. On the **Add domain** page, choose **Create a domain**
-4. In the **Domain name** box, enter a friendly name (e.g., your organization name)
-5. Under **Encryption**, clear the **Customize encryption settings** checkbox
-6. Choose **Add domain**
-
-This is a one-time setup per Connect instance.
-
----
-
-## Step 4: Create AI Prompt
-
-The AI Prompt defines how the AI Agent role-plays the customer.
-
-**Reference:** [AWS Docs - Create AI Prompts](https://docs.aws.amazon.com/connect/latest/adminguide/create-ai-prompts.html)
-
-1. In Amazon Connect admin website, navigate to **AI agent designer** → **AI prompts**
-2. Click **Create AI Prompt**
-3. In the **Create AI Prompt** dialog:
-   - **Name:** CallCenterTrainingPrompt
-   - **AI Prompt type:** Select **Orchestration**
-   - **Copy from existing:** Leave **empty** (do not select any existing prompt)
-   - Click **Create**
-4. **Paste the prompt template:**
-   - Open the file `amazon-connect/ai-agent-prompt-template.txt` from the project repository
-   - Copy the entire contents
-   - In the **AI Prompt** field, delete any default content and paste the copied template
-   - The template uses **YAML MESSAGES format** with `system:` and `messages:` sections
-5. Click **Save** to save your work
-6. Click **Publish** to create an immutable published version
-
----
-
-## Step 5: Create AI Agent
-
-**Reference:** [AWS Docs - Create AI Agents](https://docs.aws.amazon.com/connect/latest/adminguide/create-ai-agents.html)
-
-1. In Amazon Connect admin website, navigate to **AI agent designer** → **AI agents**
-2. Click **Create AI Agent**
-3. In the **Create AI Agent** dialog:
-   - **Name:** call-center-training
-   - **AI Agent type:** Select **Orchestration**
-   - **Copy from existing:** Select **SelfServiceOrchestrator**
-   - Click **Create**
-4. On the AI Agent builder page:
-   - **Locale:** Select **en-US**
-5. **Replace the AI Prompt:**
-   - In the **AI prompts** section, you'll see **SelfServiceOrchestrator** already added
-   - Click the **Remove** (X) button next to **SelfServiceOrchestrator** to remove it
-   - Click **Add AI prompt**
-   - Select **CallCenterTrainingPrompt** (the published prompt you created in Step 5)
-   - **Important:** You must select a *published* version, not a saved draft
-6. Click **Save** to save your work
-7. Click **Publish** to create a published version
-8. **Get the AI Agent Assistant ID:**
-   - In Amazon Connect admin website, navigate to **AI agent designer** → **AI agents**
-   - Click on **call-center-training**
-   - In the **Overview** section, find the **Assistant ARN**
-   - The ARN format is: `arn:aws:wisdom:<REGION>:<ACCOUNT_ID>:assistant/<ASSISTANT_ID>`
-   - Copy the last part after the final `/` (the Assistant ID)
-   - You'll need this Assistant ID for config.json in Step 9
-
----
-
-## Step 6: Create Conversational AI Bot
-
-The Conversational AI bot connects your AI Agent to Amazon Connect contact flows and enables speech-to-speech conversation.
-
-1. In Amazon Connect admin website, go to **Flows** → **Conversational AI** tab
-2. Click **Create Conversational AI bot**
-3. **Bot name:** Enter `call-center-agent-training`
-4. Click **Create**
-5. **Add language:**
-   - Click **Add language**
-   - Select **English (US)**
-6. **Link AI Agent:**
-   - Enable the **Amazon Connect AI agent Intent** toggle button
-   - Select your AI assistant ARN from the dropdown (the AI Agent you created in Step 6)
-   - Click **Confirm**
-7. **Build the bot:**
-   - Click **Build Language**
-   - Wait for the build to complete
-8. **Configure Speech-to-Speech:**
-   - **Model type:** Select **Speech-to-speech**
-   - **Voice provider:** Select **Amazon Nova Sonic**
-   - Click **Confirm**
-9. **Rebuild with speech-to-speech configuration:**
-   - Click **Build Language** again
-   - Wait for the build to complete
-
-The bot is now configured and ready to use in contact flows.
-
----
-
-## Step 7: Import Contact Flow
-
-1. In Amazon Connect console, go to **Routing** → **Contact flows**
-2. Click **Create contact flow**
-3. Click the dropdown arrow next to **Save** → **Import flow (beta)**
-4. Select `amazon-connect/AIAgentFlow.json`
-5. The imported flow will have some blocks that need configuration (Lambda and AI Agent) - **don't configure them yet**
-6. Click **Save** (don't publish yet - we'll configure it after deployment)
-7. **Get the Contact Flow ID:**
-   - Click the **Details** tab in the flow designer
-   - Copy the ARN (format: `arn:aws:connect:<REGION>:<ACCOUNT_ID>:instance/<INSTANCE_ID>/contact-flow/<CONTACT_FLOW_ID>`)
-   - Extract the last part after `/contact-flow/` as the Contact Flow ID
-   - You'll need this for config.json in Step 9
-
----
-
-## Step 8: Claim a Phone Number
-
-1. In the Connect console, open your instance
-2. Go to **Channels** > **Phone numbers**
-3. Click **Claim a number**
-4. Select:
-   - **Country**: United States
-   - **Type**: Toll free
-5. **Associate with:** Select **Sample queue customer** (built-in inbound flow)
-6. Note the claimed phone number (E.164 format, e.g. `+18332894032`)
-   - You'll need this for config.json in Step 9
-
-This phone number serves as the **destination** for outbound training calls - it routes calls to agents via CCP.
-
----
-
-## Step 9: Update config.json
-
-Edit `deployment/config.json` with all the values you've collected:
+## Step 1: Configure `deployment/config.json`
 
 ```json
 {
   "connect": {
-    "instanceArn": "arn:aws:connect:us-west-2:<account-id>:instance/<instance-id>",
-    "recordingsBucket": "amazon-connect-<random-hash>",
-    "contactFlowId": "<contact-flow-id>",
-    "destinationPhoneNumber": "+1XXXXXXXXXX",
-    "AIAgentAssistantId": "<assistant-id>"
+    "manageInstance": true,
+    "instanceAlias": "call-center-training",
+    "features": {
+      "lexBot": true,
+      "aiAgent": true,
+      "contactFlows": true,
+      "phoneNumber": true,
+      "agentUser": true
+    }
   }
 }
 ```
 
-**Values:**
-- `instanceArn` — from Step 1
-- `recordingsBucket` — from Step 2
-- `contactFlowId` — from Step 7
-- `destinationPhoneNumber` — from Step 8
-- `AIAgentAssistantId` — from Step 5 (optional but recommended)
+**`manageInstance`** — whether CDK owns the Connect instance itself:
+- `true` (recommended for greenfield) — CDK creates a new Connect instance, recordings bucket, KMS key, and storage configs.
+- `false` — attach to an existing, manually-created instance. See "Attaching to an existing Connect instance" below.
+
+### Attaching to an existing Connect instance (`manageInstance: false`)
+
+Use this when you already have a Connect instance you want to preserve (existing users, routing profiles, phone numbers, recording history).
+
+Example config:
+```json
+{
+  "connect": {
+    "manageInstance": false,
+    "instanceArn": "<CONNECT_INSTANCE_ARN>",
+    "recordingsBucket": "<RECORDINGS_BUCKET_NAME>",
+    "destinationPhoneNumber": "<E164_PHONE_NUMBER>",
+    "features": {
+      "lexBot": true,
+      "aiAgent": true,
+      "contactFlows": true,
+      "phoneNumber": false,
+      "agentUser": false
+    }
+  }
+}
+```
+
+**What CDK creates inside your instance:**
+- Wisdom (Q Connect) Assistant + AI Prompt + AI Agent
+- WISDOM_ASSISTANT integration association
+- Lex V2 bot + Live alias + LEX_BOT integration + resource policy
+- Voice + chat contact flows (named `CallCenterTrainingVoice` / `CallCenterTrainingChat`)
+- Session Setup Lambda + LAMBDA_FUNCTION integration
+- Post-call processing pipeline (EventBridge → Lambda → scoring)
+- Admin UI (CloudFront + Cognito) + Admin API Gateway
+
+**What stays yours (never touched):**
+- The Connect instance itself — users, queues, routing profiles, security profiles, phone numbers
+- Your recordings bucket — only *read* by the post-call Lambda, never written or modified
+- Any existing contact flows (new flows are added alongside, never overwritten)
+
+**Caveats:**
+
+> ⚠️ **WARNING — Existing Q Connect / Lex integrations will be DELETED.**
+>
+> Connect allows only **one** `WISDOM_ASSISTANT` and **one** `LEX_BOT` integration association per instance. If your instance already has either, CDK's setup Lambda will automatically delete the existing integration before creating its own. **Any Q in Connect assistant or Lex bot previously wired into this instance will be disconnected.**
+>
+> If you use Q Connect or Lex on this instance for anything else (e.g. another AI agent, a different workflow), do **not** enable `aiAgent` / `lexBot` features against that instance — deploy to a separate instance instead.
+
+- **Recordings bucket access.** The post-call Lambda needs `s3:GetObject` on your bucket. CDK grants this on its own IAM role, but if your bucket has a restrictive bucket policy (deny-by-default), you may need to allow the Lambda's role ARN explicitly.
+- **Phone number routing.** Set `features.phoneNumber: false` and provide `destinationPhoneNumber` — CDK will NOT reassociate your existing number's inbound contact flow. If calls to `destinationPhoneNumber` should route through a specific flow, configure that manually in the Connect console.
+- **Agent users.** Set `features.agentUser: false` — your instance presumably already has CCP users. The trainee login you pass to the Admin UI must match an existing user on your instance.
+- **First-use Lex reconciliation.** After the first CDK deploy against your existing instance, you'll likely need to perform the "Reconcile Lex Bot Management" step (see Step 3 below) even if your instance previously had Lex bots configured. CDK adds a new LEX_BOT integration that Connect needs to reconcile once before it'll accept calls.
+
+**`features`** — per-resource toggles for incremental deploys. Enable all for a full deploy. If a deploy fails partway (e.g. Lex bot issue), flip the failing flag off to roll back cleanly to the last-known-good state, fix, and re-enable:
+
+| Flag | What it enables |
+|------|-----------------|
+| `lexBot` | Lex V2 bot + alias + LEX_BOT integration + resource policy |
+| `aiAgent` | Wisdom Assistant + custom-resource AI Prompt/Agent setup |
+| `contactFlows` | Voice + chat contact flows (requires `lexBot` + `aiAgent`) |
+| `phoneNumber` | Toll-free US number + inbound flow association |
+| `agentUser` | CCP trainee user + Secrets Manager password |
 
 ---
 
-## Step 10: Deploy CDK
+## Step 2: Deploy
 
 ```bash
 cd deployment
-./deploy.sh --all
+./deploy.sh --connect
 ```
 
-This creates:
-- **Session Setup Lambda** — injects scenario data into AI Agent sessions
-- **Admin API Lambda** — HTTP API for managing calls
-- **Admin UI** — CloudFront-hosted web app
-- **Post-call processing Lambda** — handles Contact Lens analysis and scoring
-
-**Note the outputs:**
-- `AIAgentSessionSetupLambdaArn` — you'll need this in Step 11 to configure the contact flow
-- `ConnectAdminApiUrl` — admin API endpoint
-
----
-
-## Step 11: Import Lambda Function into Connect
-
-Before configuring the contact flow, you must import the Session Setup Lambda function into your Connect instance.
-
-1. In Amazon Connect console, go to **Flows** (left navigation bar)
-2. Scroll down to the **AWS Lambda** section
-3. From the dropdown, select your Session Setup Lambda function:
-   - Function name format: `CallCenterTraining-Connect-AIAgentSessionSetup...`
-   - Use the ARN from CDK output: `AIAgentSessionSetupLambdaArn`
-4. Click **Add Lambda Function**
-
-The Lambda function is now available for use in contact flows.
-
----
-
-## Step 12: Configure Contact Flow
-
-Now configure the contact flow with the deployed resources.
-
-1. Open the Contact Flow you imported in Step 7
-2. **Configure the AWS Lambda Function block:**
-   - Find the **Invoke AWS Lambda function** block (first block after logging)
-   - Click the block to edit
-   - Select your Session Setup Lambda from the dropdown
-   - Function name format: `CallCenterTraining-Connect-AIAgentSessionSetup...`
-   - Click **Save**
-3. **Configure the Connect Assistant (AI Agent) block:**
-   - Find the **Connect Assistant** or **AI Agent** block (after the Lambda block)
-   - Click to edit
-   - **AI Agent:** Select **call-center-training** (the agent you created in Step 5)
-   - **Version:** Select **$LATEST**
-   - Click **Save**
-4. **Configure the Get Customer Input block:**
-   - Find the **Get Customer Input** block (where the bot interaction happens)
-   - Click to edit
-   - **Bot name:** Select **call-center-training-agent** (the bot you created in Step 6)
-   - **Bot alias:** Select the alias (typically **$LATEST** or **Live**)
-   - **AI Agent:** Select **call-center-training**
-   - Click **Save**
-5. **Save and Publish the flow:**
-   - Click **Save**
-   - Click **Publish**
-
-The contact flow is now fully configured and ready to use!
-
----
-
-## Step 13: Create an Admin User
-
-Create a user in the **Admin Cognito User Pool** (separate from Connect agent users):
+For iterative redeploys of just the Connect stack (faster, avoids touching Core/Web):
 
 ```bash
-cd deployment
-./create-user.sh admin@example.com Password123!
+cd deployment && npm run build && cdk deploy CallCenterTraining-Connect --exclusively --require-approval never --context deployMode=connect
 ```
+
+Note the CloudFormation outputs:
+
+| Output | Description |
+|--------|-------------|
+| `ConnectInstanceArn` | Connect instance ARN |
+| `ConnectInstanceAlias` | Alias → CCP URL: `https://<alias>.my.connect.aws/ccp-v2/` |
+| `ConnectPhoneNumber` | Toll-free number claimed for training calls |
+| `ConnectContactFlowId` | Voice flow ID |
+| `ConnectChatContactFlowId` | Chat flow ID |
+| `AIAgentAssistantId` | Q Connect Assistant ID |
+| `AIAgentPublishedVersionArn` | Published AI Agent version ARN |
+| `LexBotAliasArn` | Lex V2 bot alias ARN |
+| `ConnectAdminApiUrl` | Admin API Gateway endpoint |
+| `ConnectAdminUiUrl` | CloudFront URL for the admin dashboard |
 
 ---
 
-## Step 14: Test
+## Step 3: Reconcile Lex Bot Management (Manual)
 
-The deployment outputs the following URLs:
+After the first deploy, Connect's runtime rejects the Lex integration with `Invalid Bot Configuration: Amazon Lex could not access your Q In Connect Assistant` on the first training call. Even though CDK sets `BOT_MANAGEMENT=true` on the instance, an extra console-side reconciliation step is needed to wire the Lex service-linked role correctly. This is a **one-time** action per instance.
 
-| URL | Purpose |
-|-----|---------|
-| **Admin UI URL** | Where admins initiate training calls |
-| **CCP URL** | Where trainees accept calls via softphone |
+1. Open the Connect admin console for the deployed instance.
+2. In the left navigation, click **Flows**.
+3. Scroll to the **Amazon Lex** section, uncheck **Enable Lex Bot Management in Amazon Connect**, and click **Save changes**.
+4. Re-check the same checkbox and click **Save changes** again.
+
+After this, training calls will succeed without the bot-configuration error.
+
+---
+
+## Step 4: Verify Speech Model
+
+Nova Sonic speech-to-speech is configured by CDK via `unifiedSpeechSettings` on the bot locale. Verify it's active:
+
+1. Open the Connect console → **Flows** → **Conversational AI** tab.
+2. Open the bot `call-center-training-agent-bot`.
+3. Confirm **Model type** shows **Speech-to-speech** and **Voice provider** shows **Amazon Nova Sonic**.
+
+If the speech model is not set, select **Speech-to-speech** + **Amazon Nova Sonic** and click **Build Language**.
+
+---
+
+## Step 5: Retrieve the CCP Trainee Password
+
+CDK already created the Connect-native CCP agent user (default username `trainee`, configurable via `config.connect.agentUsername`). Retrieve its auto-generated password from Secrets Manager:
+
+```bash
+SECRET_ARN=$(aws cloudformation describe-stacks \
+  --stack-name CallCenterTraining-Connect \
+  --query "Stacks[0].Outputs[?OutputKey=='ConnectAgentPasswordSecretArn'].OutputValue" \
+  --output text)
+
+aws secretsmanager get-secret-value \
+  --secret-id "$SECRET_ARN" \
+  --query SecretString --output text
+```
+
+> The Connect Admin UI (CloudFront dashboard) uses its own separate Cognito user pool. See the Admin UI output `AdminUserPoolId` from the stack, or add a dedicated admin user via the AWS Cognito console. The repo's `deployment/create-user.sh` targets the Web UI stack's Cognito pool, not the Connect Admin UI pool.
+
+---
+
+## Step 6: Test
 
 ### Testing a Training Call
 
 1. **Open CCP:**
-   - Open the CCP URL: `https://<instance-alias>.my.connect.aws/ccp-v2/`
-   - Log in with your admin user (from Step 1)
+   - Open the CCP URL from the `ConnectInstanceAlias` output: `https://<alias>.my.connect.aws/ccp-v2/`
+   - Log in with your Connect agent user
    - Set status to **Available**
 
 2. **Initiate call from Admin UI:**
    - Open the Admin UI URL (from CDK output `ConnectAdminUiUrl`)
-   - Log in with the Cognito credentials (from Step 13)
+   - Log in with the Cognito credentials (from Step 5)
    - Select a training scenario
-   - Enter the Connect agent username (your admin user)
+   - Enter the Connect agent username (default: `trainee`)
    - Click **Start Training Call**
 
 3. **Accept the call in CCP:**
@@ -337,26 +237,17 @@ The deployment outputs the following URLs:
    - The AI customer should greet and begin the training scenario
    - Verify the AI customer responds via Nova Sonic voice
 
+### Test Chat Flow (Optional)
+
+In the Connect console go to **Channels** → **Test Chat**, select the deployed chat flow, click **Test Settings** and add contact attributes `{"scenario_id": "sample_unauthorized_child_01"}`, then click **Start Chat**.
+
 ---
 
-## Step 15: Test Chat Flow (Optional)
-
-For web-based text training, import the chat flow `amazon-connect/AIAgentChatFlow.json` following the same process as Step 7. Configure the Lambda function, AI Agent, and Lex bot blocks similar to Step 12. Then in Connect console go to **Channels** → **Test Chat**, select the chat flow, click **Test Settings** and add contact attributes `{"scenario_id": "sample_unauthorized_child_01"}`, then click **Start Chat** to test the text-based training conversation.
-
 ## Tearing Down
-
-To destroy the Connect stack:
 
 ```bash
 cd deployment
 cdk destroy CallCenterTraining-Connect --context deployMode=connect
 ```
 
-To destroy everything:
-
-```bash
-cd deployment
-cdk destroy --all --context deployMode=all
-```
-
-> **Note**: S3 buckets and Cognito User Pools with `RETAIN` removal policy will not be deleted. Remove them manually if needed.
+> **Note**: The toll-free phone number has `RemovalPolicy.RETAIN` to avoid the 30-day quarantine on release. Clean it up manually via the Connect console if no longer needed. S3 buckets, KMS keys, and Cognito User Pools also have `RETAIN` — remove manually if needed.

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { AgentCoreStack } from '../lib/agentcore-stack';
+import { CoreInfraStack } from '../lib/core-infra-stack';
+import { AgentRuntimeStack } from '../lib/agent-runtime-stack';
 import { WebUIStack } from '../lib/webui-stack';
 import { ConnectStack } from '../lib/connect-stack';
 import { AwsSolutionsChecks } from 'cdk-nag';
@@ -24,38 +25,56 @@ const commonTags = {
 };
 
 // Deployment mode: 'agentcore' | 'webui' | 'connect' | 'all'
-// - agentcore: Deploy only the shared AgentCore backend
-// - webui: Deploy AgentCore + Web UI stacks
-// - connect: Deploy AgentCore + Connect stacks
-// - all: Deploy AgentCore + Web UI + Connect stacks
+// - agentcore: Deploy shared Core infra + AgentCore runtime only
+// - webui:     Deploy Core infra + AgentCore runtime + Web UI
+// - connect:   Deploy Core infra + Connect (no AgentCore runtime — Connect doesn't use it)
+// - all:       Deploy everything
 const deployMode = app.node.tryGetContext('deployMode') || 'agentcore';
 
 console.log(`Deploy mode: ${deployMode}`);
 
-// Stack 1: AgentCore (ALWAYS deployed)
-const agentCoreStack = new AgentCoreStack(app, 'CallCenterTraining-Core', {
+// Stack 1: Core shared infra (ALWAYS deployed)
+const coreStack = new CoreInfraStack(app, 'CallCenterTraining-Core', {
   env,
-  description: 'Shared backend infrastructure - AgentCore Runtime, VPC, S3, IAM',
+  description: 'Shared backend infrastructure - VPC, S3, KMS, DynamoDB, VPC endpoints',
   tags: commonTags,
 });
 
-// Stack 2: Web UI (optional)
+// Stack 2: AgentCore runtime (deployed for agentcore/webui/all — skipped for connect)
+let agentRuntimeStack: AgentRuntimeStack | undefined;
+if (deployMode === 'agentcore' || deployMode === 'webui' || deployMode === 'all') {
+  agentRuntimeStack = new AgentRuntimeStack(app, 'CallCenterTraining-AgentRuntime', {
+    env,
+    description: 'Bedrock AgentCore runtime for Web UI - agent image, IAM role, runtime',
+    tags: commonTags,
+    vpc: coreStack.vpc,
+    bedrockEndpointSg: coreStack.bedrockEndpointSg,
+    recordingsBucket: coreStack.storage.recordingsBucket,
+    encryptionKey: coreStack.storage.encryptionKey,
+    scenariosTable: coreStack.dynamoTables.scenariosTable,
+    vpcCidr: coreStack.vpcCidr,
+    createBedrockAgentCoreEndpoint: coreStack.createBedrockAgentCoreEndpoint,
+  });
+}
+
+// Stack 3: Web UI (optional)
 if (deployMode === 'webui' || deployMode === 'all') {
   const webUIStack = new WebUIStack(app, 'CallCenterTraining-Web', {
     env,
     description: 'Browser-based training interface - CloudFront, Cognito, Scoring Lambda',
     tags: commonTags,
-    agentCoreStack,
+    coreStack,
+    agentRuntimeStack: agentRuntimeStack!,
   });
 }
 
-// Stack 3: Amazon Connect (optional)
+// Stack 4: Amazon Connect (optional)
 if (deployMode === 'connect' || deployMode === 'all') {
   const connectStack = new ConnectStack(app, 'CallCenterTraining-Connect', {
     env,
     description: 'Amazon Connect training integration - Connect instance, Bridge Lambda, Admin UI',
     tags: commonTags,
-    agentCoreStack,
+    coreStack,
   });
 }
 

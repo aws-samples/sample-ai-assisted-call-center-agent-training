@@ -1,12 +1,13 @@
 /**
- * AgentCore Stack - Shared Backend Infrastructure
+ * Core Infra Stack - Shared Backend Infrastructure
  *
- * This stack contains all shared infrastructure used by both the Web UI and Connect deployments:
+ * Contains infrastructure shared by the Web UI and Connect stacks:
  * - VPC + VPC Endpoints + Flow Logs
  * - S3 Storage (recordings) + KMS encryption
- * - Docker image build (ECR)
- * - IAM roles for AgentCore
- * - Bedrock AgentCore Runtime (BidiAgent/Nova Sonic container)
+ * - DynamoDB tables (scenarios, criteria config, sessions)
+ *
+ * AgentCore runtime, agent IAM role, agent Docker image, and the bedrock-agentcore
+ * VPC endpoint live in the separate AgentRuntimeStack, since only the Web UI needs them.
  */
 
 import * as cdk from 'aws-cdk-lib';
@@ -16,41 +17,35 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { NagSuppressions } from 'cdk-nag';
 
-// Import modular constructs
-import { DockerImagesConstruct } from './constructs/docker-images';
 import { S3StorageConstruct } from './constructs/storage';
-import { IamRolesConstruct } from './constructs/iam-roles';
-import { AgentCoreRuntimeConstruct } from './constructs/agentcore-runtime';
 import { DynamoDBTablesConstruct } from './constructs/dynamodb-tables';
 
-export interface AgentCoreStackProps extends cdk.StackProps {
+export interface CoreInfraStackProps extends cdk.StackProps {
   // No additional props needed - config loaded from config.json
 }
 
-export class AgentCoreStack extends cdk.Stack {
+export class CoreInfraStack extends cdk.Stack {
   /** VPC for private connectivity */
   public readonly vpc: ec2.Vpc;
   /** S3 storage construct (recordings + scoring buckets) */
   public readonly storage: S3StorageConstruct;
-  /** Docker images construct */
-  public readonly dockerImages: DockerImagesConstruct;
-  /** IAM roles construct */
-  public readonly iamRoles: IamRolesConstruct;
-  /** AgentCore runtime construct */
-  public readonly agentRuntime: AgentCoreRuntimeConstruct;
-  /** Security group for AgentCore runtime */
-  public readonly agentSecurityGroup: ec2.SecurityGroup;
   /** DynamoDB tables (scenarios + criteria config) */
   public readonly dynamoTables: DynamoDBTablesConstruct;
   /** Security group for Bedrock VPC endpoints */
   public readonly bedrockEndpointSg: ec2.SecurityGroup;
+  /** VPC CIDR (from config) for consumers that need to add SG rules */
+  public readonly vpcCidr: string;
+  /** Whether the bedrock-agentcore VPC endpoint should be created by consumers */
+  public readonly createBedrockAgentCoreEndpoint: boolean;
 
-  constructor(scope: Construct, id: string, props?: AgentCoreStackProps) {
+  constructor(scope: Construct, id: string, props?: CoreInfraStackProps) {
     super(scope, id, props);
 
     // Load configuration
     const configPath = path.join(__dirname, '../config.json');
     const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+    this.vpcCidr = config.vpcConfig.vpcCidr;
+    this.createBedrockAgentCoreEndpoint = config.vpcEndpoints.createBedrockAgentCoreEndpoint;
 
     // ========================================
     // VPC Configuration
@@ -89,7 +84,7 @@ export class AgentCoreStack extends cdk.Stack {
     // ========================================
     this.bedrockEndpointSg = new ec2.SecurityGroup(this, 'BedrockAgentCoreEndpointSg', {
       vpc: this.vpc,
-      description: 'Security group for Bedrock AgentCore VPC endpoint',
+      description: 'Security group for Bedrock VPC endpoints',
       allowAllOutbound: false,
     });
 
@@ -105,15 +100,6 @@ export class AgentCoreStack extends cdk.Stack {
       new ec2.InterfaceVpcEndpoint(this, 'BedrockRuntimeEndpoint', {
         vpc: this.vpc,
         service: new ec2.InterfaceVpcEndpointService(`com.amazonaws.${this.region}.bedrock-runtime`),
-        subnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
-        securityGroups: [this.bedrockEndpointSg],
-      });
-    }
-
-    if (config.vpcEndpoints.createBedrockAgentCoreEndpoint) {
-      new ec2.InterfaceVpcEndpoint(this, 'BedrockAgentCoreEndpoint', {
-        vpc: this.vpc,
-        service: new ec2.InterfaceVpcEndpointService(`com.amazonaws.${this.region}.bedrock-agentcore`),
         subnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
         securityGroups: [this.bedrockEndpointSg],
       });
@@ -170,7 +156,7 @@ export class AgentCoreStack extends cdk.Stack {
     NagSuppressions.addResourceSuppressions(this.vpc, [
       {
         id: 'Prototype Security Nag Pack-VPC Endpoint for bedrock-agent-runtime',
-        reason: 'This application uses bedrock-agentcore endpoint (which is created), not bedrock-agent-runtime.',
+        reason: 'This application uses bedrock-agentcore endpoint (created in AgentRuntimeStack), not bedrock-agent-runtime.',
       },
       {
         id: 'Prototype Security Nag Pack-VPC Endpoint for batch',
@@ -178,27 +164,12 @@ export class AgentCoreStack extends cdk.Stack {
       },
     ]);
 
-    // ========================================
-    // Security Group for AgentCore Runtime
-    // ========================================
-    this.agentSecurityGroup = new ec2.SecurityGroup(this, 'AgentSecurityGroup', {
-      vpc: this.vpc,
-      description: 'Security group for call center training agent runtime',
-      allowAllOutbound: true,
-    });
-
-    this.bedrockEndpointSg.addIngressRule(
-      this.agentSecurityGroup,
-      ec2.Port.tcp(443),
-      'Allow agent to call Bedrock AgentCore API'
-    );
-
     // Allow any VPC resource (e.g., admin Lambda in Web stack) to reach Bedrock endpoints.
     // Using VPC CIDR avoids cross-stack SG references that would create cyclic dependencies.
     this.bedrockEndpointSg.addIngressRule(
       ec2.Peer.ipv4(config.vpcConfig.vpcCidr),
       ec2.Port.tcp(443),
-      'Allow VPC resources to call Bedrock Runtime'
+      'Allow VPC resources to call Bedrock Runtime',
     );
 
     // ========================================
@@ -207,66 +178,8 @@ export class AgentCoreStack extends cdk.Stack {
     this.storage = new S3StorageConstruct(this, 'Storage');
 
     // ========================================
-    // DynamoDB Tables (scenarios + criteria config)
+    // DynamoDB Tables (scenarios + criteria config + sessions)
     // ========================================
     this.dynamoTables = new DynamoDBTablesConstruct(this, 'DynamoTables');
-
-    // ========================================
-    // Docker Image Build
-    // ========================================
-    this.dockerImages = new DockerImagesConstruct(this, 'DockerImages');
-
-    // ========================================
-    // IAM Roles for AgentCore Runtime
-    // ========================================
-    this.iamRoles = new IamRolesConstruct(this, 'IamRoles', {
-      recordingsBucketArn: this.storage.recordingsBucket.bucketArn,
-      ecrRepositoryArn: this.dockerImages.agentImage.repository.repositoryArn,
-      scenariosTableArn: this.dynamoTables.scenariosTable.tableArn,
-    });
-
-    // Grant KMS key permissions to agent role
-    this.storage.encryptionKey.grantEncryptDecrypt(this.iamRoles.agentRole);
-
-    // Suppress IAM5 wildcards that can only be resolved at this stack level
-    NagSuppressions.addResourceSuppressions(
-      this.iamRoles.agentRole,
-      [
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'kms:GenerateDataKey* and kms:ReEncrypt* are standard CDK KMS grant patterns from grantEncryptDecrypt().',
-          appliesTo: ['Action::kms:GenerateDataKey*', 'Action::kms:ReEncrypt*'],
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'S3 object-level access requires /* suffix. Resource is scoped to the specific recordings bucket.',
-          appliesTo: [
-            {
-              regex: '/Resource::.*\\.Arn>\\/\\*$/g',
-            } as any,
-          ],
-        },
-      ],
-      true,
-    );
-
-    // ========================================
-    // AgentCore Runtime
-    // ========================================
-    this.agentRuntime = new AgentCoreRuntimeConstruct(this, 'Runtime', {
-      agentImage: this.dockerImages.agentImage,
-      agentRole: this.iamRoles.agentRole,
-      recordingsBucketName: this.storage.recordingsBucket.bucketName,
-      kmsKeyId: this.storage.encryptionKey.keyId,
-      agentSecurityGroups: [this.agentSecurityGroup.securityGroupId],
-      subnetIds: this.vpc.selectSubnets({ subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS }).subnetIds,
-      scenariosTableName: this.dynamoTables.scenariosTable.tableName,
-    });
-
-    // Ensure IAM role policy is attached before AgentCore Runtime is created
-    const roleDefaultPolicy = this.iamRoles.agentRole.node.tryFindChild('DefaultPolicy');
-    if (roleDefaultPolicy) {
-      this.agentRuntime.agentRuntime.node.addDependency(roleDefaultPolicy);
-    }
   }
 }

@@ -49,7 +49,7 @@
           "WisdomAssistantArn": {
             "useAIAgentDropdown": true,
             "aiAgentName": "call-center-training",
-            "aiAgentVersionArn": "<AI_AGENT_VERSION_ARN>"
+            "aiAgentVersionArn": "${AIAgentVersionArn}"
           }
         },
         "fragments": {
@@ -57,7 +57,7 @@
         },
         "useAIAgentDropdown": true,
         "aiAgentName": "call-center-training",
-        "aiAgentVersionArn": "<AI_AGENT_VERSION_ARN>"
+        "aiAgentVersionArn": "${AIAgentVersionArn}"
       },
       "29d9ad29-ea98-4426-a11e-13df91122ffd": {
         "position": {
@@ -74,9 +74,9 @@
         "parameters": {
           "LexV2Bot": {
             "AliasArn": {
-              "displayName": "TestBotAlias",
+              "displayName": "Live",
               "useLexBotDropdown": true,
-              "lexV2BotName": "call-center-agent-training"
+              "lexV2BotName": "call-center-training-agent-bot"
             }
           }
         },
@@ -85,8 +85,8 @@
           "x-amz-lex:q-in-connect:ai-agent-arn": false
         },
         "useLexBotDropdown": true,
-        "lexV2BotName": "call-center-agent-training",
-        "lexV2BotAliasName": "TestBotAlias",
+        "lexV2BotName": "call-center-training-agent-bot",
+        "lexV2BotAliasName": "Live",
         "conditionMetadata": []
       },
       "990983c8-532d-4fb2-94f4-0e05a91fb006": {
@@ -105,11 +105,6 @@
         "position": {
           "x": 766.4,
           "y": -40
-        },
-        "parameters": {
-          "LambdaFunctionARN": {
-            "displayName": "CallCenterTraining-Connec-AIAgentSessionSetupFunct-rxT0Vom0F7qr"
-          }
         },
         "dynamicMetadata": {}
       },
@@ -136,9 +131,9 @@
   "Actions": [
     {
       "Parameters": {
-        "WisdomAssistantArn": "<WISDOM_ASSISTANT_ARN>",
+        "WisdomAssistantArn": "${WisdomAssistantArn}",
         "OrchestrationAIAgentConfiguration": {
-          "AgentAssistanceAgentVersionArn": "<AI_AGENT_VERSION_ARN>"
+          "AgentAssistanceAgentVersionArn": "${AIAgentVersionArn}"
         }
       },
       "Identifier": "7a1f6607-4a87-4d67-998d-f130ae813093",
@@ -171,7 +166,7 @@
     },
     {
       "Parameters": {
-        "WisdomAssistantArn": "<WISDOM_ASSISTANT_ARN>"
+        "WisdomAssistantArn": "${WisdomAssistantArn}"
       },
       "Identifier": "b0e1cef9-5a0b-4d38-8f74-00007a67eb1a",
       "Type": "CreateWisdomSession",
@@ -205,11 +200,11 @@
       "Parameters": {
         "Text": " ",
         "LexV2Bot": {
-          "AliasArn": "<LEX_BOT_ALIAS_ARN>"
+          "AliasArn": "${LexBotAliasArn}"
         },
         "LexSessionAttributes": {
           "voice_id": "$.Attributes.voice_id",
-          "x-amz-lex:q-in-connect:ai-agent-arn": "<AI_AGENT_VERSION_ARN>"
+          "x-amz-lex:q-in-connect:ai-agent-arn": "${AIAgentVersionArn}"
         }
       },
       "Identifier": "fe4bfcf9-ca1a-4102-a3d4-716c4ddc2c87",
@@ -256,7 +251,7 @@
     },
     {
       "Parameters": {
-        "LambdaFunctionARN": "<LAMBDA_FUNCTION_ARN>",
+        "LambdaFunctionARN": "${LambdaArn}",
         "InvocationTimeLimitSeconds": "3",
         "InvocationType": "SYNCHRONOUS",
         "ResponseValidation": {

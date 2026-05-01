@@ -19,16 +19,16 @@
         "parameters": {
           "WisdomAssistantArn": {
             "useAIAgentDropdown": true,
-            "aiAgentName": "cell-center-training-ai-agent",
-            "aiAgentVersionArn": "arn:aws:wisdom:us-west-2:195249792362:ai-agent/d9f14a5f-1e38-4060-b6af-0629874d5f23/273624d8-36cf-40dc-9b5f-da078f20ca17:$LATEST"
+            "aiAgentName": "call-center-training",
+            "aiAgentVersionArn": "${AIAgentVersionArn}"
           }
         },
         "fragments": {
           "SetContactData": "67315c9f-0c68-46b1-8716-ccd0c02af761"
         },
         "useAIAgentDropdown": true,
-        "aiAgentName": "cell-center-training-ai-agent",
-        "aiAgentVersionArn": "arn:aws:wisdom:us-west-2:195249792362:ai-agent/d9f14a5f-1e38-4060-b6af-0629874d5f23/273624d8-36cf-40dc-9b5f-da078f20ca17:$LATEST"
+        "aiAgentName": "call-center-training",
+        "aiAgentVersionArn": "${AIAgentVersionArn}"
       },
       "67315c9f-0c68-46b1-8716-ccd0c02af761": {
         "position": {
@@ -45,9 +45,9 @@
         "parameters": {
           "LexV2Bot": {
             "AliasArn": {
-              "displayName": "TestBotAlias",
+              "displayName": "Live",
               "useLexBotDropdown": true,
-              "lexV2BotName": "ai-agent-bot"
+              "lexV2BotName": "call-center-training-agent-bot"
             }
           }
         },
@@ -56,8 +56,8 @@
           "x-amz-lex:q-in-connect:ai-agent-arn": false
         },
         "useLexBotDropdown": true,
-        "lexV2BotName": "ai-agent-bot",
-        "lexV2BotAliasName": "TestBotAlias",
+        "lexV2BotName": "call-center-training-agent-bot",
+        "lexV2BotAliasName": "Live",
         "conditionMetadata": []
       },
       "1a4550ad-0224-44cc-8870-0c9b0d362123": {
@@ -70,11 +70,6 @@
         "position": {
           "x": 766.4,
           "y": -40
-        },
-        "parameters": {
-          "LambdaFunctionARN": {
-            "displayName": "CallCenterTraining-Connec-AIAgentSessionSetupFunct-USSCVUu1Nt6N"
-          }
         },
         "dynamicMetadata": {}
       },
@@ -90,7 +85,7 @@
           "OrchestrationAIAgentConfiguration": {
             "AgentAssistanceAgentVersionArn": {
               "useAIAgentDropdown": true,
-              "aiAgentName": "cell-center-training-ai-agent"
+              "aiAgentName": "call-center-training"
             }
           }
         },
@@ -98,7 +93,7 @@
           "SetContactData": "07343838-a44e-4d16-9a0b-721b615b1eb5"
         },
         "useAIAgentDropdown": true,
-        "aiAgentName": "cell-center-training-ai-agent"
+        "aiAgentName": "call-center-training"
       },
       "07343838-a44e-4d16-9a0b-721b615b1eb5": {
         "position": {
@@ -155,7 +150,7 @@
   "Actions": [
     {
       "Parameters": {
-        "WisdomAssistantArn": "arn:aws:wisdom:us-west-2:195249792362:assistant/d9f14a5f-1e38-4060-b6af-0629874d5f23"
+        "WisdomAssistantArn": "${WisdomAssistantArn}"
       },
       "Identifier": "b0e1cef9-5a0b-4d38-8f74-00007a67eb1a",
       "Type": "CreateWisdomSession",
@@ -189,11 +184,11 @@
       "Parameters": {
         "Text": " ",
         "LexV2Bot": {
-          "AliasArn": "arn:aws:lex:us-west-2:195249792362:bot-alias/R2DIABBUMN/TSTALIASID"
+          "AliasArn": "${LexBotAliasArn}"
         },
         "LexSessionAttributes": {
           "voice_id": "$.Attributes.voice_id",
-          "x-amz-lex:q-in-connect:ai-agent-arn": "arn:aws:wisdom:us-west-2:195249792362:ai-agent/d9f14a5f-1e38-4060-b6af-0629874d5f23/273624d8-36cf-40dc-9b5f-da078f20ca17:$LATEST"
+          "x-amz-lex:q-in-connect:ai-agent-arn": "${AIAgentVersionArn}"
         }
       },
       "Identifier": "cad4200a-57e0-412e-b992-2169689ba4e3",
@@ -256,7 +251,7 @@
     },
     {
       "Parameters": {
-        "LambdaFunctionARN": "arn:aws:lambda:us-west-2:195249792362:function:CallCenterTraining-Connec-AIAgentSessionSetupFunct-USSCVUu1Nt6N",
+        "LambdaFunctionARN": "${LambdaArn}",
         "InvocationTimeLimitSeconds": "3",
         "InvocationType": "SYNCHRONOUS",
         "ResponseValidation": {
@@ -277,9 +272,9 @@
     },
     {
       "Parameters": {
-        "WisdomAssistantArn": "arn:aws:wisdom:us-west-2:195249792362:assistant/d9f14a5f-1e38-4060-b6af-0629874d5f23",
+        "WisdomAssistantArn": "${WisdomAssistantArn}",
         "OrchestrationAIAgentConfiguration": {
-          "AgentAssistanceAgentVersionArn": "arn:aws:wisdom:us-west-2:195249792362:ai-agent/d9f14a5f-1e38-4060-b6af-0629874d5f23/273624d8-36cf-40dc-9b5f-da078f20ca17:$LATEST"
+          "AgentAssistanceAgentVersionArn": "${AIAgentVersionArn}"
         }
       },
       "Identifier": "7a1f6607-4a87-4d67-998d-f130ae813093",

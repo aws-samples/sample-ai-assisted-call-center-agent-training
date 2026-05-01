@@ -1,10 +1,10 @@
 #!/bin/bash
 # Deployment script for Call Center Training Agent
 # Supports multiple deployment modes:
-#   - agentcore: Shared backend only
-#   - webui: AgentCore + Web UI
-#   - connect: AgentCore + Amazon Connect
-#   - all: AgentCore + Web UI + Connect
+#   - agentcore: Core infra + AgentCore runtime
+#   - webui:     Core infra + AgentCore runtime + Web UI
+#   - connect:   Core infra + Amazon Connect (no AgentCore runtime)
+#   - all:       Core infra + AgentCore runtime + Web UI + Connect
 #
 # Performance optimizations:
 #   - Single describe-stacks call per stack (batched output parsing via jq)
@@ -65,10 +65,10 @@ while [[ $# -gt 0 ]]; do
             echo "Usage: $0 [--mode <mode>] [--agentcore|--webui|--connect|--all]"
             echo ""
             echo "Deployment modes:"
-            echo "  agentcore - Shared AgentCore backend only"
-            echo "  webui     - AgentCore + Browser-based Web UI"
-            echo "  connect   - AgentCore + Amazon Connect integration"
-            echo "  all       - AgentCore + Web UI + Connect (everything)"
+            echo "  agentcore - Core infra + AgentCore runtime"
+            echo "  webui     - Core infra + AgentCore runtime + Browser-based Web UI"
+            echo "  connect   - Core infra + Amazon Connect integration (no AgentCore runtime)"
+            echo "  all       - Everything (Core + AgentCore runtime + Web UI + Connect)"
             echo ""
             echo "If no mode is specified, an interactive menu is shown."
             exit 0
@@ -104,10 +104,10 @@ if [ -z "$DEPLOY_MODE" ]; then
     echo ""
     echo "  Select deployment mode:"
     echo ""
-    echo "    1) AgentCore only - Shared backend infrastructure"
-    echo "    2) Web UI         - AgentCore + Browser-based training"
-    echo "    3) Connect        - AgentCore + Amazon Connect integration"
-    echo "    4) All            - AgentCore + Web UI + Connect"
+    echo "    1) AgentCore      - Core infra + AgentCore runtime"
+    echo "    2) Web UI         - Core infra + AgentCore runtime + Browser-based training"
+    echo "    3) Connect        - Core infra + Amazon Connect integration (no AgentCore runtime)"
+    echo "    4) All            - Everything"
     echo ""
     read -p "  Enter choice [1-4]: " choice
 
@@ -282,11 +282,19 @@ fi
 
 log_success "CDK ready"
 
-# Step 2: Deploy AgentCore stack (always required)
-log_info "Step 2: Deploying AgentCore stack..."
+# Step 2: Deploy Core infra stack (always required)
+log_info "Step 2: Deploying Core infra stack..."
 cdk deploy CallCenterTraining-Core --require-approval never \
-    --context deployMode=all --context skipFrontend=true --context skipAdminUI=true
-log_success "AgentCore stack deployed"
+    --context deployMode="$DEPLOY_MODE" --context skipFrontend=true --context skipAdminUI=true
+log_success "Core infra stack deployed"
+
+# Step 2b: Deploy AgentCore runtime stack (needed for webui/all; skipped for connect-only)
+if [ "$DEPLOY_MODE" = "webui" ] || [ "$DEPLOY_MODE" = "all" ]; then
+    log_info "Step 2b: Deploying AgentCore runtime stack..."
+    cdk deploy CallCenterTraining-AgentRuntime --exclusively --require-approval never \
+        --context deployMode="$DEPLOY_MODE" --context skipFrontend=true --context skipAdminUI=true
+    log_success "AgentCore runtime stack deployed"
+fi
 
 # Variables to hold outputs for results display (set by deploy functions)
 WEBUI_URL=""
@@ -317,14 +325,16 @@ echo -e "${GREEN}  Deployment Complete! [mode: ${DEPLOY_MODE}]${NC}"
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-# Show AgentCore outputs (single API call, reuse cached value if available)
-if [ -z "$CORE_AGENT_RUNTIME_ARN" ]; then
-    CORE_AGENT_RUNTIME_ARN=$(aws cloudformation describe-stacks --stack-name "CallCenterTraining-Core" \
-        --query 'Stacks[0].Outputs[?OutputKey==`AgentRuntimeArn`].OutputValue' --output text 2>/dev/null || echo "N/A")
+# Show AgentCore runtime output (only exists when AgentRuntime stack was deployed)
+if [ "$DEPLOY_MODE" = "agentcore" ] || [ "$DEPLOY_MODE" = "webui" ] || [ "$DEPLOY_MODE" = "all" ]; then
+    if [ -z "$CORE_AGENT_RUNTIME_ARN" ]; then
+        CORE_AGENT_RUNTIME_ARN=$(aws cloudformation describe-stacks --stack-name "CallCenterTraining-AgentRuntime" \
+            --query 'Stacks[0].Outputs[?OutputKey==`AgentRuntimeArn`].OutputValue' --output text 2>/dev/null || echo "N/A")
+    fi
+    echo -e "${BLUE}AgentCore Runtime Stack:${NC}"
+    echo "  Runtime ARN: $CORE_AGENT_RUNTIME_ARN"
+    echo ""
 fi
-echo -e "${BLUE}AgentCore Stack:${NC}"
-echo "  Runtime ARN: $CORE_AGENT_RUNTIME_ARN"
-echo ""
 
 # Show Web UI outputs
 if [ "$DEPLOY_MODE" = "webui" ] || [ "$DEPLOY_MODE" = "all" ]; then

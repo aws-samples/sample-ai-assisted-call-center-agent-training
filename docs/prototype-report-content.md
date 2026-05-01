@@ -581,9 +581,7 @@ A deployment script (`deployment/deploy.sh`) orchestrates the build and deployme
 ./deployment/deploy.sh --connect
 
 # Direct CDK deployment of a single stack
-cd deployment && npm run build && cdk deploy CallCenterTraining-Core \
-  --require-approval never \
-  --region us-west-2
+cd deployment && npm run build && cdk deploy CallCenterTraining-Core --require-approval never
 ```
 
 The deployment process builds CDK TypeScript code, synthesizes CloudFormation templates, deploys stacks, syncs the React frontend to S3, and creates a CloudFront cache invalidation.

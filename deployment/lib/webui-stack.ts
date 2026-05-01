@@ -7,7 +7,8 @@
  * - Scoring Lambda
  * - Frontend deployment
  *
- * Depends on: AgentCoreStack (for S3 storage, KMS key, AgentCore Runtime ARN, VPC)
+ * Depends on: CoreInfraStack (VPC, S3, KMS, DynamoDB) and AgentRuntimeStack
+ * (AgentCore Runtime ARN for browser users).
  */
 
 import * as cdk from 'aws-cdk-lib';
@@ -32,11 +33,14 @@ import { AdminLambdaConstruct } from './constructs/admin-lambda';
 import { TraineeLambdaConstruct } from './constructs/trainee-lambda';
 import { AudioEmpathyLambdaConstruct } from './constructs/audio-empathy-lambda';
 import { ApiGatewayConstruct } from './constructs/api-gateway';
-import { AgentCoreStack } from './agentcore-stack';
+import { CoreInfraStack } from './core-infra-stack';
+import { AgentRuntimeStack } from './agent-runtime-stack';
 
 export interface WebUIStackProps extends cdk.StackProps {
-  /** Reference to the shared AgentCore stack */
-  agentCoreStack: AgentCoreStack;
+  /** Reference to the shared Core infra stack */
+  coreStack: CoreInfraStack;
+  /** Reference to the AgentCore runtime stack */
+  agentRuntimeStack: AgentRuntimeStack;
 }
 
 export class WebUIStack extends cdk.Stack {
@@ -47,7 +51,9 @@ export class WebUIStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: WebUIStackProps) {
     super(scope, id, props);
 
-    const { agentCoreStack } = props;
+    const { coreStack, agentRuntimeStack } = props;
+    // Alias for backward-compatible references below; maps to shared infra only.
+    const agentCoreStack = coreStack;
 
     // ========================================
     // Cognito User Pool for Authentication
@@ -169,7 +175,7 @@ export class WebUIStack extends cdk.Stack {
     const identityPool = new CognitoIdentityPoolConstruct(this, 'IdentityPool', {
       userPool: this.userPool,
       userPoolClient: this.userPoolClient,
-      agentRuntimeArn: agentCoreStack.agentRuntime.agentRuntime.attrAgentRuntimeArn,
+      agentRuntimeArn: agentRuntimeStack.agentRuntime.agentRuntime.attrAgentRuntimeArn,
       recordingsBucket: agentCoreStack.storage.recordingsBucket,
       encryptionKey: agentCoreStack.storage.encryptionKey,
     });
@@ -463,7 +469,7 @@ export class WebUIStack extends cdk.Stack {
       [
         {
           id: 'Prototype Security Nag Pack-VPC Endpoint for bedrock-agent-runtime',
-          reason: 'This application uses bedrock-agentcore endpoint (in Core stack), not bedrock-agent-runtime.',
+          reason: 'This application uses bedrock-agentcore endpoint (in AgentRuntimeStack), not bedrock-agent-runtime.',
         },
         {
           id: 'Prototype Security Nag Pack-VPC Endpoint for batch',
@@ -493,8 +499,8 @@ export class WebUIStack extends cdk.Stack {
 
     // Cross-stack references for deploy script
     new cdk.CfnOutput(this, 'AgentRuntimeArn', {
-      value: agentCoreStack.agentRuntime.agentRuntime.attrAgentRuntimeArn,
-      description: 'ARN of the training agent runtime (from AgentCoreStack)',
+      value: agentRuntimeStack.agentRuntime.agentRuntime.attrAgentRuntimeArn,
+      description: 'ARN of the training agent runtime (from AgentRuntimeStack)',
     });
 
     new cdk.CfnOutput(this, 'RecordingsBucketName', {

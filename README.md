@@ -75,7 +75,7 @@ Bootstrap CDK in your target account/region (only needed once):
 
 ```bash
 cd deployment
-cdk bootstrap aws://ACCOUNT_ID/us-west-2 --profile YOUR_PROFILE
+cdk bootstrap aws://ACCOUNT_ID/us-west-2
 ```
 
 ### Choose your deployment mode
@@ -88,12 +88,24 @@ cdk bootstrap aws://ACCOUNT_ID/us-west-2 --profile YOUR_PROFILE
 
 **Option 2: Amazon Connect** — Phone-based training via Amazon Connect AI Agents
 
-See [docs/CONNECT_GUIDE.md](docs/CONNECT_GUIDE.md) for complete setup and deployment instructions.
+```bash
+./deployment/deploy.sh --connect
+```
+
+> After first deploy, a one-time manual toggle is required in the Connect console to reconcile the Lex integration. See [docs/CONNECT_GUIDE.md](docs/CONNECT_GUIDE.md).
+
+**Option 3: All** — Web UI + Amazon Connect
+
+```bash
+./deployment/deploy.sh --all
+```
+
+> After first deploy, a one-time manual toggle is required in the Connect console to reconcile the Lex integration. See [docs/CONNECT_GUIDE.md](docs/CONNECT_GUIDE.md).
 
 ### Deploy a single stack
 
 ```bash
-cd deployment && npm run build && cdk deploy CallCenterTraining-Core --require-approval never --context deployMode=all --profile YOUR_PROFILE --region us-west-2
+cd deployment && npm run build && cdk deploy CallCenterTraining-Core --require-approval never --context deployMode=all
 ```
 
 Stack names: `CallCenterTraining-Core`, `CallCenterTraining-Web`, `CallCenterTraining-Connect`
@@ -152,3 +164,28 @@ python scripts/seed_scenarios.py
 ```
 
 See existing scenarios in `scenarios/` for the expected JSON format.
+
+## Clean Up
+
+Destroy the deployed stacks when you're done:
+
+```bash
+cd deployment
+
+# Destroy a single stack
+cdk destroy CallCenterTraining-Connect --context deployMode=connect
+cdk destroy CallCenterTraining-Web --context deployMode=webui
+
+# Or destroy everything
+cdk destroy --all --context deployMode=all
+```
+
+Resources that survive `cdk destroy` (by design, to prevent accidental data loss):
+
+- **Toll-free phone numbers** — 30-day release quarantine, so destroy-recreate would lock you out. Release manually via Connect console → **Channels** → **Phone numbers** when no longer needed.
+- **S3 buckets** (recordings, Contact Lens output, access logs) — empty them first, then delete via S3 console or `aws s3 rb s3://BUCKET --force`.
+- **KMS keys** — scheduled for deletion with a 7-30 day waiting period via `aws kms schedule-key-deletion`.
+- **Cognito User Pools** — delete via the Cognito console if you want to remove user accounts.
+- **DynamoDB tables** (scenarios, sessions, scoring criteria) — drop via the DynamoDB console if you want to clear data.
+
+If you're abandoning the project entirely, also delete the CDK toolkit stack (`CDKToolkit`) if no other CDK projects use it in the same account/region.

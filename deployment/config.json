@@ -21,10 +21,17 @@
     "liteModelId": "us.amazon.nova-2-lite-v1:0"
   },
   "connect": {
-    "instanceArn": "arn:aws:connect:<REGION>:<ACCOUNT_ID>:instance/<INSTANCE_ID>",
-    "contactFlowId": "<CONTACT_FLOW_ID>",
-    "destinationPhoneNumber": "<PHONE_NUMBER>",
-    "recordingsBucket": "<S3_BUCKET_NAME>",
-    "AIAgentAssistantId": "<AI_AGENT_ASSISTANT_ID>"
+    "manageInstance": true,
+    "instanceAlias": "call-center-training",
+    "instanceArn": "",
+    "recordingsBucket": "",
+    "destinationPhoneNumber": "",
+    "features": {
+      "lexBot": true,
+      "aiAgent": true,
+      "contactFlows": true,
+      "phoneNumber": true,
+      "agentUser": true
+    }
   }
 }

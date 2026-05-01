@@ -27,13 +27,7 @@ with open(_config_path, 'r', encoding='utf-8') as _f:
     _config = json.load(_f)
 
 _connect = _config['connect']
-CONNECT_INSTANCE_ARN = _connect['instanceArn']
-CONNECT_INSTANCE_ID = CONNECT_INSTANCE_ARN.split('instance/')[-1]
-CONTACT_FLOW_ID = _connect['contactFlowId']
-DEFAULT_PHONE = _connect['destinationPhoneNumber']
 DEFAULT_VOICE = _connect.get('defaultVoiceId', 'matthew')
-REGION = CONNECT_INSTANCE_ARN.split(':')[3]  # extract region from ARN
-DEFAULT_PROFILE = None
 
 
 def get_scenarios_dir():
@@ -78,10 +72,10 @@ def load_scenario(scenario_id):
 
 
 
-def resolve_queue_id(client):
+def resolve_queue_id(client, instance_id):
     """Get the first STANDARD queue ID."""
     paginator = client.get_paginator('list_queues')
-    for page in paginator.paginate(InstanceId=CONNECT_INSTANCE_ID, QueueTypes=['STANDARD']):
+    for page in paginator.paginate(InstanceId=instance_id, QueueTypes=['STANDARD']):
         for q in page.get('QueueSummaryList', []):
             return q['Id']
     return None
@@ -89,13 +83,13 @@ def resolve_queue_id(client):
 
 def main():
     parser = argparse.ArgumentParser(description='Start an outbound training call via Amazon Connect')
-    parser.add_argument('--scenario', help='Scenario ID (e.g. athene_death_notification_01)')
-    parser.add_argument('--phone', default=DEFAULT_PHONE, help=f'Destination phone number (default: {DEFAULT_PHONE})')
+    parser.add_argument('--scenario', help='Scenario ID')
+    parser.add_argument('--phone', help=f'Destination phone number')
     parser.add_argument('--voice', default=DEFAULT_VOICE, choices=['matthew', 'tiffany', 'amy'],
                         help=f'AI voice ID (default: {DEFAULT_VOICE})')
     parser.add_argument('--source-phone', help='Outbound caller ID phone number claimed in Connect (E.164 format)')
-    parser.add_argument('--flow-id', default=CONTACT_FLOW_ID, help=f'Contact flow ID (default: {CONTACT_FLOW_ID})')
-    parser.add_argument('--profile', default=DEFAULT_PROFILE, help='AWS profile (default: uses AWS credential chain)')
+    parser.add_argument('--flow-id', help=f'Contact flow ID')
+    parser.add_argument('--instance-id', help='Amazon Connect instance ID')
     parser.add_argument('--list', action='store_true', help='List available scenarios and exit')
     args = parser.parse_args()
 
@@ -111,6 +105,9 @@ def main():
     if not args.scenario:
         parser.error('--scenario is required (use --list to see available scenarios)')
 
+    if not args.instance_id:
+        parser.error('--instance-id is required')
+
     # Load scenario
     scenario = load_scenario(args.scenario)
     if not scenario:
@@ -121,21 +118,19 @@ def main():
     print(f'Scenario:  {scenario.get("name", args.scenario)}')
     print(f'Phone:     {args.phone}')
     print(f'Voice:     {args.voice}')
-    print(f'Profile:   {args.profile}')
     print()
 
     # Create boto3 session with profile
-    session = boto3.Session(profile_name=args.profile, region_name=REGION)
-    client = session.client('connect')
+    client = boto3.client('connect')
 
     contact_flow_id = args.flow_id
     print(f'Contact flow ID: {contact_flow_id}')
 
     # Resolve queue ID
     print('Resolving queue...')
-    queue_id = resolve_queue_id(client)
+    queue_id = resolve_queue_id(client, args.instance_id)
     if not queue_id:
-        print(f'Error: no STANDARD queue found in instance {CONNECT_INSTANCE_ID}', file=sys.stderr)
+        print(f'Error: no STANDARD queue found in instance {args.instance_id}', file=sys.stderr)
         sys.exit(1)
     print(f'  Queue ID: {queue_id}')
 
@@ -153,7 +148,7 @@ def main():
     call_params = {
         'DestinationPhoneNumber': args.phone,
         'ContactFlowId': contact_flow_id,
-        'InstanceId': CONNECT_INSTANCE_ID,
+        'InstanceId': args.instance_id,
         'QueueId': queue_id,
         'Attributes': attributes,
         # 'RelatedContactId': '1234',

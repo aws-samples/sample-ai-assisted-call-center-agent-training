@@ -3,11 +3,10 @@
 Seed DynamoDB Scenarios table from existing JSON scenario files.
 
 Usage:
-    python scripts/seed_scenarios.py [--table TABLE_NAME] [--region REGION]
+    python scripts/seed_scenarios.py [--table TABLE_NAME]
 
 Defaults:
     --table  CallCenterTraining-Scenarios
-    --region us-west-2
 """
 
 import argparse
@@ -31,9 +30,9 @@ def json_to_dynamodb(obj):
     return obj
 
 
-def seed_scenarios(table_name: str, region: str, scenarios_dir: str):
+def seed_scenarios(table_name: str, scenarios_dir: str):
     """Load all JSON scenario files and write them to DynamoDB."""
-    dynamodb = boto3.resource('dynamodb', region_name=region)
+    dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(table_name)
 
     files = sorted(glob.glob(os.path.join(scenarios_dir, '*.json')))
@@ -42,7 +41,7 @@ def seed_scenarios(table_name: str, region: str, scenarios_dir: str):
         sys.exit(1)
 
     print(f"Found {len(files)} scenario files in {scenarios_dir}")
-    print(f"Target table: {table_name} ({region})")
+    print(f"Target table: {table_name}")
 
     success = 0
     for filepath in files:
@@ -83,8 +82,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Seed DynamoDB Scenarios table from JSON files')
     parser.add_argument('--table', default='CallCenterTraining-Scenarios',
                         help='DynamoDB table name (default: CallCenterTraining-Scenarios)')
-    parser.add_argument('--region', default='us-west-2',
-                        help='AWS region (default: us-west-2)')
     parser.add_argument('--scenarios-dir', default=None,
                         help='Path to scenarios directory (default: scenarios/ relative to project root)')
     args = parser.parse_args()
@@ -96,4 +93,4 @@ if __name__ == '__main__':
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         scenarios_dir = os.path.join(project_root, 'scenarios')
 
-    seed_scenarios(args.table, args.region, scenarios_dir)
+    seed_scenarios(args.table, scenarios_dir)
