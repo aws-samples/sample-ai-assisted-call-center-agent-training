@@ -24,7 +24,3 @@ uvicorn[standard]>=0.32.0
 # Security constraints (transitive dep minimum versions)
 cryptography>=46.0.5
 pillow>=12.1.1
-
-# Development
-pytest==8.3.4
-pytest-asyncio==0.24.0

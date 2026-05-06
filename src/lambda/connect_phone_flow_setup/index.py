@@ -41,7 +41,6 @@ def handle_create_or_update(props):
     if not flow_id:
         raise RuntimeError(f'Contact flow not found by name: {flow_name}')
 
-    logger.info(f'Associating phone {phone_number_id} with flow {flow_name} ({flow_id})')
     connect_client.associate_phone_number_contact_flow(
         PhoneNumberId=phone_number_id,
         InstanceId=instance_id,
