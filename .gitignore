@@ -72,6 +72,9 @@ frontend/test-react-lambda/
 # Tests
 tests/
 
+# Guidance Factory artifacts
+guidance-docs/
+
 # Claude Code
 .claude/
 CLAUDE.md
