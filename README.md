@@ -31,6 +31,10 @@ Two deployment modes are supported:
 
 Multilingual support covers English, French, Italian, German, Spanish, Portuguese, and Hindi via Nova 2 Sonic voices.
 
+### Demo
+
+[![Watch the demo](https://img.youtube.com/vi/uTJ_EdOM0H4/maxresdefault.jpg)](https://youtu.be/uTJ_EdOM0H4)
+
 ### Architecture
 
 #### Web UI
