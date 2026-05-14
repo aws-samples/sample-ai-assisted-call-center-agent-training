@@ -54,8 +54,8 @@ Multilingual support covers English, French, Italian, German, Spanish, Portugues
 
 1. Admins initiate training calls through the Connect Admin UI hosted on **Amazon CloudFront**.
 2. **Amazon Connect** places an outbound call to the trainee using a toll-free number.
-3. The contact flow invokes the Session Setup **AWS Lambda** to inject scenario data into the **Amazon Q in Connect** (Wisdom) session.
-4. The AI Agent (powered by **Amazon Lex** and **Amazon Q in Connect**) conducts the training conversation.
+3. The contact flow invokes the Session Setup **AWS Lambda** to inject scenario data into the **Amazon Connect** session.
+4. The AI Agent (powered by **Amazon Connect AI Agents**) conducts the training conversation.
 5. Post-call processing **AWS Lambda** retrieves the recording from the Connect recordings bucket, runs scoring via **Amazon Bedrock**, and stores results in **Amazon DynamoDB**.
 
 ### Cost
@@ -85,7 +85,7 @@ The following table provides a sample cost breakdown for deploying this Guidance
 | AWS Service | Dimensions | Cost [USD] |
 | --- | --- | --- |
 | Amazon Connect | 500 voice minutes (inbound/outbound) | ~$50.00 |
-| Amazon Connect AI Agent (Q in Connect) | 500 sessions | ~$25.00 |
+| Amazon Connect AI Agent | 500 sessions | ~$25.00 |
 | Amazon Lex | 500 sessions | ~$4.00 |
 | Toll-free phone number | 1 number + per-minute charges | ~$5.00 |
 
