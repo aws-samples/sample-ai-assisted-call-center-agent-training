@@ -31,6 +31,14 @@ export interface ConnectPostCallLambdaProps {
   connectInstanceArn: string;
   /** S3 bucket name where Connect stores call recordings and Contact Lens analysis */
   connectRecordingsBucket: string;
+  /**
+   * KMS CMK protecting the Connect recordings bucket (call recordings + Contact Lens analysis).
+   * Optional — undefined when running against an externally-managed Connect instance whose
+   * bucket key we do not own.
+   */
+  connectRecordingsKey?: kms.IKey;
+  /** KMS CMK protecting the DynamoDB tables. Required for read+write access. */
+  dynamoEncryptionKey: kms.IKey;
 }
 
 export class ConnectPostCallLambdaConstruct extends Construct {
@@ -169,6 +177,10 @@ export class ConnectPostCallLambdaConstruct extends Construct {
     props.recordingsBucket.grantReadWrite(this.function);
     props.encryptionKey.grantEncryptDecrypt(this.function);
 
+    // DynamoDB tables use a separate customer-managed CMK; grant explicitly
+    // since this construct uses raw inline policies (not table.grantReadWriteData).
+    props.dynamoEncryptionKey.grantEncryptDecrypt(this.function);
+
     // Grant S3 read for Connect recordings bucket (Contact Lens analysis + call recordings)
     this.function.addToRolePolicy(
       new iam.PolicyStatement({
@@ -180,6 +192,12 @@ export class ConnectPostCallLambdaConstruct extends Construct {
         ],
       })
     );
+
+    // Connect bucket objects are SSE-KMS encrypted under a separate CMK owned by
+    // ConnectInstanceConstruct — granting Decrypt is required to GetObject.
+    if (props.connectRecordingsKey) {
+      props.connectRecordingsKey.grantDecrypt(this.function);
+    }
 
     // Grant invoke on scoring Lambda
     props.scoringLambda.grantInvoke(this.function);

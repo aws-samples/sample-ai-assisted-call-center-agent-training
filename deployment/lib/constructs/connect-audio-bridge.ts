@@ -46,6 +46,8 @@ export interface ConnectAudioBridgeProps {
   sessionsTableName: string;
   /** DynamoDB Sessions table ARN */
   sessionsTableArn: string;
+  /** KMS CMK protecting the DynamoDB tables. Required for read+write access. */
+  dynamoEncryptionKey: kms.IKey;
 }
 
 export class ConnectAudioBridgeConstruct extends Construct {
@@ -138,7 +140,7 @@ export class ConnectAudioBridgeConstruct extends Construct {
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
               actions: ['kms:Decrypt', 'kms:Encrypt', 'kms:GenerateDataKey'],
-              resources: [props.encryptionKey.keyArn],
+              resources: [props.encryptionKey.keyArn, props.dynamoEncryptionKey.keyArn],
             }),
           ],
         }),

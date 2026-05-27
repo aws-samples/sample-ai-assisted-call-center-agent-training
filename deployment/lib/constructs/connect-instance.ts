@@ -83,6 +83,7 @@ export class ConnectInstanceConstruct extends Construct {
       encryptionKey: accessLogsKey,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
+      versioned: true,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
       lifecycleRules: [{ expiration: cdk.Duration.days(90) }],
     });
@@ -96,7 +97,7 @@ export class ConnectInstanceConstruct extends Construct {
       encryptionKey: this.encryptionKey,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
-      versioned: false,
+      versioned: true,
       serverAccessLogsBucket: accessLogsBucket,
       serverAccessLogsPrefix: 'connect-recordings-access/',
       removalPolicy: cdk.RemovalPolicy.RETAIN,

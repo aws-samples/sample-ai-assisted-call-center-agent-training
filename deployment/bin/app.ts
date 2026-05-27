@@ -52,6 +52,7 @@ if (deployMode === 'agentcore' || deployMode === 'webui' || deployMode === 'all'
     recordingsBucket: coreStack.storage.recordingsBucket,
     encryptionKey: coreStack.storage.encryptionKey,
     scenariosTable: coreStack.dynamoTables.scenariosTable,
+    dynamoEncryptionKey: coreStack.dynamoTables.encryptionKey,
     vpcCidr: coreStack.vpcCidr,
     createBedrockAgentCoreEndpoint: coreStack.createBedrockAgentCoreEndpoint,
   });

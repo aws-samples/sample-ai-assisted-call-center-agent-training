@@ -26,6 +26,8 @@ export interface ScoringLambdaProps {
   criteriaConfigTableArn: string;
   sessionsTableName: string;
   sessionsTableArn: string;
+  /** KMS CMK protecting the DynamoDB tables. Required for read+write access. */
+  dynamoEncryptionKey: kms.IKey;
 }
 
 export class ScoringLambdaConstruct extends Construct {
@@ -239,6 +241,10 @@ export class ScoringLambdaConstruct extends Construct {
 
     // Grant KMS permissions for encrypted S3 objects
     props.encryptionKey.grantDecrypt(this.function);
+
+    // DynamoDB tables use a separate customer-managed CMK; grant explicitly
+    // since this construct uses raw inline policies (not table.grantReadWriteData).
+    props.dynamoEncryptionKey.grantEncryptDecrypt(this.function);
 
     // Grant self-invoke for async scoring pattern (API GW has 30s timeout, scoring takes 1-3 min)
     // Uses L1 CfnPolicy to avoid circular dependency:

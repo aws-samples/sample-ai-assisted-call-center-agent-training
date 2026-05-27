@@ -13,6 +13,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as logs from 'aws-cdk-lib/aws-logs';
+import * as kms from 'aws-cdk-lib/aws-kms';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import * as path from 'path';
@@ -40,9 +41,16 @@ export class ConnectAgentUserConstruct extends Construct {
     const stack = cdk.Stack.of(this);
     this.username = props.username ?? 'trainee';
 
+    const secretEncryptionKey = new kms.Key(this, 'PasswordSecretKey', {
+      description: 'KMS key for encrypting Connect agent password secret',
+      enableKeyRotation: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
     // Generated password — retrieved from Secrets Manager via the AWS console / CLI
     this.passwordSecret = new secretsmanager.Secret(this, 'PasswordSecret', {
       description: `Connect CCP login password for ${this.username}`,
+      encryptionKey: secretEncryptionKey,
       generateSecretString: {
         excludePunctuation: false,
         includeSpace: false,

@@ -12,14 +12,22 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as kms from 'aws-cdk-lib/aws-kms';
 
 export class DynamoDBTablesConstruct extends Construct {
   public readonly scenariosTable: dynamodb.Table;
   public readonly criteriaConfigTable: dynamodb.Table;
   public readonly sessionsTable: dynamodb.Table;
+  public readonly encryptionKey: kms.Key;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
+
+    this.encryptionKey = new kms.Key(this, 'DynamoDBEncryptionKey', {
+      description: 'KMS key for encrypting Call Center Training DynamoDB tables',
+      enableKeyRotation: true,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
 
     // ========================================
     // Scenarios Table
@@ -29,6 +37,8 @@ export class DynamoDBTablesConstruct extends Construct {
       partitionKey: { name: 'scenarioId', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: true },
+      encryption: dynamodb.TableEncryption.CUSTOMER_MANAGED,
+      encryptionKey: this.encryptionKey,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 
@@ -40,6 +50,8 @@ export class DynamoDBTablesConstruct extends Construct {
       partitionKey: { name: 'scenarioId', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: true },
+      encryption: dynamodb.TableEncryption.CUSTOMER_MANAGED,
+      encryptionKey: this.encryptionKey,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 
@@ -52,6 +64,8 @@ export class DynamoDBTablesConstruct extends Construct {
       sortKey: { name: 'sessionId', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: true },
+      encryption: dynamodb.TableEncryption.CUSTOMER_MANAGED,
+      encryptionKey: this.encryptionKey,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 

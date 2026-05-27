@@ -103,8 +103,10 @@ export class ConnectAdminUIConstruct extends Construct {
       encryptionKey: adminEncryptionKey,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
+      versioned: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
+      lifecycleRules: [{ expiration: cdk.Duration.days(90) }],
     });
 
     const adminBucket = new s3.Bucket(this, 'AdminFrontendBucket', {
@@ -115,6 +117,7 @@ export class ConnectAdminUIConstruct extends Construct {
       enforceSSL: true,
       serverAccessLogsBucket: logBucket,
       serverAccessLogsPrefix: 's3-access-logs/',
+      versioned: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
@@ -126,6 +129,7 @@ export class ConnectAdminUIConstruct extends Construct {
       objectOwnership: s3.ObjectOwnership.OBJECT_WRITER,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
+      versioned: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
       lifecycleRules: [

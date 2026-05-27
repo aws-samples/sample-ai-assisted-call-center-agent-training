@@ -27,6 +27,8 @@ export interface AdminLambdaProps {
   criteriaConfigTableArn: string;
   sessionsTableName: string;
   sessionsTableArn: string;
+  /** KMS CMK protecting the DynamoDB tables. Required for read+write access. */
+  dynamoEncryptionKey: kms.IKey;
 }
 
 export class AdminLambdaConstruct extends Construct {
@@ -45,6 +47,12 @@ export class AdminLambdaConstruct extends Construct {
       allowAllOutbound: true,
     });
 
+    // Explicit log group (replaces deprecated logRetention property)
+    const logGroup = new logs.LogGroup(this, 'LogGroup', {
+      retention: logs.RetentionDays.ONE_WEEK,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
     // Custom execution role with inline policies (no managed policies per CLAUDE.md)
     const lambdaRole = new iam.Role(this, 'ExecutionRole', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
@@ -60,7 +68,11 @@ export class AdminLambdaConstruct extends Construct {
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
               actions: ['logs:CreateLogStream', 'logs:PutLogEvents'],
-              resources: [`arn:aws:logs:${stack.region}:${stack.account}:log-group:/aws/lambda/*:*`],
+              resources: [
+                `arn:aws:logs:${stack.region}:${stack.account}:log-group:/aws/lambda/*:*`,
+                logGroup.logGroupArn,
+                `${logGroup.logGroupArn}:*`,
+              ],
             }),
           ],
         }),
@@ -133,12 +145,6 @@ export class AdminLambdaConstruct extends Construct {
       },
     });
 
-    // Explicit log group (replaces deprecated logRetention property)
-    const logGroup = new logs.LogGroup(this, 'LogGroup', {
-      retention: logs.RetentionDays.ONE_WEEK,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
-
     const projectRoot = path.join(__dirname, '../../..');
 
     // Hash only the source files that get bundled into the Lambda ZIP.
@@ -203,6 +209,10 @@ export class AdminLambdaConstruct extends Construct {
 
     // Grant KMS encrypt/decrypt for encrypted S3 objects (read + write comments)
     props.encryptionKey.grantEncryptDecrypt(this.function);
+
+    // DynamoDB tables use a separate customer-managed CMK; grant explicitly
+    // since this construct uses raw inline policies (not table.grantReadWriteData).
+    props.dynamoEncryptionKey.grantEncryptDecrypt(this.function);
 
     // ========================================
     // IAM5 Suppressions

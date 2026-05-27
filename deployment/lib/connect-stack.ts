@@ -38,6 +38,8 @@ import { ConnectContactFlowConstruct } from './constructs/connect-contact-flow';
 import { ConnectPhoneNumberConstruct } from './constructs/connect-phone-number';
 import { ConnectLambdaIntegrationConstruct } from './constructs/connect-lambda-integration';
 import { ConnectAgentUserConstruct } from './constructs/connect-agent-user';
+import { createLogsEncryptionKey } from './utils/logs-encryption-key';
+import { EncryptLogsAspect } from './utils/encrypt-logs-aspect';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const config = require('../config.json');
@@ -127,6 +129,7 @@ export class ConnectStack extends cdk.Stack {
       scenariosTableArn: agentCoreStack.dynamoTables.scenariosTable.tableArn,
       sessionsTableName: agentCoreStack.dynamoTables.sessionsTable.tableName,
       sessionsTableArn: agentCoreStack.dynamoTables.sessionsTable.tableArn,
+      dynamoEncryptionKey: agentCoreStack.dynamoTables.encryptionKey,
     });
 
     // ========================================
@@ -140,6 +143,7 @@ export class ConnectStack extends cdk.Stack {
           scenariosTableArn: agentCoreStack.dynamoTables.scenariosTable.tableArn,
           connectInstanceId: connectInstance.instanceId,
           assistantId: aiAgent.assistantId,
+          dynamoEncryptionKey: agentCoreStack.dynamoTables.encryptionKey,
         })
       : undefined;
 
@@ -242,6 +246,7 @@ export class ConnectStack extends cdk.Stack {
       criteriaConfigTableArn: agentCoreStack.dynamoTables.criteriaConfigTable.tableArn,
       sessionsTableName: agentCoreStack.dynamoTables.sessionsTable.tableName,
       sessionsTableArn: agentCoreStack.dynamoTables.sessionsTable.tableArn,
+      dynamoEncryptionKey: agentCoreStack.dynamoTables.encryptionKey,
     });
 
     const connectEmpathy = new AudioEmpathyLambdaConstruct(this, 'ConnectEmpathy', {
@@ -268,6 +273,8 @@ export class ConnectStack extends cdk.Stack {
       scoringLambda: connectScoring.function,
       connectInstanceArn: connectInstance.instanceArn,
       connectRecordingsBucket: connectInstance.recordingsBucketName,
+      connectRecordingsKey: connectInstance.encryptionKey,
+      dynamoEncryptionKey: agentCoreStack.dynamoTables.encryptionKey,
     });
 
     // ========================================
@@ -389,6 +396,17 @@ export class ConnectStack extends cdk.Stack {
         appliesTo: [{ regex: '/Resource::arn:aws:s3:::<Instance.*RecordingsBucket.*>\\/\\*$/g' } as any],
       },
     ]);
+
+    // ========================================
+    // CloudWatch Log Group encryption
+    // ========================================
+    const logsKey = createLogsEncryptionKey(
+      this,
+      'StackLogsEncryptionKey',
+      'KMS key for encrypting CloudWatch Log Groups in Connect stack',
+      cdk.RemovalPolicy.RETAIN,
+    );
+    cdk.Aspects.of(this).add(new EncryptLogsAspect(logsKey));
 
     // ========================================
     // Outputs

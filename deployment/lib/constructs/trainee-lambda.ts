@@ -14,6 +14,7 @@ import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as kms from 'aws-cdk-lib/aws-kms';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
@@ -24,6 +25,8 @@ export interface TraineeLambdaProps {
   scenariosTableArn: string;
   sessionsTableName: string;
   sessionsTableArn: string;
+  /** KMS CMK protecting the DynamoDB tables. Required for read+write access. */
+  dynamoEncryptionKey: kms.IKey;
 }
 
 export class TraineeLambdaConstruct extends Construct {
@@ -42,6 +45,12 @@ export class TraineeLambdaConstruct extends Construct {
       allowAllOutbound: true,
     });
 
+    // Explicit log group (replaces deprecated logRetention property)
+    const logGroup = new logs.LogGroup(this, 'LogGroup', {
+      retention: logs.RetentionDays.ONE_WEEK,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
     // Execution role with minimal inline policies (no managed policies per CLAUDE.md)
     const lambdaRole = new iam.Role(this, 'ExecutionRole', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
@@ -57,7 +66,11 @@ export class TraineeLambdaConstruct extends Construct {
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
               actions: ['logs:CreateLogStream', 'logs:PutLogEvents'],
-              resources: [`arn:aws:logs:${stack.region}:${stack.account}:log-group:/aws/lambda/*:*`],
+              resources: [
+                `arn:aws:logs:${stack.region}:${stack.account}:log-group:/aws/lambda/*:*`,
+                logGroup.logGroupArn,
+                `${logGroup.logGroupArn}:*`,
+              ],
             }),
           ],
         }),
@@ -95,12 +108,6 @@ export class TraineeLambdaConstruct extends Construct {
       },
     });
 
-    // Explicit log group (replaces deprecated logRetention property)
-    const logGroup = new logs.LogGroup(this, 'LogGroup', {
-      retention: logs.RetentionDays.ONE_WEEK,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
-
     // Create Lambda function (zip deployment — only dependency is boto3 provided by runtime)
     this.function = new lambda.Function(this, 'Function', {
       runtime: lambda.Runtime.PYTHON_3_13,
@@ -122,6 +129,10 @@ export class TraineeLambdaConstruct extends Construct {
       description: 'Trainee scenario access and session creation',
     });
 
+    // DynamoDB tables use a customer-managed KMS CMK. Without explicit grants
+    // here, scan/get/put calls fail with KMSAccessDeniedException.
+    props.dynamoEncryptionKey.grantEncryptDecrypt(this.function);
+
     // ========================================
     // IAM5 Suppressions
     // ========================================
@@ -142,6 +153,14 @@ export class TraineeLambdaConstruct extends Construct {
           id: 'AwsSolutions-IAM5',
           reason: 'Lambda log group and stream names are dynamic. Resource is scoped to /aws/lambda/ path.',
           appliesTo: [`Resource::arn:aws:logs:${stack.region}:${stack.account}:log-group:/aws/lambda/*:*`],
+        },
+        {
+          id: 'AwsSolutions-IAM5',
+          reason: 'KMS grantEncryptDecrypt generates standard CDK wildcard action patterns scoped to the DynamoDB CMK.',
+          appliesTo: [
+            'Action::kms:GenerateDataKey*',
+            'Action::kms:ReEncrypt*',
+          ],
         },
       ],
       true,

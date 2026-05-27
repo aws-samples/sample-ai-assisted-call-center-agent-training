@@ -17,6 +17,7 @@ import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as kms from 'aws-cdk-lib/aws-kms';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
@@ -32,6 +33,8 @@ export interface AIAgentSessionSetupLambdaProps {
   connectInstanceId: string;
   /** Q Connect Assistant ID */
   assistantId: string;
+  /** KMS CMK protecting the DynamoDB tables. Required for read access. */
+  dynamoEncryptionKey: kms.IKey;
 }
 
 export class AIAgentSessionSetupLambdaConstruct extends Construct {
@@ -146,6 +149,9 @@ export class AIAgentSessionSetupLambdaConstruct extends Construct {
       logGroup,
       description: 'Injects scenario data into AI Agent sessions via Q Connect UpdateSessionData API',
     });
+
+    // DynamoDB tables use a customer-managed CMK; grant decrypt for scenario reads.
+    props.dynamoEncryptionKey.grantDecrypt(this.function);
 
     // NagSuppressions
     NagSuppressions.addResourceSuppressions(

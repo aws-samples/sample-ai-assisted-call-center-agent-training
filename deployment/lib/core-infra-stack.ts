@@ -13,12 +13,16 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as kms from 'aws-cdk-lib/aws-kms';
+import * as logs from 'aws-cdk-lib/aws-logs';
 import * as path from 'path';
 import * as fs from 'fs';
 import { NagSuppressions } from 'cdk-nag';
 
 import { S3StorageConstruct } from './constructs/storage';
 import { DynamoDBTablesConstruct } from './constructs/dynamodb-tables';
+import { EncryptLogsAspect } from './utils/encrypt-logs-aspect';
 
 export interface CoreInfraStackProps extends cdk.StackProps {
   // No additional props needed - config loaded from config.json
@@ -69,8 +73,38 @@ export class CoreInfraStack extends cdk.Stack {
     });
 
     // VPC Flow Logs to CloudWatch (AwsSolutions-VPC7)
+    // KMS-encrypted log group (Checkov CKV_AWS_158).
+    const flowLogsKey = new kms.Key(this, 'FlowLogsEncryptionKey', {
+      description: 'KMS key for encrypting VPC flow log CloudWatch log group',
+      enableKeyRotation: true,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+    flowLogsKey.addToResourcePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      principals: [new iam.ServicePrincipal(`logs.${this.region}.amazonaws.com`)],
+      actions: [
+        'kms:Encrypt*',
+        'kms:Decrypt*',
+        'kms:ReEncrypt*',
+        'kms:GenerateDataKey*',
+        'kms:Describe*',
+      ],
+      resources: ['*'],
+      conditions: {
+        ArnLike: {
+          'kms:EncryptionContext:aws:logs:arn': `arn:aws:logs:${this.region}:${this.account}:log-group:*`,
+        },
+      },
+    }));
+
+    const flowLogsGroup = new logs.LogGroup(this, 'VpcFlowLogsLogGroup', {
+      retention: logs.RetentionDays.THREE_MONTHS,
+      encryptionKey: flowLogsKey,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+
     this.vpc.addFlowLog('VpcFlowLogs', {
-      destination: ec2.FlowLogDestination.toCloudWatchLogs(),
+      destination: ec2.FlowLogDestination.toCloudWatchLogs(flowLogsGroup),
       trafficType: ec2.FlowLogTrafficType.ALL,
     });
 
@@ -181,5 +215,10 @@ export class CoreInfraStack extends cdk.Stack {
     // DynamoDB Tables (scenarios + criteria config + sessions)
     // ========================================
     this.dynamoTables = new DynamoDBTablesConstruct(this, 'DynamoTables');
+
+    // ========================================
+    // CloudWatch Log Group encryption
+    // ========================================
+    cdk.Aspects.of(this).add(new EncryptLogsAspect(flowLogsKey));
   }
 }

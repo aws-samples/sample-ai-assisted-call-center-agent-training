@@ -35,6 +35,8 @@ import { AudioEmpathyLambdaConstruct } from './constructs/audio-empathy-lambda';
 import { ApiGatewayConstruct } from './constructs/api-gateway';
 import { CoreInfraStack } from './core-infra-stack';
 import { AgentRuntimeStack } from './agent-runtime-stack';
+import { createLogsEncryptionKey } from './utils/logs-encryption-key';
+import { EncryptLogsAspect } from './utils/encrypt-logs-aspect';
 
 export interface WebUIStackProps extends cdk.StackProps {
   /** Reference to the shared Core infra stack */
@@ -140,6 +142,7 @@ export class WebUIStack extends cdk.Stack {
       criteriaConfigTableArn: agentCoreStack.dynamoTables.criteriaConfigTable.tableArn,
       sessionsTableName: agentCoreStack.dynamoTables.sessionsTable.tableName,
       sessionsTableArn: agentCoreStack.dynamoTables.sessionsTable.tableArn,
+      dynamoEncryptionKey: agentCoreStack.dynamoTables.encryptionKey,
     });
 
     // ========================================
@@ -151,6 +154,7 @@ export class WebUIStack extends cdk.Stack {
       scenariosTableArn: agentCoreStack.dynamoTables.scenariosTable.tableArn,
       sessionsTableName: agentCoreStack.dynamoTables.sessionsTable.tableName,
       sessionsTableArn: agentCoreStack.dynamoTables.sessionsTable.tableArn,
+      dynamoEncryptionKey: agentCoreStack.dynamoTables.encryptionKey,
     });
 
     // Outputs for frontend configuration
@@ -218,6 +222,7 @@ export class WebUIStack extends cdk.Stack {
       encryptionKey: frontendAccessLogsKey,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
+      versioned: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       lifecycleRules: [
         {
@@ -242,6 +247,7 @@ export class WebUIStack extends cdk.Stack {
       enforceSSL: true,
       serverAccessLogsBucket: frontendAccessLogsBucket,
       serverAccessLogsPrefix: 'frontend-access-logs/',
+      versioned: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
@@ -253,6 +259,7 @@ export class WebUIStack extends cdk.Stack {
       objectOwnership: s3.ObjectOwnership.OBJECT_WRITER,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
+      versioned: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       lifecycleRules: [
         {
@@ -285,6 +292,7 @@ export class WebUIStack extends cdk.Stack {
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
       },
       defaultRootObject: 'index.html',
+      minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       enableLogging: true,
       logBucket: cloudFrontLogsBucket,
       logFilePrefix: 'cloudfront-logs/',
@@ -364,6 +372,7 @@ export class WebUIStack extends cdk.Stack {
       criteriaConfigTableArn: agentCoreStack.dynamoTables.criteriaConfigTable.tableArn,
       sessionsTableName: agentCoreStack.dynamoTables.sessionsTable.tableName,
       sessionsTableArn: agentCoreStack.dynamoTables.sessionsTable.tableArn,
+      dynamoEncryptionKey: agentCoreStack.dynamoTables.encryptionKey,
     });
 
     // ========================================
@@ -478,6 +487,17 @@ export class WebUIStack extends cdk.Stack {
       ],
       true,
     );
+
+    // ========================================
+    // CloudWatch Log Group encryption
+    // ========================================
+    const logsKey = createLogsEncryptionKey(
+      this,
+      'StackLogsEncryptionKey',
+      'KMS key for encrypting CloudWatch Log Groups in WebUI stack',
+      cdk.RemovalPolicy.DESTROY,
+    );
+    cdk.Aspects.of(this).add(new EncryptLogsAspect(logsKey));
 
     // ========================================
     // Outputs

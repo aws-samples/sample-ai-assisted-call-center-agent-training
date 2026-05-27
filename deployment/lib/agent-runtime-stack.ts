@@ -33,6 +33,8 @@ export interface AgentRuntimeStackProps extends cdk.StackProps {
   recordingsBucket: s3.IBucket;
   encryptionKey: kms.IKey;
   scenariosTable: dynamodb.ITable;
+  /** KMS CMK protecting the DynamoDB tables. Required for read access to Scenarios. */
+  dynamoEncryptionKey: kms.IKey;
   vpcCidr: string;
   createBedrockAgentCoreEndpoint: boolean;
 }
@@ -62,6 +64,7 @@ export class AgentRuntimeStack extends cdk.Stack {
 
     // Grant KMS key permissions to agent role
     props.encryptionKey.grantEncryptDecrypt(this.iamRoles.agentRole);
+    props.dynamoEncryptionKey.grantDecrypt(this.iamRoles.agentRole);
 
     // Suppress IAM5 wildcards that can only be resolved at this stack level
     NagSuppressions.addResourceSuppressions(

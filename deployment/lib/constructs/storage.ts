@@ -46,6 +46,7 @@ export class S3StorageConstruct extends Construct {
       encryptionKey: accessLogsEncryptionKey,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
+      versioned: true,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
       lifecycleRules: [
         {
@@ -57,7 +58,7 @@ export class S3StorageConstruct extends Construct {
     NagSuppressions.addResourceSuppressions(accessLogsBucket, [
       {
         id: 'AwsSolutions-S1',
-        reason: 'This is the access logging destination bucket. Enabling access logging on it would create infinite recursion.',
+        reason: 'This is the access logging destination bucket (also covers Checkov CKV_AWS_18). Enabling access logging on it would create infinite recursion.',
       },
     ]);
 
@@ -70,7 +71,7 @@ export class S3StorageConstruct extends Construct {
       enforceSSL: true,
       serverAccessLogsBucket: accessLogsBucket,
       serverAccessLogsPrefix: 'recordings-access-logs/',
-      versioned: false,
+      versioned: true,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
       lifecycleRules: [
         {
