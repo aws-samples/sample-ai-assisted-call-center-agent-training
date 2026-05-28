@@ -39,24 +39,11 @@ Multilingual support covers English, French, Italian, German, Spanish, Portugues
 
 #### Web UI
 
-![Web UI Architecture](docs/web-ui-architecture.png)
-
-1. Trainees and supervisors authenticate via **Amazon Cognito** and access the React frontend through **Amazon CloudFront**.
-2. Voice streams flow directly from the browser to **Amazon Bedrock AgentCore Runtime** (Strands BidiAgent) using credentials from the **Amazon Cognito Identity Pool**.
-3. The AgentCore Runtime invokes **Amazon Nova 2 Sonic** for bidirectional voice streaming and retrieves scenario data from **Amazon DynamoDB**.
-4. Session recordings are stored in **Amazon S3** with **AWS KMS** encryption.
-5. **Amazon API Gateway** (HTTP API) routes requests to **AWS Lambda** functions for scenario management, session scoring, screen analysis, and audio empathy evaluation.
-6. Scoring Lambda invokes **Amazon Bedrock** (Claude) to evaluate transcripts against configurable rubrics stored in DynamoDB.
+![Web UI Architecture](docs/architecture-diagram-webui.png)
 
 #### Amazon Connect
 
-![Amazon Connect Architecture](docs/amazon-connect-architecture.png)
-
-1. Admins initiate training calls through the Connect Admin UI hosted on **Amazon CloudFront**.
-2. **Amazon Connect** places an outbound call to the trainee using a toll-free number.
-3. The contact flow invokes the Session Setup **AWS Lambda** to inject scenario data into the **Amazon Connect** session.
-4. The AI Agent (powered by **Amazon Connect AI Agents**) conducts the training conversation.
-5. Post-call processing **AWS Lambda** retrieves the recording from the Connect recordings bucket, runs scoring via **Amazon Bedrock**, and stores results in **Amazon DynamoDB**.
+![Amazon Connect Architecture](docs/architecture-diagram-connect.png)
 
 ### Cost
 

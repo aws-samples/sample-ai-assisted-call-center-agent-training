@@ -74,6 +74,8 @@ tests/
 
 # Guidance Factory artifacts
 guidance-docs/
+temp/
+templates/
 
 #SPARK
 SPARK-Output/

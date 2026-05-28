@@ -5,9 +5,6 @@ This stack now provisions nearly everything via CDK. What used to be a 15-step c
 ## Architecture Overview
 
 ![Connect Flow Architecture](connect-flow-architecture.png)
-
-The admin initiates an outbound call via the Admin API Lambda, which calls `start_outbound_voice_contact`. When the trainee answers via CCP (Contact Control Panel), the call flows through the Contact Flow which invokes the Session Setup Lambda, then hands off to the AI Agent. The AI Agent uses Nova Sonic speech-to-speech conversation to simulate realistic customer interactions.
-
 ---
 
 ## Prerequisites
