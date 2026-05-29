@@ -143,6 +143,9 @@ cd ../../
 
 # Run the deploy script
 ./deployment/deploy.sh --webui
+
+# Seed database with sample scenarios
+python scripts/seed_scenarios.py
 ```
 
 **Available deployment modes:**
@@ -416,4 +419,4 @@ For any feedback, questions, or suggestions, please use the issues tab under thi
 
 ## Authors
 
-- Saleh Anwar
+- Mohammad Salehan
