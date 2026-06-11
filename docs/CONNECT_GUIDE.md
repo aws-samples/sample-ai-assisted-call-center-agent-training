@@ -123,7 +123,7 @@ Example config:
 
 - **Recordings bucket access.** The post-call Lambda needs `s3:GetObject` on your bucket. CDK grants this on its own IAM role, but if your bucket has a restrictive bucket policy (deny-by-default), you may need to allow the Lambda's role ARN explicitly.
 - **Phone number routing.** Set `features.phoneNumber: false` and provide `destinationPhoneNumber` — CDK will NOT reassociate your existing number's inbound contact flow. If calls to `destinationPhoneNumber` should route through a specific flow, configure that manually in the Connect console.
-- **Agent users.** Set `features.agentUser: false` — your instance presumably already has CCP users. The trainee login you pass to the Admin UI must match an existing user on your instance.
+- **Representative users.** Set `features.agentUser: false` — your instance presumably already has CCP users. The trainee login you pass to the Admin UI must match an existing user on your instance.
 - **First-use Lex reconciliation.** After the first CDK deploy against your existing instance, you'll likely need to perform the "Reconcile Lex Bot Management" step (see Step 3 below) even if your instance previously had Lex bots configured. CDK adds a new LEX_BOT integration that Connect needs to reconcile once before it'll accept calls.
 
 **`features`** — per-resource toggles for incremental deploys. Enable all for a full deploy. If a deploy fails partway (e.g. Lex bot issue), flip the failing flag off to roll back cleanly to the last-known-good state, fix, and re-enable:
@@ -134,7 +134,7 @@ Example config:
 | `aiAgent` | Wisdom Assistant + custom-resource AI Prompt/Agent setup |
 | `contactFlows` | Voice + chat contact flows (requires `lexBot` + `aiAgent`) |
 | `phoneNumber` | Toll-free US number + inbound flow association |
-| `agentUser` | CCP trainee user + Secrets Manager password |
+| `agentUser` | CCP trainee (representative) user + Secrets Manager password |
 
 ---
 
@@ -195,7 +195,7 @@ If the speech model is not set, select **Speech-to-speech** + **Amazon Nova Soni
 
 ## Step 5: Retrieve the CCP Trainee Password
 
-CDK already created the Connect-native CCP agent user (default username `trainee`, configurable via `config.connect.agentUsername`). Retrieve its auto-generated password from Secrets Manager:
+CDK already created the Connect-native CCP representative user (default username `trainee`, configurable via `config.connect.agentUsername`). Retrieve its auto-generated password from Secrets Manager:
 
 ```bash
 SECRET_ARN=$(aws cloudformation describe-stacks \
@@ -218,14 +218,14 @@ aws secretsmanager get-secret-value \
 
 1. **Open CCP:**
    - Open the CCP URL from the `ConnectInstanceAlias` output: `https://<alias>.my.connect.aws/ccp-v2/`
-   - Log in with your Connect agent user
+   - Log in with your Connect representative user
    - Set status to **Available**
 
 2. **Initiate call from Admin UI:**
    - Open the Admin UI URL (from CDK output `ConnectAdminUiUrl`)
    - Log in with the Cognito credentials (from Step 5)
    - Select a training scenario
-   - Enter the Connect agent username (default: `trainee`)
+   - Enter the Connect representative username (default: `trainee`)
    - Click **Start Training Call**
 
 3. **Accept the call in CCP:**

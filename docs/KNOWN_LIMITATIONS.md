@@ -17,7 +17,7 @@ Please ensure gaps between audio bytes and interactive content are less than 55 
 
 ### Workarounds
 
-- Keep conversation turns concise — shorter agent/customer exchanges reduce the risk of hitting the timeout.
+- Keep conversation turns concise — shorter representative/customer exchanges reduce the risk of hitting the timeout.
 - In the test script, the `--delay` flag controls the pause *between* turns but cannot prevent timeouts caused by long model response times.
 - There is no client-side configuration to extend this limit; it is enforced server-side by the Nova Sonic service.
 

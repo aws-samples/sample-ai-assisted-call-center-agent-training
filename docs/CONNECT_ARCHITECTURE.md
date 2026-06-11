@@ -32,7 +32,7 @@ See also the [full stack architecture diagram](amazon-connect-architecture.png).
 - **Trigger**: API Gateway (HTTP API)
 - **Endpoints**:
   - `GET /scenarios` - List training scenarios from DynamoDB
-  - `GET /agents` - List Connect agents
+  - `GET /agents` - List Connect representatives
   - `GET /calls` - List recent call sessions from DynamoDB
   - `GET /calls/{sessionId}` - Get session detail (scorecard + transcript)
   - `GET /calls/{sessionId}/audio` - Get presigned URL for audio playback
@@ -45,7 +45,7 @@ See also the [full stack architecture diagram](amazon-connect-architecture.png).
 - **Function**: Processes completed training calls:
   1. Parses Contact Lens analysis (transcript + analytics)
   2. Downloads Connect call recording (stereo WAV)
-  3. Extracts agent audio channel using ffmpeg
+  3. Extracts representative audio channel using ffmpeg
   4. Converts transcript to session format
   5. Uploads to recordings S3 bucket
   6. Invokes Scoring Lambda asynchronously
@@ -69,7 +69,7 @@ Contact flow in `amazon-connect/`:
 - **Features**:
   - Cognito authentication (admin-only, no self-signup)
   - Scenario selection
-  - Agent username input
+  - Representative username input
   - Start training call button
   - Call history table with scoring results
 - **Hosting**: CloudFront + S3
@@ -171,7 +171,7 @@ S3 Bucket (shared):
 
 1. **Separate Admin UI**: Admin UI is a separate React app (not a route in the existing frontend) because it serves a different purpose, has different auth requirements, and deploys to a different stack.
 
-2. **Connect-managed identity**: Simplest setup - agents are created directly in Connect rather than federated. For production, SAML/OIDC federation could be added.
+2. **Connect-managed identity**: Simplest setup - representatives are created directly in Connect rather than federated. For production, SAML/OIDC federation could be added.
 
 3. **Post-call scoring**: Connect natively records calls via Contact Lens. When analysis completes, an EventBridge event triggers the post-call Lambda, which processes the recording and invokes scoring + audio empathy evaluation automatically.
 

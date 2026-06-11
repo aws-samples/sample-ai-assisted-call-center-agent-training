@@ -1,4 +1,4 @@
-# Guidance for AI-Assisted Call Center Agent Training on AWS
+# Guidance for AI-Assisted Call Center Representative Training on AWS
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@
 
 ## Overview
 
-This Guidance helps call center operations teams reduce agent onboarding time and improve training quality by providing AI-powered voice simulations of realistic customer interactions. An AI customer (powered by **Amazon Nova 2 Sonic**) engages trainees in real-time voice conversations based on configurable scenarios drawn from real call logs. Sessions are recorded in stereo WAV format with full transcripts and automatically scored against a detailed rubric using **Amazon Bedrock** (Claude).
+This Guidance helps call center operations teams reduce representative onboarding time and improve training quality by providing AI-powered voice simulations of realistic customer interactions. An AI customer (powered by **Amazon Nova 2 Sonic**) engages trainees in real-time voice conversations based on configurable scenarios drawn from real call logs. Sessions are recorded in stereo WAV format with full transcripts and automatically scored against a detailed rubric using **Amazon Bedrock** (Claude).
 
 Two deployment modes are supported:
 

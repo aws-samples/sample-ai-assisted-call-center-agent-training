@@ -22,7 +22,7 @@
 
 ## Architecture Overview
 
-The prototype follows a serverless, event-driven architecture deployed entirely on AWS. The system is composed of three independently deployable CDK stacks that together provide a complete AI-powered voice training platform for call center agents.
+The prototype follows a serverless, event-driven architecture deployed entirely on AWS. The system is composed of three independently deployable CDK stacks that together provide a complete AI-powered voice training platform for call center representatives.
 
 The architecture supports two training modes:
 
@@ -125,7 +125,7 @@ The following describes the end-to-end data flow when a trainee completes a trai
 - System supports natural interruptions (trainee can interrupt the customer mid-sentence)
 
 **6. Client-Side Recording (Concurrent)**
-- Audio recording: Captures a single stereo WebM file (agent on one channel, customer on the other), uploaded to S3
+- Audio recording: Captures a single stereo WebM file (representative on one channel, customer on the other), uploaded to S3
 - Enriched transcript: Builds transcript with accurate browser-side timestamps, uploads as `{sessionId}_client_transcript.json`
 - Screen capture (optional): Periodic screenshots every 10 seconds, batched in groups of 3 (every 30 seconds) and sent to the Screen Analysis Lambda, which uses Claude vision to describe on-screen activity for compliance checking
 
@@ -178,9 +178,9 @@ The following describes the end-to-end data flow when a trainee completes a trai
   1. Looks up session by contactId (DynamoDB GSI: ContactIdIndex)
   2. Downloads Contact Lens analysis JSON (transcript, sentiment, interruptions)
   3. Downloads stereo WAV recording from Connect
-  4. Extracts agent-only audio (right channel to mono via ffmpeg)
+  4. Extracts representative-only audio (right channel to mono via ffmpeg)
   5. Converts Contact Lens transcript to SessionRecording format
-  6. Uploads session JSON, agent audio, and stereo audio to recordings S3 bucket
+  6. Uploads session JSON, representative audio, and stereo audio to recordings S3 bucket
   7. Invokes Scoring Lambda asynchronously
 
 ### Scoring Pipeline Detail
@@ -195,16 +195,16 @@ The scoring pipeline runs asynchronously after a training session ends. It uses 
 
 **Step 2: Compute Transcript Analytics**
 - `compute_transcript_analytics()` in `src/evaluators/transcript_analytics.py` extracts call metrics:
-  - Agent silence (seconds, percentage, max gap, violations >20s)
+  - Representative silence (seconds, percentage, max gap, violations >20s)
   - Talk-over count (overlapping speech detection)
   - Questions asked/answered by customer
   - Hold count (phrase detection)
   - Confidence language count (hedging phrases)
-  - Average agent response time
+  - Average representative response time
 
 **Step 3: Audio Empathy Analysis (Concurrent)**
 - Kicks off Audio Empathy Lambda in a thread pool (runs concurrently with Claude evaluation)
-- Extracts agent audio from right channel of stereo recording, then uses librosa to extract prosodic features: pitch variation, energy, speaking rate, voice quality (ZCR), and consistency
+- Extracts representative audio from right channel of stereo recording, then uses librosa to extract prosodic features: pitch variation, energy, speaking rate, voice quality (ZCR), and consistency
 - Calculates weighted empathy score (0-100) from 5 components, combined 50/50 with text-based empathy from Claude
 
 **Step 4: Claude AI Evaluation**
@@ -361,7 +361,7 @@ Supported languages: English, French, Italian, German, Spanish, Portuguese, Hind
 
 Each training scenario is defined as a structured JSON document containing a detailed customer persona, personal details (name, DOB, SSN, policy number), situation context, key challenges, and success criteria. The system includes 18+ pre-built scenarios covering various call types across multiple carriers including tax calls, death claims, surrenders, loans, withdrawals, and rider inquiries. A scenario generator powered by Claude Sonnet can create new scenarios from raw call transcripts. The system supports both single-character and multi-character (duo) scenarios, where multiple AI characters can hand off to each other mid-conversation.
 
-The BidiAgent is equipped with a `verify_spelling` tool that ensures accurate verification of customer details during calls. When the trainee reads back an email address, name, policy number, or other detail for verification, the AI customer invokes this tool before responding. It takes the correct value from the scenario and what the agent said, then calls Claude via Bedrock Converse API to compare the two — handling phonetic alphabet decoding (e.g. "B as in Bravo, H as in Hotel") and ignoring case/spacing differences. The tool returns MATCH or MISMATCH with specific details, allowing the AI customer to realistically confirm or correct the trainee. This prevents the model from hallucinating whether a read-back was correct, which is a common failure mode in voice LLM interactions.
+The BidiAgent is equipped with a `verify_spelling` tool that ensures accurate verification of customer details during calls. When the trainee reads back an email address, name, policy number, or other detail for verification, the AI customer invokes this tool before responding. It takes the correct value from the scenario and what the representative said, then calls Claude via Bedrock Converse API to compare the two — handling phonetic alphabet decoding (e.g. "B as in Bravo, H as in Hotel") and ignoring case/spacing differences. The tool returns MATCH or MISMATCH with specific details, allowing the AI customer to realistically confirm or correct the trainee. This prevents the model from hallucinating whether a read-back was correct, which is a common failure mode in voice LLM interactions.
 
 ### AI Agent Orchestration
 
@@ -381,7 +381,7 @@ After each training session, an asynchronous scoring pipeline evaluates the trai
 
 ### Audio Empathy Analysis
 
-In addition to transcript-based evaluation, the system includes an audio empathy analyzer that extracts prosodic features from the agent's voice using the librosa signal processing library. The agent's audio is isolated by extracting the right channel from the stereo recording (agent channel) as mono WAV at 24kHz using ffmpeg.
+In addition to transcript-based evaluation, the system includes an audio empathy analyzer that extracts prosodic features from the representative's voice using the librosa signal processing library. The representative's audio is isolated by extracting the right channel from the stereo recording (representative channel) as mono WAV at 24kHz using ffmpeg.
 
 The feature set is based on the Geneva Minimalistic Acoustic Parameter Set (GeMAPS) standard [Eyben et al., 2015], which defines a validated minimal set of acoustic parameters for affect detection. The analyzer extracts seven prosodic features — pitch mean and variation, energy (RMS) mean and variation, zero crossing rate, spectral centroid, and speaking rate (via beat tracking) — and combines them into five weighted components:
 
@@ -414,15 +414,15 @@ The prototype captures and evaluates the following performance metrics for each 
 | Metric | Description | How It's Computed |
 |--------|-------------|-------------------|
 | **Call Duration** | Total length of the training call in seconds | End time minus start time from session recording |
-| **Agent Silence** | Total seconds and percentage of the call where the agent was silent | Sum of gaps >= 1.0s between customer speech end and agent speech start |
-| **Max Silence Gap** | Longest single period of agent silence in seconds | Maximum individual gap in the silence gaps list |
+| **Representative Silence** | Total seconds and percentage of the call where the representative was silent | Sum of gaps >= 1.0s between customer speech end and representative speech start |
+| **Max Silence Gap** | Longest single period of representative silence in seconds | Maximum individual gap in the silence gaps list |
 | **Silence Violations** | Count of silence gaps exceeding the acceptable threshold | Gaps > 20 seconds |
-| **Talk-Over Count** | Number of times the agent spoke over the customer | Detected when one speaker's audio end time overlaps the next speaker's start time |
-| **Average Agent Response Time** | Mean time in seconds between customer finishing and agent responding | Average of all customer-to-agent transition gaps |
-| **Hold Count** | Number of times the agent placed the caller on hold | Phrase detection in agent turns: "put you on hold", "place you on hold", "one moment please", "brief hold", etc. |
+| **Talk-Over Count** | Number of times the representative spoke over the customer | Detected when one speaker's audio end time overlaps the next speaker's start time |
+| **Average Representative Response Time** | Mean time in seconds between customer finishing and representative responding | Average of all customer-to-representative transition gaps |
+| **Hold Count** | Number of times the representative placed the caller on hold | Phrase detection in representative turns: "put you on hold", "place you on hold", "one moment please", "brief hold", etc. |
 | **Confidence Language Count** | Occurrences of hedging or low-confidence language | Phrase detection: "I don't know", "I'm not sure", "it looks like", "I think maybe", "I guess" |
 | **Questions Asked** | Number of questions the customer asked during the call | Count of `?` characters in customer turns |
-| **Questions Answered** | Number of customer questions the agent successfully addressed | Customer questions followed by a non-empty agent response |
+| **Questions Answered** | Number of customer questions the representative successfully addressed | Customer questions followed by a non-empty representative response |
 
 ### Audio Empathy Metrics
 
@@ -596,7 +596,7 @@ This section presents an estimation of the AWS infrastructure costs to run this 
 
 ### Assumptions
 
-- **Training volume:** 100 agents, 20 training sessions per agent per month = 2,000 sessions/month
+- **Training volume:** 100 representatives, 20 training sessions per representative per month = 2,000 sessions/month
 - **Average session duration:** ~95 seconds of bidirectional audio
 - **Nova Sonic tokens per session:** ~2,353 input + ~1,169 output (measured from full training session)
 - **Claude Sonnet scoring tokens per evaluation:** ~3,976 input + ~3,409 output (measured)
@@ -648,16 +648,16 @@ Fixed monthly infrastructure costs (always-on regardless of session count):
 
 ### Realistic Usage Scenario: Cohort-Based Training
 
-The 2,000 sessions/month estimate above assumes steady-state usage. In practice, BPO teams are more likely to run training in cohorts — onboarding a group of new agents with a concentrated burst of sessions, then pausing until the next cohort. Usage will be intermittent and spikey rather than continuous.
+The 2,000 sessions/month estimate above assumes steady-state usage. In practice, BPO teams are more likely to run training in cohorts — onboarding a group of new representatives with a concentrated burst of sessions, then pausing until the next cohort. Usage will be intermittent and spikey rather than continuous.
 
-**Example: 70 new agents × 10 training sessions = 700 sessions over ~2 weeks**
+**Example: 70 new representatives × 10 training sessions = 700 sessions over ~2 weeks**
 
 | Component | Cost |
 |-----------|------|
 | Variable costs (700 sessions × $0.17) | ~$119 |
 | Fixed infrastructure (1 month) | ~$126 |
 | **Total for training cohort** | **~$245** |
-| **Cost per agent** (10 sessions) | **~$3.50** |
+| **Cost per representative** (10 sessions) | **~$3.50** |
 | **Cost per session** | **~$0.35** |
 
 If infrastructure is shut down between cohorts (e.g., removing VPC endpoints and NAT Gateway when not in use), fixed costs only apply during active training months. Connect voice pricing (~$0.09/session for voice service + telephony) would *replace* Nova Sonic + AgentCore at ~$0.05/session — at the measured token volume this is roughly cost-neutral, so the Connect path should be chosen on the basis of architectural benefits (Contact Lens, unified flows) rather than voice cost savings.
@@ -677,7 +677,7 @@ If infrastructure is shut down between cohorts (e.g., removing VPC endpoints and
 
 - **Additional latency:** Connect mode uses Amazon Connect AI Agents which introduce latency compared to the Web UI's bidirectional streaming. The AI Agent architecture processes each turn as: Nova Sonic STT → Claude Haiku (text generation via Bedrock) → Nova Sonic TTS. This three-step pipeline has higher latency than the Web UI's AgentCore container, which runs Nova Sonic's native bidirectional speech-to-speech model locally with direct BidiAgent control.
 - **No Strands Agents support:** Connect mode uses Amazon Connect AI Agents with Bedrock orchestration rather than the Strands Agents SDK available in the Web UI's AgentCore container. This means several Web UI features are unavailable in Connect mode, including the verify spelling tool (which spells out names and policy numbers letter-by-letter for confirmation) and duo/multi-character scenarios (which rely on Strands agent tool calling for character handoffs).
-- **No screen capture:** The Web UI captures periodic screenshots of the trainee's screen during calls and analyzes them with Claude vision for compliance checking. Connect mode (phone-based) has no equivalent screen capture. Two options to address this: (1) Amazon Connect provides native screen recording for agents using the Connect agent workspace, which could be leveraged if trainees use the Connect CCP during training; (2) the Web UI's screen capture logic could be ported to the Connect admin UI, allowing supervisors who monitor training sessions via the admin dashboard to have screen activity captured and analyzed alongside the call.
+- **No screen capture:** The Web UI captures periodic screenshots of the trainee's screen during calls and analyzes them with Claude vision for compliance checking. Connect mode (phone-based) has no equivalent screen capture. Two options to address this: (1) Amazon Connect provides native screen recording for representatives using the Connect agent workspace, which could be leveraged if trainees use the Connect CCP during training; (2) the Web UI's screen capture logic could be ported to the Connect admin UI, allowing supervisors who monitor training sessions via the admin dashboard to have screen activity captured and analyzed alongside the call.
 
 ### Key Cost Drivers
 
@@ -704,9 +704,9 @@ The following items will need to be resolved to build a comprehensive business c
 
 2. **Token Consumption Variance:** Nova Sonic token usage varies by scenario complexity, customer mood, conversational depth, and hold duration. Measure across a representative sample of scenarios and difficulty levels to establish reliable per-session cost ranges.
 
-3. **Training Volume Projections:** The estimates assume 100 agents × 20 sessions/month. Actual ramp-up trajectory, seasonal peaks, and whether the platform will be used for initial training only or ongoing gap training will materially affect costs.
+3. **Training Volume Projections:** The estimates assume 100 representatives × 20 sessions/month. Actual ramp-up trajectory, seasonal peaks, and whether the platform will be used for initial training only or ongoing gap training will materially affect costs.
 
-4. **Trainer Time Savings (ROI Baseline):** Quantifying the return on investment requires baseline data on current training costs: trainer FTEs dedicated to role-play, time per trainee per session, trainer-to-trainee ratios, and opportunity cost of pulling experienced agents for coaching. This data is needed to calculate the break-even point.
+4. **Trainer Time Savings (ROI Baseline):** Quantifying the return on investment requires baseline data on current training costs: trainer FTEs dedicated to role-play, time per trainee per session, trainer-to-trainee ratios, and opportunity cost of pulling experienced representatives for coaching. This data is needed to calculate the break-even point.
 
 5. **Training Effectiveness Metrics:** To justify continued investment, define measurable outcomes: improvement in QA scores post-training, reduction in time-to-competency for new hires, decrease in call escalation rates. These require pre/post measurement over a pilot period.
 
@@ -734,7 +734,7 @@ The following items will need to be resolved to build a comprehensive business c
 - Automated performance evaluation using Claude (Sonnet 4.6) with a comprehensive rubric containing 30+ criteria across 6 sections, producing detailed scorecards with letter grades, per-criterion feedback, and critical failure identification
 - Multi-character (duo) scenario support enabling realistic multi-party interactions with AI-driven character handoffs during a single training session. This is an experimental feature and was not part of the scope or even stretch goals.
 - Admin dashboard for scenario management (CRUD operations, AI-powered scenario generation from call transcripts), trainee management, and per-scenario evaluation criteria configuration
-- Session recording with stereo audio capture (agent and customer on separate channels), real-time transcription, and S3 storage with KMS encryption and lifecycle policies
+- Session recording with stereo audio capture (representative and customer on separate channels), real-time transcription, and S3 storage with KMS encryption and lifecycle policies
 - Real-time transcript display with talk-over detection — segments where the trainee speaks over the customer are highlighted in amber for immediate visual feedback
 - Amazon Connect integration providing phone-based training as an alternative to the web UI, with automatic post-call scoring via EventBridge triggers
 
@@ -807,12 +807,12 @@ Nova Sonic generates natural, conversational responses based on this context wit
 
 ### Approach 2: Context + Conditional Directives (Guided Responses)
 
-In addition to the context above, define specific responses to specific agent actions using conditional conversation directives embedded in the context field. This approach is used when a scenario requires precise pivotal moments — for example, a customer who should only reveal certain information when asked in a specific way, or who should escalate emotionally at a particular point in the conversation.
+In addition to the context above, define specific responses to specific representative actions using conditional conversation directives embedded in the context field. This approach is used when a scenario requires precise pivotal moments — for example, a customer who should only reveal certain information when asked in a specific way, or who should escalate emotionally at a particular point in the conversation.
 
 Conditional directives follow the pattern:
-- "When the agent tells you [X], respond by [Y]"
-- "If the agent asks about [topic], say [specific response]"
-- "Do NOT mention [detail] unless the agent specifically asks about it"
+- "When the representative tells you [X], respond by [Y]"
+- "If the representative asks about [topic], say [specific response]"
+- "Do NOT mention [detail] unless the representative specifically asks about it"
 
 This gives scenario authors fine-grained control over critical moments while still allowing Nova Sonic to improvise the rest of the conversation naturally.
 
@@ -855,11 +855,11 @@ Scenarios are defined as JSON files loaded by the `ScenarioLoader` (`src/scenari
 | `scenario_id` | string | Unique identifier (e.g., `jnl_bene_change_01`) |
 | `name` | string | Display name (e.g., "JNL Bene Change") |
 | `context` | string | Second-person customer profile including personal details, situation, and optional conditional directives |
-| `key_challenges` | string[] | 4-7 challenges for the agent (what makes the call difficult) |
-| `success_criteria` | string[] | 5-8 observable behaviors the agent should demonstrate |
+| `key_challenges` | string[] | 4-7 challenges for the representative (what makes the call difficult) |
+| `success_criteria` | string[] | 5-8 observable behaviors the representative should demonstrate |
 | `difficulty` | string | `"beginner"`, `"intermediate"`, or `"advanced"` |
 | `original_call_logs` | string | Full transcript from the original real call (used by the generator and as reference) |
-| `initial_message` | string | Customer's first utterance when the agent greets them |
+| `initial_message` | string | Customer's first utterance when the representative greets them |
 | `caller_gender` | string | `"male"` or `"female"` (determines default voice selection) |
 
 ### Multi-Character (Duo) Additional Fields
@@ -875,7 +875,7 @@ Duo scenarios add a `characters` array. When present with more than one entry, t
 | `characters[].is_primary` | boolean | Whether this character speaks first |
 | `characters[].context` | string | Character-specific persona and situation |
 | `characters[].initial_message` | string | Character's opening line (primary character only) |
-| `characters[].handoff_trigger` | string | Condition for handing off (e.g., "agent asks to speak with Merry") |
+| `characters[].handoff_trigger` | string | Condition for handing off (e.g., "representative asks to speak with Merry") |
 | `characters[].handoff_to` | string | Target character ID to hand off to |
 
 ---
