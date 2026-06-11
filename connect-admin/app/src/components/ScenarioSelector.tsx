@@ -212,7 +212,7 @@ export const ScenarioSelector = () => {
                 <Box variant="p"><strong>Scenario:</strong> {callResult.scenario?.name}</Box>
                 <Box variant="p"><strong>Contact ID:</strong> {callResult.contact_id}</Box>
                 <Box variant="p"><strong>Session ID:</strong> {callResult.session_id}</Box>
-                <Box variant="p">The agent should receive the call in their CCP shortly.</Box>
+                <Box variant="p">The representative should receive the call in their CCP shortly.</Box>
               </SpaceBetween>
             </Alert>
           )}

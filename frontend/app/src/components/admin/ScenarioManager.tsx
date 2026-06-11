@@ -548,7 +548,7 @@ export const ScenarioManager = ({ onBack }: ScenarioManagerProps) => {
                       </FormField>
                     )}
 
-                    <FormField label="Handoff Trigger" description="When should the agent hand off to this character's partner?">
+                    <FormField label="Handoff Trigger" description="When should the representative hand off to this character's partner?">
                       <Textarea
                         value={char.handoff_trigger}
                         onChange={({ detail }) => {
@@ -559,7 +559,7 @@ export const ScenarioManager = ({ onBack }: ScenarioManagerProps) => {
                           });
                         }}
                         rows={2}
-                        placeholder="e.g. The agent asks to speak with the other person"
+                        placeholder="e.g. The representative asks to speak with the other person"
                       />
                     </FormField>
 

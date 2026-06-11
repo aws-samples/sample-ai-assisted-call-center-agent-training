@@ -341,7 +341,7 @@ const AnalyticsView = ({ analytics }: { analytics: CallAnalytics }) => (
           </Box>
         </div>
         <div>
-          <Box variant="awsui-key-label">Agent Silence</Box>
+          <Box variant="awsui-key-label">Representative Silence</Box>
           <Box variant="h2" fontSize="heading-xl">
             {analytics.agent_silence_percentage != null ? (
               <StatusIndicator type={getSilenceStatus(analytics.agent_silence_percentage)}>
@@ -506,7 +506,7 @@ const TranscriptView = ({ transcript }: { transcript: TranscriptTurn[] }) => {
                       variant="strong"
                       color={isCustomer ? 'text-status-info' : isAgent ? 'text-status-success' : 'inherit'}
                     >
-                      {isCustomer ? 'Customer' : isAgent ? 'Agent (Trainee)' : turn.speaker}
+                      {isCustomer ? 'Customer' : isAgent ? 'Representative (Trainee)' : turn.speaker}
                     </Box>
                     {isTalkOver && (
                       <span style={{

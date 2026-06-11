@@ -83,9 +83,9 @@ export const CallAnalytics = ({ analytics }: CallAnalyticsProps) => {
             </Box>
           </div>
 
-          {/* Agent Silence */}
+          {/* Representative Silence */}
           <div>
-            <Box variant="awsui-key-label">Agent Silence</Box>
+            <Box variant="awsui-key-label">Representative Silence</Box>
             <Box variant="h2" fontSize="heading-xl">
               <StatusIndicator type={getSilenceStatus(analytics.agent_silence_percentage)}>
                 {analytics.agent_silence_seconds.toFixed(1)}s ({analytics.agent_silence_percentage.toFixed(0)}%)
