@@ -21,11 +21,24 @@ ResourceProperties:
 
 import json
 import logging
+import os
 import time
 import boto3
+from botocore.config import Config
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+# Marker appended to the User-Agent header so AWS can attribute service API usage
+# to this solution. Set by CDK from the `Solution` CloudFormation mapping.
+SOLUTION_USER_AGENT = os.environ.get('USER_AGENT_STRING', '')
+
+
+def boto_config(**kwargs) -> Config:
+    """Return a botocore Config carrying the solution User-Agent marker."""
+    if SOLUTION_USER_AGENT:
+        kwargs['user_agent_extra'] = SOLUTION_USER_AGENT
+    return Config(**kwargs)
 
 
 def find_prompt(qc, assistant_id, name):
@@ -91,7 +104,7 @@ def ensure_assistant_tagged(assistant_arn):
     """
     for client_name in ('wisdom', 'qconnect'):
         try:
-            client = boto3.client(client_name)
+            client = boto3.client(client_name, config=boto_config())
             client.tag_resource(
                 resourceArn=assistant_arn,
                 tags={'AmazonConnectEnabled': 'True'},
@@ -267,8 +280,8 @@ def handle_create_or_update(event):
     security_profile_id = props.get('SecurityProfileId')
     integration_associate = props.get('IntegrationAssociate', 'true').lower() == 'true'
 
-    qc = boto3.client('qconnect')
-    connect_client = boto3.client('connect')
+    qc = boto3.client('qconnect', config=boto_config())
+    connect_client = boto3.client('connect', config=boto_config())
 
     connect_instance_arn = f'arn:aws:connect:{region}:{account_id}:instance/{connect_instance_id}'
     assistant_arn = f'arn:aws:wisdom:{region}:{account_id}:assistant/{assistant_id}'
@@ -320,8 +333,8 @@ def handle_delete(event):
     agent_name = props['AgentName']
     prompt_name = props['PromptName']
 
-    qc = boto3.client('qconnect')
-    connect_client = boto3.client('connect')
+    qc = boto3.client('qconnect', config=boto_config())
+    connect_client = boto3.client('connect', config=boto_config())
     assistant_arn = f'arn:aws:wisdom:{region}:{account_id}:assistant/{assistant_id}'
 
     existing_agent = find_agent(qc, assistant_id, agent_name)

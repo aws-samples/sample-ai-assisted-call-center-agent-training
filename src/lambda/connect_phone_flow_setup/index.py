@@ -14,12 +14,25 @@ ResourceProperties:
 
 import json
 import logging
+import os
 import boto3
+from botocore.config import Config
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 DEFAULT_FLOW_NAME = 'Sample queue customer'
+
+# Marker appended to the User-Agent header so AWS can attribute service API usage
+# to this solution. Set by CDK from the `Solution` CloudFormation mapping.
+SOLUTION_USER_AGENT = os.environ.get('USER_AGENT_STRING', '')
+
+
+def boto_config(**kwargs) -> Config:
+    """Return a botocore Config carrying the solution User-Agent marker."""
+    if SOLUTION_USER_AGENT:
+        kwargs['user_agent_extra'] = SOLUTION_USER_AGENT
+    return Config(**kwargs)
 
 
 def find_flow_id_by_name(connect_client, instance_id, flow_name):
@@ -32,7 +45,7 @@ def find_flow_id_by_name(connect_client, instance_id, flow_name):
 
 
 def handle_create_or_update(props):
-    connect_client = boto3.client('connect')
+    connect_client = boto3.client('connect', config=boto_config())
     instance_id = props['InstanceId']
     phone_number_id = props['PhoneNumberId']
     flow_name = props.get('FlowName', DEFAULT_FLOW_NAME)
@@ -55,7 +68,7 @@ def handle_create_or_update(props):
 
 def handle_delete(props):
     # Disassociation is best-effort; phone number may already be released.
-    connect_client = boto3.client('connect')
+    connect_client = boto3.client('connect', config=boto_config())
     instance_id = props['InstanceId']
     phone_number_id = props['PhoneNumberId']
     try:

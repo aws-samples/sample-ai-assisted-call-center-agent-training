@@ -15,6 +15,7 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface ConnectPhoneNumberProps {
   instanceArn: string;
@@ -147,6 +148,9 @@ export class ConnectPhoneNumberConstruct extends Construct {
         timeout: cdk.Duration.minutes(2),
         memorySize: 256,
         logGroup: crLogGroup,
+        environment: {
+          USER_AGENT_STRING: solutionUserAgent(this),
+        },
         description: 'Associates a Connect phone number with the built-in sample inbound flow',
       });
 

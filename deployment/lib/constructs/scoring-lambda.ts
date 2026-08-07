@@ -16,6 +16,7 @@ import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
 import { computeSourceHash } from '../utils/asset-hash';
 import { MODEL_IDS, bedrockModelArns } from '../utils/model-config';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface ScoringLambdaProps {
   recordingsBucket: s3.Bucket;
@@ -125,6 +126,7 @@ export class ScoringLambdaConstruct extends Construct {
     // This prevents CDK from rebuilding when unrelated project files change.
     const assetHash = computeSourceHash(
       path.join(projectRoot, 'src/config/models.py'),
+      path.join(projectRoot, 'src/config/user_agent.py'),
       path.join(projectRoot, 'src/lambda/scoring/index.py'),
       path.join(projectRoot, 'src/recording/session_types.py'),
       path.join(projectRoot, 'src/recording/__init__.py'),
@@ -172,6 +174,7 @@ export class ScoringLambdaConstruct extends Construct {
               const sourceFiles: [string, string][] = [
                 ['src/config/__init__.py', 'src/config/__init__.py'],
                 ['src/config/models.py', 'src/config/models.py'],
+                ['src/config/user_agent.py', 'src/config/user_agent.py'],
                 ['src/recording/session_types.py', 'src/recording/session_types.py'],
                 ['src/recording/__init__.py', 'src/recording/__init__.py'],
                 ['src/evaluators/scoring_engine.py', 'src/evaluators/scoring_engine.py'],
@@ -202,7 +205,7 @@ export class ScoringLambdaConstruct extends Construct {
               // Copy handler
               'cp src/lambda/scoring/index.py /asset-output/',
               // Copy source modules
-              'cp src/config/__init__.py src/config/models.py /asset-output/src/config/',
+              'cp src/config/__init__.py src/config/models.py src/config/user_agent.py /asset-output/src/config/',
               'cp src/recording/session_types.py /asset-output/src/recording/',
               'cp src/recording/__init__.py /asset-output/src/recording/',
               'cp src/evaluators/scoring_engine.py src/evaluators/transcript_analytics.py /asset-output/src/evaluators/',
@@ -224,6 +227,7 @@ export class ScoringLambdaConstruct extends Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [lambdaSg],
       environment: {
+        USER_AGENT_STRING: solutionUserAgent(this),
         RECORDINGS_BUCKET: props.recordingsBucket.bucketName,
         SCORING_BUCKET: props.scoringBucket.bucketName,
         CRITERIA_CONFIG_TABLE: props.criteriaConfigTableName,

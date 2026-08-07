@@ -6,7 +6,6 @@ Uses AI to evaluate criteria, then applies scoring rubric.
 import json
 import logging
 import boto3
-import os
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
@@ -14,6 +13,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 from src.config.models import EVALUATION_MODEL_ID
+from src.config.user_agent import boto_config
 from src.recording.session_types import SessionRecording
 from src.models.call_scorecard import (
     EVALUATION_SCHEMA,
@@ -32,10 +32,7 @@ class ScoringEngine:
         self._scoring_config = load_rubric(rubric_path)
 
         # Initialize Bedrock Runtime client for Claude
-        self.client = boto3.client(
-            'bedrock-runtime',
-            region_name=os.environ.get('AWS_REGION', 'us-west-2')
-        )
+        self.client = boto3.client('bedrock-runtime', config=boto_config())
 
     def _filter_scoring_config(self, enabled_criteria: Optional[set] = None) -> dict:
         """

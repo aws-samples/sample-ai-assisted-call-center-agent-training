@@ -21,6 +21,7 @@ COPY src/lambda/audio_empathy/index.py .
 # Copy source modules needed by AudioEmpathyEvaluator
 COPY src/recording/ src/recording/
 COPY src/evaluators/ src/evaluators/
+COPY src/config/ src/config/
 COPY src/__init__.py src/__init__.py
 
 # nosemgrep: dockerfile.security.missing-user.missing-user

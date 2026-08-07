@@ -20,13 +20,15 @@ import concurrent.futures
 from datetime import datetime
 import tempfile
 
+from src.config.user_agent import boto_config
+
 logger = logging.getLogger()
 logger.setLevel(os.environ.get('LOG_LEVEL', 'INFO'))
 
-s3_client = boto3.client('s3')
-lambda_client = boto3.client('lambda')
-dynamodb_client = boto3.client('dynamodb')
-dynamodb_resource = boto3.resource('dynamodb')
+s3_client = boto3.client('s3', config=boto_config())
+lambda_client = boto3.client('lambda', config=boto_config())
+dynamodb_client = boto3.client('dynamodb', config=boto_config())
+dynamodb_resource = boto3.resource('dynamodb', config=boto_config())
 CRITERIA_CONFIG_TABLE = os.environ.get('CRITERIA_CONFIG_TABLE', '')
 SESSIONS_TABLE = os.environ.get('SESSIONS_TABLE', '')
 

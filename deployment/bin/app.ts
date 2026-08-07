@@ -7,6 +7,7 @@ import { WebUIStack } from '../lib/webui-stack';
 import { ConnectStack } from '../lib/connect-stack';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { PrototypeSecurityNagPack } from './prototype-security';
+import { stackDescription } from '../lib/utils/solution';
 
 const app = new cdk.App();
 
@@ -36,7 +37,7 @@ console.log(`Deploy mode: ${deployMode}`);
 // Stack 1: Core shared infra (ALWAYS deployed)
 const coreStack = new CoreInfraStack(app, 'CallCenterTraining-Core', {
   env,
-  description: 'Shared backend infrastructure - VPC, S3, KMS, DynamoDB, VPC endpoints',
+  description: stackDescription('Shared backend infrastructure - VPC, S3, KMS, DynamoDB, VPC endpoints'),
   tags: commonTags,
 });
 
@@ -45,7 +46,7 @@ let agentRuntimeStack: AgentRuntimeStack | undefined;
 if (deployMode === 'agentcore' || deployMode === 'webui' || deployMode === 'all') {
   agentRuntimeStack = new AgentRuntimeStack(app, 'CallCenterTraining-AgentRuntime', {
     env,
-    description: 'Bedrock AgentCore runtime for Web UI - agent image, IAM role, runtime',
+    description: stackDescription('Bedrock AgentCore runtime for Web UI - agent image, IAM role, runtime'),
     tags: commonTags,
     vpc: coreStack.vpc,
     bedrockEndpointSg: coreStack.bedrockEndpointSg,
@@ -62,7 +63,7 @@ if (deployMode === 'agentcore' || deployMode === 'webui' || deployMode === 'all'
 if (deployMode === 'webui' || deployMode === 'all') {
   const webUIStack = new WebUIStack(app, 'CallCenterTraining-Web', {
     env,
-    description: 'Browser-based training interface - CloudFront, Cognito, Scoring Lambda',
+    description: stackDescription('Browser-based training interface - CloudFront, Cognito, Scoring Lambda'),
     tags: commonTags,
     coreStack,
     agentRuntimeStack: agentRuntimeStack!,
@@ -73,7 +74,7 @@ if (deployMode === 'webui' || deployMode === 'all') {
 if (deployMode === 'connect' || deployMode === 'all') {
   const connectStack = new ConnectStack(app, 'CallCenterTraining-Connect', {
     env,
-    description: 'Amazon Connect training integration - Connect instance, Bridge Lambda, Admin UI',
+    description: stackDescription('Amazon Connect training integration - Connect instance, Bridge Lambda, Admin UI'),
     tags: commonTags,
     coreStack,
   });

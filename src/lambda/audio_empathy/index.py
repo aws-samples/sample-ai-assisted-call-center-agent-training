@@ -15,10 +15,12 @@ import tempfile
 import boto3
 from botocore.exceptions import ClientError
 
+from src.config.user_agent import boto_config
+
 logger = logging.getLogger()
 logger.setLevel(os.environ.get('LOG_LEVEL', 'INFO'))
 
-s3_client = boto3.client('s3')
+s3_client = boto3.client('s3', config=boto_config())
 
 
 def find_audio_file(s3_client, bucket, prefix, session_id):

@@ -1,12 +1,12 @@
 """Tool for verifying spelling of text read back by the call center agent."""
 
 import logging
-import os
 
 import boto3
 from strands.tools.decorator import tool
 
 from src.config.models import NOVA_LITE_MODEL_ID
+from src.config.user_agent import boto_config
 
 logger = logging.getLogger(__name__)
 
@@ -53,8 +53,7 @@ def verify_spelling(original_text: str, spoken_text: str) -> str:
     logger.info(f"verify_spelling: original='{original_text}' spoken='{spoken_text}'")
 
     try:
-        region = os.getenv("AWS_REGION", os.getenv("AWS_DEFAULT_REGION", "us-west-2"))
-        client = boto3.client("bedrock-runtime", region_name=region)
+        client = boto3.client("bedrock-runtime", config=boto_config())
 
         prompt = VERIFICATION_PROMPT.format(
             original_text=original_text,

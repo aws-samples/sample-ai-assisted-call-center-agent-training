@@ -10,6 +10,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ecr_assets from 'aws-cdk-lib/aws-ecr-assets';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { MODEL_IDS } from '../utils/model-config';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface AgentCoreRuntimeProps {
   agentImage: ecr_assets.DockerImageAsset;
@@ -57,7 +58,12 @@ export class AgentCoreRuntimeConstruct extends Construct {
       roleArn: props.agentRole.roleArn,
       description: 'AI-powered call center training agent with Nova Sonic voice capabilities',
       environmentVariables: {
+        USER_AGENT_STRING: solutionUserAgent(this),
+        // boto3 resolves the region from AWS_DEFAULT_REGION only — it ignores
+        // AWS_REGION unless a config file supplies one. Set both so SDK clients
+        // can be constructed without an explicit region_name.
         AWS_REGION: region,
+        AWS_DEFAULT_REGION: region,
         LOG_LEVEL: 'INFO',
         S3_RECORDINGS_BUCKET: props.recordingsBucketName,
         S3_KMS_KEY_ID: props.kmsKeyId,

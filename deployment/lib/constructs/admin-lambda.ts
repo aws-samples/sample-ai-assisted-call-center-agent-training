@@ -16,6 +16,7 @@ import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
 import { computeSourceHash } from '../utils/asset-hash';
 import { MODEL_IDS, bedrockModelArns } from '../utils/model-config';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface AdminLambdaProps {
   recordingsBucket: s3.Bucket;
@@ -193,6 +194,7 @@ export class AdminLambdaConstruct extends Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [this.securityGroup],
       environment: {
+        USER_AGENT_STRING: solutionUserAgent(this),
         RECORDINGS_BUCKET: props.recordingsBucket.bucketName,
         SCENARIOS_TABLE: props.scenariosTableName,
         CRITERIA_CONFIG_TABLE: props.criteriaConfigTableName,

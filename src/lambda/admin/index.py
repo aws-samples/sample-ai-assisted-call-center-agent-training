@@ -22,9 +22,21 @@ from decimal import Decimal
 logger = logging.getLogger()
 logger.setLevel(os.environ.get('LOG_LEVEL', 'INFO'))
 
-s3_client = boto3.client('s3', config=Config(signature_version='s3v4'))
-bedrock_client = boto3.client('bedrock-runtime')
-dynamodb = boto3.resource('dynamodb')
+# Marker appended to the User-Agent header so AWS can attribute service API usage
+# to this solution. Set by CDK from the `Solution` CloudFormation mapping.
+SOLUTION_USER_AGENT = os.environ.get('USER_AGENT_STRING', '')
+
+
+def boto_config(**kwargs) -> Config:
+    """Return a botocore Config carrying the solution User-Agent marker."""
+    if SOLUTION_USER_AGENT:
+        kwargs['user_agent_extra'] = SOLUTION_USER_AGENT
+    return Config(**kwargs)
+
+
+s3_client = boto3.client('s3', config=boto_config(signature_version='s3v4'))
+bedrock_client = boto3.client('bedrock-runtime', config=boto_config())
+dynamodb = boto3.resource('dynamodb', config=boto_config())
 BUCKET = os.environ.get('RECORDINGS_BUCKET', '')
 SCENARIOS_TABLE = os.environ.get('SCENARIOS_TABLE', '')
 CRITERIA_CONFIG_TABLE = os.environ.get('CRITERIA_CONFIG_TABLE', '')

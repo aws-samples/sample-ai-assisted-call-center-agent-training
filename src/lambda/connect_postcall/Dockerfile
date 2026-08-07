@@ -20,6 +20,7 @@ COPY src/lambda/connect_postcall/index.py .
 
 # Copy source modules needed for SessionRecording format
 COPY src/recording/ src/recording/
+COPY src/config/ src/config/
 COPY src/__init__.py src/__init__.py
 
 # nosemgrep: dockerfile.security.missing-user.missing-user

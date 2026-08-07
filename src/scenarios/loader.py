@@ -71,21 +71,19 @@ class ScenarioLoader:
 
         return self.scenarios
 
-    def load_from_dynamodb(self, table_name: str, region: str = '') -> Dict[str, Scenario]:
+    def load_from_dynamodb(self, table_name: str) -> Dict[str, Scenario]:
         """Load all scenarios from a DynamoDB table.
 
         Args:
             table_name: Name of the DynamoDB scenarios table.
-            region: AWS region. Falls back to AWS_REGION or AWS_DEFAULT_REGION env vars.
 
         Returns:
             Dict mapping scenario_id to Scenario objects.
         """
-        import os
         import boto3
+        from src.config.user_agent import boto_config
 
-        region = region or os.getenv('AWS_REGION') or os.getenv('AWS_DEFAULT_REGION') or 'us-west-2'
-        dynamodb = boto3.resource('dynamodb', region_name=region)
+        dynamodb = boto3.resource('dynamodb', config=boto_config())
         table = dynamodb.Table(table_name)
 
         items = []
@@ -104,13 +102,12 @@ class ScenarioLoader:
         logger.info(f"Loaded {len(items)} scenarios from DynamoDB table '{table_name}'")
         return self.scenarios
 
-    def load_single_from_dynamodb(self, table_name: str, scenario_id: str, region: str = '') -> Optional[Scenario]:
+    def load_single_from_dynamodb(self, table_name: str, scenario_id: str) -> Optional[Scenario]:
         """Fetch a single scenario from DynamoDB by ID and update the cache."""
-        import os
         import boto3
+        from src.config.user_agent import boto_config
 
-        region = region or os.getenv('AWS_REGION') or os.getenv('AWS_DEFAULT_REGION') or 'us-west-2'
-        dynamodb = boto3.resource('dynamodb', region_name=region)
+        dynamodb = boto3.resource('dynamodb', config=boto_config())
         table = dynamodb.Table(table_name)
 
         response = table.get_item(Key={'scenarioId': scenario_id})

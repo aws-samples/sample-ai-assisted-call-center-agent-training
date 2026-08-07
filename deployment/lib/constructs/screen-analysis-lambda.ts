@@ -16,6 +16,7 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
 import { MODEL_IDS, bedrockModelArns } from '../utils/model-config';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface ScreenAnalysisLambdaProps {
   recordingsBucket: s3.Bucket;
@@ -108,6 +109,7 @@ export class ScreenAnalysisLambdaConstruct extends Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [lambdaSg],
       environment: {
+        USER_AGENT_STRING: solutionUserAgent(this),
         RECORDINGS_BUCKET: props.recordingsBucket.bucketName,
         BEDROCK_MODEL_ID: MODEL_IDS.evaluation,
         LOG_LEVEL: 'INFO',

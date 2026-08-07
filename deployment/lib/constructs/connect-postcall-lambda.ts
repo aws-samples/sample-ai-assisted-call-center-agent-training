@@ -20,6 +20,7 @@ import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface ConnectPostCallLambdaProps {
   vpc: ec2.IVpc;
@@ -148,6 +149,8 @@ export class ConnectPostCallLambdaConstruct extends Construct {
           '!src/lambda/connect_postcall/**',
           '!src/recording',
           '!src/recording/**',
+          '!src/config',
+          '!src/config/**',
           '**/__pycache__',
           '**/*.pyc',
         ],
@@ -161,6 +164,7 @@ export class ConnectPostCallLambdaConstruct extends Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [lambdaSg],
       environment: {
+        USER_AGENT_STRING: solutionUserAgent(this),
         RECORDINGS_BUCKET: props.recordingsBucket.bucketName,
         SESSIONS_TABLE: props.sessionsTableName,
         SCORING_FUNCTION_NAME: props.scoringLambda.functionName,

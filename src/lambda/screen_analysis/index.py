@@ -12,6 +12,7 @@ import logging
 import os
 import base64
 import boto3
+from botocore.config import Config
 from datetime import datetime
 
 logger = logging.getLogger()
@@ -19,11 +20,20 @@ logger.setLevel(os.environ.get('LOG_LEVEL', 'INFO'))
 
 BEDROCK_MODEL_ID = os.environ.get('BEDROCK_MODEL_ID', 'us.anthropic.claude-sonnet-4-6')
 
-s3_client = boto3.client('s3')
-bedrock_client = boto3.client(
-    'bedrock-runtime',
-    region_name=os.environ.get('AWS_REGION', 'us-west-2')
-)
+# Marker appended to the User-Agent header so AWS can attribute service API usage
+# to this solution. Set by CDK from the `Solution` CloudFormation mapping.
+SOLUTION_USER_AGENT = os.environ.get('USER_AGENT_STRING', '')
+
+
+def boto_config(**kwargs) -> Config:
+    """Return a botocore Config carrying the solution User-Agent marker."""
+    if SOLUTION_USER_AGENT:
+        kwargs['user_agent_extra'] = SOLUTION_USER_AGENT
+    return Config(**kwargs)
+
+
+s3_client = boto3.client('s3', config=boto_config())
+bedrock_client = boto3.client('bedrock-runtime', config=boto_config())
 
 # JSON schema for structured output — array wrapped in an object (top-level must be object)
 SCREEN_ANALYSIS_SCHEMA = {

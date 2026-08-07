@@ -22,6 +22,7 @@ import * as path from 'path';
 import { execSync } from 'child_process';
 import { NagSuppressions } from 'cdk-nag';
 import { computeSourceHash } from '../utils/asset-hash';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface ConnectAudioBridgeProps {
   /** Connect instance ARN */
@@ -228,7 +229,7 @@ export class ConnectAudioBridgeConstruct extends Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [lambdaSg],
       environment: {
-        AWS_REGION_NAME: stack.region,
+        USER_AGENT_STRING: solutionUserAgent(this),
         RECORDINGS_BUCKET: props.recordingsBucket.bucketName,
         CONNECT_INSTANCE_ARN: props.connectInstanceArn,
         CONNECT_INSTANCE_ID: cdk.Fn.select(1, cdk.Fn.split('instance/', props.connectInstanceArn)),

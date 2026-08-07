@@ -20,6 +20,7 @@ sys.path.insert(0, '/app')
 from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models.nova_sonic import BidiNovaSonicModel
 from src.config.models import NOVA_SONIC_MODEL_ID
+from src.config.user_agent import boto_config
 from src.scenarios.loader import ScenarioLoader
 from src.recording.session_recorder import SessionRecorder
 from src.customer_prompt import build_system_prompt
@@ -302,12 +303,11 @@ async def websocket_endpoint(websocket: WebSocket):
                 s3_bucket = os.getenv("S3_RECORDINGS_BUCKET")
                 if s3_bucket:
                     try:
-                        from botocore.config import Config as BotoConfig
                         # Use a fresh S3 client with standard transfer (not CRT)
                         # to avoid InvalidStateError from cancelled futures after disconnect
                         s3_client = boto3.client(
                             's3',
-                            config=BotoConfig(retries={'max_attempts': 3})
+                            config=boto_config(retries={'max_attempts': 3})
                         )
                         sid = recording.session_id
                         uid = recording.user_id
@@ -337,7 +337,7 @@ async def websocket_endpoint(websocket: WebSocket):
                                             # Create fresh client for retry
                                             s3_client = boto3.client(
                                                 's3',
-                                                config=BotoConfig(retries={'max_attempts': 3})
+                                                config=boto_config(retries={'max_attempts': 3})
                                             )
                                         else:
                                             raise

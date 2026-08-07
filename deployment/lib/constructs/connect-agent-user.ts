@@ -18,6 +18,7 @@ import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface ConnectAgentUserProps {
   vpc: ec2.IVpc;
@@ -146,6 +147,9 @@ export class ConnectAgentUserConstruct extends Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [sg],
       logGroup,
+      environment: {
+        USER_AGENT_STRING: solutionUserAgent(this),
+      },
       description: 'Provisions Connect CCP agent user for call center training',
     });
 

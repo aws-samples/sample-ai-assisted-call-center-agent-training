@@ -15,6 +15,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface AudioEmpathyLambdaProps {
   recordingsBucket: s3.Bucket;
@@ -104,6 +105,8 @@ export class AudioEmpathyLambdaConstruct extends Construct {
           '!src/recording/**',
           '!src/evaluators',
           '!src/evaluators/**',
+          '!src/config',
+          '!src/config/**',
           '**/__pycache__',
           '**/*.pyc',
         ],
@@ -117,6 +120,7 @@ export class AudioEmpathyLambdaConstruct extends Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [lambdaSg],
       environment: {
+        USER_AGENT_STRING: solutionUserAgent(this),
         RECORDINGS_BUCKET: props.recordingsBucket.bucketName,
         // numba (librosa dependency) needs a writable cache directory;
         // Lambda filesystem is read-only except /tmp

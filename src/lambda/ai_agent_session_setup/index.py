@@ -17,14 +17,27 @@ import logging
 import time
 import os
 import boto3
+from botocore.config import Config
 from decimal import Decimal
 
 logger = logging.getLogger()
 logger.setLevel(os.environ.get('LOG_LEVEL', 'INFO'))
 
+# Marker appended to the User-Agent header so AWS can attribute service API usage
+# to this solution. Set by CDK from the `Solution` CloudFormation mapping.
+SOLUTION_USER_AGENT = os.environ.get('USER_AGENT_STRING', '')
+
+
+def boto_config(**kwargs) -> Config:
+    """Return a botocore Config carrying the solution User-Agent marker."""
+    if SOLUTION_USER_AGENT:
+        kwargs['user_agent_extra'] = SOLUTION_USER_AGENT
+    return Config(**kwargs)
+
+
 # Initialize clients
-qconnect = boto3.client('qconnect')
-connect_client = boto3.client('connect')
+qconnect = boto3.client('qconnect', config=boto_config())
+connect_client = boto3.client('connect', config=boto_config())
 
 
 def _decimal_to_native(obj):
@@ -44,7 +57,7 @@ def load_scenario(scenario_id: str) -> dict:
     if not scenarios_table_name:
         raise ValueError("SCENARIOS_TABLE environment variable not set")
 
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', config=boto_config())
     table = dynamodb.Table(scenarios_table_name)
 
     response = table.get_item(Key={'scenarioId': scenario_id})

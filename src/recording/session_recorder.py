@@ -156,8 +156,9 @@ class SessionRecorder:
     async def upload_to_s3(self, bucket_name: str, session_id: str, kms_key_id: Optional[str] = None) -> Dict[str, str]:
         """Upload recording files to S3."""
         import boto3
+        from src.config.user_agent import boto_config
 
-        s3_client = boto3.client('s3')
+        s3_client = boto3.client('s3', config=boto_config())
 
         json_file = self.recordings_dir / f"{session_id}_server_transcript.json"
 

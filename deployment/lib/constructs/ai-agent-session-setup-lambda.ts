@@ -21,6 +21,7 @@ import * as kms from 'aws-cdk-lib/aws-kms';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as path from 'path';
 import { NagSuppressions } from 'cdk-nag';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface AIAgentSessionSetupLambdaProps {
   /** VPC for Lambda deployment */
@@ -141,6 +142,7 @@ export class AIAgentSessionSetupLambdaConstruct extends Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [this.securityGroup],
       environment: {
+        USER_AGENT_STRING: solutionUserAgent(this),
         SCENARIOS_TABLE: props.scenariosTableName,
         ASSISTANT_ID: props.assistantId,
         CONNECT_INSTANCE_ID: props.connectInstanceId,

@@ -24,6 +24,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 import { NagSuppressions } from 'cdk-nag';
+import { solutionUserAgent } from '../utils/solution';
 
 export interface ConnectAIAgentProps {
   /** VPC for custom resource Lambda */
@@ -275,6 +276,9 @@ export class ConnectAIAgentConstruct extends Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [sg],
       logGroup,
+      environment: {
+        USER_AGENT_STRING: solutionUserAgent(this),
+      },
       description: 'Provisions Q Connect AI Prompt + AI Agent for call center training',
     });
 

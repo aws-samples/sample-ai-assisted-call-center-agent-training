@@ -29,7 +29,6 @@ from botocore.config import Config as BotoConfig
 logger = logging.getLogger()
 logger.setLevel(os.environ.get('LOG_LEVEL', 'INFO'))
 
-AWS_REGION = os.environ.get('AWS_REGION_NAME', os.environ.get('AWS_REGION', 'us-west-2'))
 RECORDINGS_BUCKET = os.environ.get('RECORDINGS_BUCKET', '')
 CONNECT_INSTANCE_ID = os.environ.get('CONNECT_INSTANCE_ID', '')
 CONNECT_INSTANCE_ARN = os.environ.get('CONNECT_INSTANCE_ARN', '')
@@ -37,6 +36,18 @@ CONTACT_FLOW_ID = os.environ.get('CONTACT_FLOW_ID', '')
 DESTINATION_PHONE = os.environ.get('DESTINATION_PHONE', '')
 QUEUE_ARN = os.environ.get('QUEUE_ARN', '')
 SESSIONS_TABLE = os.environ.get('SESSIONS_TABLE', '')
+
+# Marker appended to the User-Agent header so AWS can attribute service API usage
+# to this solution. Set by CDK from the `Solution` CloudFormation mapping.
+SOLUTION_USER_AGENT = os.environ.get('USER_AGENT_STRING', '')
+
+
+def boto_config(**kwargs) -> BotoConfig:
+    """Return a botocore Config carrying the solution User-Agent marker."""
+    if SOLUTION_USER_AGENT:
+        kwargs['user_agent_extra'] = SOLUTION_USER_AGENT
+    return BotoConfig(**kwargs)
+
 
 # ---------------------------------------------------------------------------
 # Queue ID — discovered at runtime if QUEUE_ARN env var is not set
@@ -54,7 +65,7 @@ def _get_queue_id() -> str:
         _queue_id_cache = QUEUE_ARN.split('/')[-1]
         return _queue_id_cache
     try:
-        client = boto3.client('connect', region_name=AWS_REGION)
+        client = boto3.client('connect', config=boto_config())
         paginator = client.get_paginator('list_queues')
         for page in paginator.paginate(InstanceId=CONNECT_INSTANCE_ID, QueueTypes=['STANDARD']):
             for q in page.get('QueueSummaryList', []):
@@ -79,7 +90,7 @@ def _load_scenarios() -> Dict[str, dict]:
         return {}
 
     try:
-        dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
+        dynamodb = boto3.resource('dynamodb', config=boto_config())
         table = dynamodb.Table(SCENARIOS_TABLE)
         response = table.scan()
         items = response.get('Items', [])
@@ -135,7 +146,7 @@ def handle_list_scenarios() -> Dict:
 
 def handle_list_agents() -> Dict:
     try:
-        client = boto3.client('connect', region_name=AWS_REGION)
+        client = boto3.client('connect', config=boto_config())
         agents = []
         paginator = client.get_paginator('list_users')
         for page in paginator.paginate(InstanceId=CONNECT_INSTANCE_ID):
@@ -157,7 +168,7 @@ def handle_list_calls() -> Dict:
         return build_response(500, {'error': 'SESSIONS_TABLE not configured'})
 
     try:
-        dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
+        dynamodb = boto3.resource('dynamodb', config=boto_config())
         table = dynamodb.Table(SESSIONS_TABLE)
 
         response = table.query(
@@ -196,7 +207,7 @@ def handle_get_session_detail(session_id: str) -> Dict:
         return build_response(500, {'error': 'SESSIONS_TABLE not configured'})
 
     try:
-        dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
+        dynamodb = boto3.resource('dynamodb', config=boto_config())
         table = dynamodb.Table(SESSIONS_TABLE)
         response = table.get_item(Key={'userId': 'connect', 'sessionId': session_id})
         session = response.get('Item')
@@ -210,7 +221,7 @@ def handle_get_session_detail(session_id: str) -> Dict:
         }
 
         # Try to load scorecard from S3
-        s3 = boto3.client('s3', config=BotoConfig(retries={'max_attempts': 3}))
+        s3 = boto3.client('s3', config=boto_config(retries={'max_attempts': 3}))
         prefix = f'users/connect/sessions/{session_id}'
         scorecard_key = f'{prefix}/{session_id}_scorecard.json'
         try:
@@ -256,7 +267,7 @@ def handle_get_audio_url(session_id: str) -> Dict:
         f'{prefix}/{session_id}_audio.wav',
     ]
 
-    s3 = boto3.client('s3', config=BotoConfig(
+    s3 = boto3.client('s3', config=boto_config(
         retries={'max_attempts': 3},
         signature_version='s3v4',
     ))
@@ -315,7 +326,7 @@ def handle_start_call(body: Dict) -> Dict:
     }
 
     try:
-        client = boto3.client('connect', region_name=AWS_REGION)
+        client = boto3.client('connect', config=boto_config())
         resp = client.start_outbound_voice_contact(
             DestinationPhoneNumber=destination_phone,
             ContactFlowId=CONTACT_FLOW_ID,
@@ -331,7 +342,7 @@ def handle_start_call(body: Dict) -> Dict:
         # even if the call disconnects before Lex fulfillment runs.
         if SESSIONS_TABLE:
             try:
-                dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
+                dynamodb = boto3.resource('dynamodb', config=boto_config())
                 sessions_table = dynamodb.Table(SESSIONS_TABLE)
                 now = datetime.now(timezone.utc).isoformat()
                 sessions_table.put_item(Item={

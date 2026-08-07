@@ -26,7 +26,8 @@ from typing import Any, Dict, Optional
 from urllib.parse import urlparse
 
 import boto3
-from botocore.config import Config as BotoConfig
+
+from src.config.user_agent import boto_config
 
 logger = logging.getLogger()
 logger.setLevel(os.environ.get('LOG_LEVEL', 'INFO'))
@@ -37,13 +38,12 @@ SESSIONS_TABLE = os.environ.get('SESSIONS_TABLE', '')
 SCORING_FUNCTION_NAME = os.environ.get('SCORING_FUNCTION_NAME', '')
 CONNECT_INSTANCE_ID = os.environ.get('CONNECT_INSTANCE_ID', '')
 KMS_KEY_ID = os.environ.get('KMS_KEY_ID', '')
-AWS_REGION = os.environ.get('AWS_REGION', 'us-west-2')
 
 # Clients
-s3_client = boto3.client('s3', config=BotoConfig(retries={'max_attempts': 3}))
-dynamodb_resource = boto3.resource('dynamodb', region_name=AWS_REGION)
-lambda_client = boto3.client('lambda', region_name=AWS_REGION)
-connect_client = boto3.client('connect', region_name=AWS_REGION)
+s3_client = boto3.client('s3', config=boto_config(retries={'max_attempts': 3}))
+dynamodb_resource = boto3.resource('dynamodb', config=boto_config())
+lambda_client = boto3.client('lambda', config=boto_config())
+connect_client = boto3.client('connect', config=boto_config())
 
 
 def lookup_session_by_contact_id(contact_id: str) -> Optional[Dict]:
