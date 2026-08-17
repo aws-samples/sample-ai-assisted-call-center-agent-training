@@ -11,6 +11,8 @@ import { Construct } from 'constructs';
 const { version } = require('../../package.json');
 
 export const SOLUTION_ID = 'SO0349';
+/** Secondary solution ID. Reported in stack descriptions only, not in the User-Agent. */
+export const SECONDARY_SOLUTION_ID = 'SO9706';
 export const SOLUTION_VERSION = `v${version}`;
 export const SOLUTION_NAME = 'AI-Assisted Call Center Representative Training';
 
@@ -20,9 +22,9 @@ export const SOLUTION_NAME = 'AI-Assisted Call Center Representative Training';
  */
 export const SOLUTION_USER_AGENT = `AWSSOLUTION/${SOLUTION_ID}/${SOLUTION_VERSION}`;
 
-/** CloudFormation stack description carrying the solution ID and version. */
+/** CloudFormation stack description carrying the solution IDs and version. */
 export function stackDescription(component: string): string {
-  return `(${SOLUTION_ID}) - ${SOLUTION_NAME} ${component}. Version ${SOLUTION_VERSION}`;
+  return `(${SOLUTION_ID}) (${SECONDARY_SOLUTION_ID}) - ${SOLUTION_NAME} ${component}. Version ${SOLUTION_VERSION}`;
 }
 
 /**

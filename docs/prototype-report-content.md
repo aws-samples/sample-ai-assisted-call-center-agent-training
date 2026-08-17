@@ -32,10 +32,10 @@ The architecture supports two training modes:
 
 Both modes share a common backend comprising Amazon DynamoDB for scenario and session storage, Amazon S3 (KMS-encrypted) for audio recordings, transcripts, and scorecards, and Claude (via Amazon Bedrock) for AI-powered evaluation. All Lambda functions are deployed within a VPC with private subnets and VPC endpoints for secure access to AWS services including Bedrock, S3, DynamoDB, ECR, CloudWatch Logs, and Secrets Manager.
 
-![Figure 1 - Web UI Architecture](web-ui-architecture.png)
+![Figure 1 - Web UI Architecture](architecture-diagram-webui.png)
 *Figure 1 - Web UI Architecture*
 
-![Figure 2 - Amazon Connect Architecture](amazon-connect-architecture.png)
+![Figure 2 - Amazon Connect Architecture](architecture-diagram-connect.png)
 *Figure 2 - Amazon Connect Architecture*
 
 ![Figure 3 - Connect Contact Flow](connect-flow-architecture.png)
@@ -967,7 +967,8 @@ Administrators can enable/disable specific criteria per scenario via the Criteri
 | **Scenario Selection** | `frontend/app/src/components/ScenarioSelection.tsx` | Scenario picker UI |
 | **Training Session** | `frontend/app/src/components/TrainingSession.tsx` | Audio I/O and transcript display |
 | **Scoring Results** | `frontend/app/src/components/ScoringResults.tsx` | Scorecard display |
-| **Core CDK Stack** | `deployment/lib/agentcore-stack.ts` | VPC, S3, DynamoDB, AgentCore |
+| **Core CDK Stack** | `deployment/lib/core-infra-stack.ts` | VPC, S3, DynamoDB, KMS |
+| **Agent Runtime CDK Stack** | `deployment/lib/agent-runtime-stack.ts` | AgentCore Runtime, ECR image |
 | **Web CDK Stack** | `deployment/lib/webui-stack.ts` | Cognito, CloudFront, API Gateway, Lambdas |
 | **Connect CDK Stack** | `deployment/lib/connect-stack.ts` | AI Agents, Connect integration, EventBridge |
 | **Deploy Config** | `deployment/config.json` | VPC, model IDs, Connect ARNs |

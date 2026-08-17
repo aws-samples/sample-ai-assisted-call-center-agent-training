@@ -8,7 +8,7 @@ The Amazon Connect integration provides an alternative training delivery method 
 
 ![Connect Flow Architecture](connect-flow-architecture.png)
 
-See also the [full stack architecture diagram](amazon-connect-architecture.png).
+See also the [full stack architecture diagram](architecture-diagram-connect.png).
 
 ## Components
 
